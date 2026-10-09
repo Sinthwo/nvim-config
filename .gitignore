@@ -1,0 +1,17 @@
+# Machine-local selections and runtime data
+selected-background.txt
+*.log
+*.session.json
+Session.vim
+Session.vim.lock
+
+# Editor temporary files
+*.swp
+*.swo
+*~
+
+# Do not bundle another repository's local Git metadata.
+**/.git/
+
+# Temporary validation artifacts
+.validation/
