@@ -2,7 +2,10 @@
 
 **This configuration is for Windows.** It combines Neovim, PowerShell, and
 WezTerm with a file explorer, completion, language servers, Git tools, Python
-debugging, Markdown rendering, and optional Obsidian integration.
+debugging, Markdown rendering, optional Obsidian integration, Azure/Bicep,
+Terraform, YAML, Bash, CSV/TSV tables, AI session tabs, and image/PDF previews.
+
+Source repository: [Sinthwo/nvim-config](https://github.com/Sinthwo/nvim-config).
 
 Paths are resolved for the current Windows user. You do not need to put your
 username or a fixed drive letter into the configuration.
@@ -27,8 +30,15 @@ language setup, backgrounds, customization, and troubleshooting.
 
 ## Install on Windows
 
+Download this repository or clone it from PowerShell:
+
+```powershell
+git clone https://github.com/Sinthwo/nvim-config.git
+Set-Location -LiteralPath '.\nvim-config'
+```
+
 Close Neovim before replacing an existing installation. Open PowerShell in
-this downloaded or cloned folder and run the following. Existing configuration
+the repository folder and run the following. Existing configuration
 files are moved to timestamped backups first; plugin data is kept.
 
 ```powershell
@@ -73,6 +83,15 @@ The leader key is **Space**. Press the listed keys in sequence; for example,
 | Space g g | Open Git status |
 | Space u b | Choose a terminal background |
 | Space t t | Toggle a project terminal |
+| Space c v | Toggle CSV/TSV table view |
+| Space z t | Open an Azure project terminal |
+
+Use `:Codex 8` or `:Claude 8` for up to eight independent CLI sessions in a
+dedicated Neovim tab. Opening an image or PDF creates a separate WezTerm preview
+tab. These optional features need their external tools; see the
+[manual](MANUAL.md#ai-session-workspaces),
+[cloud setup guide](nvim/SETUP-CLOUD-TOOLS.md), and
+[completed task list](nvim/TODO-COMPLETED.md).
 
 ## Files and sharing
 
@@ -81,13 +100,16 @@ The leader key is **Space**. Press the listed keys in sequence; for example,
 - [MANUAL.md](MANUAL.md) explains all configured features and local settings.
 - `nvim/lazy-lock.json` records plugin revisions; keep it when sharing the config.
 
-Wallpaper selections contain a filename, and `.gitignore` excludes them along
+Wallpaper selections contain a path relative to the image folder, and `.gitignore` excludes them along
 with logs and temporary files. Personal paths belong in local environment
 variables, such as `OBSIDIAN_VAULT` and `NVIM_BACKGROUND_DIR`.
 
-The bundled background images come from
-[ThePrimeagen/anime](https://github.com/ThePrimeagen/anime). The image collection
-is included without local Git metadata; see the source repository for its image credits.
+The current wallpaper collection comes from the supplied updated configuration.
+See [image credits](nvim/backgrounds/CREDITS.md). Earlier releases used
+[ThePrimeagen/anime](https://github.com/ThePrimeagen/anime); that collection has
+been replaced. The original import ZIP is kept locally and ignored because it
+contains an old user-specific path. Local environment files and Terraform
+state/plan files are also ignored.
 
 Before sharing new changes, run the [validation commands](MANUAL.md#validate-the-configuration)
 and review any personal customization you added.

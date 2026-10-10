@@ -9,7 +9,7 @@ function M.background_dir()
   return vim.fs.joinpath(vim.fn.stdpath("config"), "backgrounds")
 end
 
-function M.find_powershell()
+function M.find_powershell(modern_only)
   local candidates = {
     vim.fn.exepath("pwsh.exe"),
     vim.fn.exepath("pwsh"),
@@ -19,10 +19,11 @@ function M.find_powershell()
     table.insert(candidates, vim.fs.joinpath(vim.env.ProgramFiles, "PowerShell", "7", "pwsh.exe"))
   end
 
-  table.insert(candidates, vim.fn.exepath("powershell.exe"))
-
-  if vim.env.SystemRoot and vim.env.SystemRoot ~= "" then
-    table.insert(candidates, vim.fs.joinpath(vim.env.SystemRoot, "System32", "WindowsPowerShell", "v1.0", "powershell.exe"))
+  if not modern_only then
+    table.insert(candidates, vim.fn.exepath("powershell.exe"))
+    if vim.env.SystemRoot and vim.env.SystemRoot ~= "" then
+      table.insert(candidates, vim.fs.joinpath(vim.env.SystemRoot, "System32", "WindowsPowerShell", "v1.0", "powershell.exe"))
+    end
   end
 
   for _, path in ipairs(candidates) do

@@ -1,6 +1,7 @@
 -- Run from the repository root: nvim --headless -u NONE -i NONE -n -l tools/verify-config.lua
 -- Test doubles keep these checks independent of plugin downloads and local profiles.
 local real = vim
+package.path = "./nvim/lua/?.lua;" .. package.path
 local checks = 0
 
 local function check(value, message)
@@ -32,6 +33,8 @@ local function fake_vim()
   local fake = {
     env = { ProgramFiles = "R:/Program Files", SystemRoot = "R:/Windows" },
     g = {},
+    cmd = function() end,
+    treesitter = { language = { register = function() end } },
     fs = {
       joinpath = real.fs.joinpath,
       normalize = normalize,
@@ -61,6 +64,8 @@ local function fake_vim()
     schedule = function(fn) fn() end,
     tbl_contains = contains,
     tbl_extend = real.tbl_extend,
+    deepcopy = real.deepcopy,
+    validate = real.validate,
   }
   fake.loop = fake.uv
   return fake
@@ -68,13 +73,16 @@ end
 
 local function with_vim(fake, fn)
   _G.vim = fake
-  local ok, err = pcall(fn)
+  local ok, err = xpcall(fn, debug.traceback)
   _G.vim = real
   if not ok then error(err, 0) end
 end
 
 local paths = dofile("nvim/lua/config/paths.lua")
 package.loaded["config.paths"] = paths
+for _, module in ipairs({ "ai_sessions", "azure", "image_preview", "project" }) do
+  package.loaded["config." .. module] = dofile("nvim/lua/config/" .. module .. ".lua")
+end
 
 -- Syntax checks include the deployed Neovim files and the hidden terminal config.
 local files = real.fn.glob("nvim/**/*.lua", false, true)
@@ -111,31 +119,49 @@ end)
 fake = fake_vim()
 with_vim(fake, function()
   local writes, choice, listed, notices = {}, "a picture.png", {}, 0
-  fake.fs.dir = function()
-    local entries = { { "notes.md", "file" }, { "nested", "directory" }, { "z.jpg", "file" }, { "a picture.png", "file" } }
-    local i = 0
-    return function() i = i + 1; if entries[i] then return unpack(entries[i]) end end
+  fake.uv.fs_scandir = function(dir)
+    local entries = dir:match("/nested$") and { { "O'Example.webp", "file" } }
+      or { { "notes.md", "file" }, { "nested", "directory" }, { "z.jpg", "file" }, { "a picture.png", "file" } }
+    return { entries = entries, index = 0 }
+  end
+  fake.uv.fs_scandir_next = function(handle)
+    handle.index = handle.index + 1
+    if handle.entries[handle.index] then return unpack(handle.entries[handle.index]) end
   end
   fake.ui = { select = function(items, _, callback) listed = items; callback(choice) end }
   fake.fn.writefile = function(lines, file) writes[#writes + 1] = { lines = lines, file = file } end
   fake.notify = function() notices = notices + 1 end
   local background = dofile("nvim/lua/config/background.lua")
   background.pick()
-  eq(#listed, 2, "Picker excludes non-images and folders")
+  eq(#listed, 3, "Picker finds subfolder images and excludes non-images")
   eq(listed[1], "a picture.png", "Picker sorts filenames")
   eq(writes[1].lines[1], "a picture.png", "Selection contains only filename")
+  eq(#writes[1].lines, 1, "Selection has exactly one line")
   eq(writes[1].file, profile.config .. "/backgrounds/selected-background.txt", "Selection uses current profile")
   choice = nil
   background.pick()
   eq(#writes, 1, "Cancellation preserves selection")
+  choice = "nested/O'Example.webp"
+  background.pick()
+  eq(writes[2].lines[1], choice, "Subfolder selection stays relative")
   fake.env.NVIM_BACKGROUND_DIR = "~/Pictures/Terminal Backgrounds"
   choice = "z.jpg"
   background.pick()
-  eq(writes[2].file, home .. "/Pictures/Terminal Backgrounds/selected-background.txt", "Picker shares directory override")
-  fake.fs.dir = function() return function() end end
+  eq(writes[3].file, home .. "/Pictures/Terminal Backgrounds/selected-background.txt", "Picker shares directory override")
+  package.loaded["fzf-lua"] = { fzf_exec = function(items, opts)
+    eq(items[2], "nested/O'Example.webp", "fzf receives sorted recursive paths")
+    opts.actions.default({ items[2] })
+  end }
   background.pick()
-  eq(#writes, 2, "Empty folder leaves selection unchanged")
-  eq(notices, 3, "Empty folder reports a notice")
+  eq(writes[4].lines[1], "nested/O'Example.webp", "fzf selection stays portable")
+  package.loaded["fzf-lua"].fzf_exec = function(_, opts) opts.actions.default(nil) end
+  background.pick()
+  eq(#writes, 4, "fzf cancellation preserves selection")
+  package.loaded["fzf-lua"] = nil
+  fake.uv.fs_scandir = function() return nil end
+  background.pick()
+  eq(#writes, 4, "Empty folder leaves selection unchanged")
+  eq(notices, 5, "Empty folder reports a notice")
 end)
 
 -- Load the standalone WezTerm config in a sandbox with virtual files and panes.
@@ -194,6 +220,9 @@ local environment = { LOCALAPPDATA = home .. "/AppData/Local", ProgramFiles = "R
 local relative = wezterm_fixture(environment, "  a picture.png  ", { [default_dir .. "/a picture.png"] = true })
 eq(relative.watched, default_dir .. "/selected-background.txt", "WezTerm current-profile directory")
 test_wallpaper(relative, default_dir .. "/a picture.png")
+test_wallpaper(wezterm_fixture(environment, "nested/O'Example.webp", {
+  [default_dir .. "/nested/O'Example.webp"] = true,
+}), default_dir .. "/nested/O'Example.webp")
 for _, value in ipairs({ "", "   ", "missing.png" }) do
   test_wallpaper(wezterm_fixture(environment, value, {}), nil)
 end
@@ -326,13 +355,191 @@ with_vim(fake, function()
   eq(workspaces[2], workspaces[3], "Java cache is stable for the same project")
 end)
 
+-- New filetypes and providers must remain enabled after bringing over old fixes.
+dofile("nvim/lua/config/filetypes.lua")
+for filename, ft in pairs({
+  ["main.bicep"] = "bicep", ["main.bicepparam"] = "bicep-params",
+  ["main.tf"] = "terraform", ["prod.tfvars"] = "terraform-vars",
+  ["values.csv"] = "csv", ["values.tsv"] = "tsv", ["azure-pipelines.yml"] = "yaml",
+}) do
+  eq(real.filetype.match({ filename = filename }), ft, "Filetype detection " .. filename)
+end
+local formats = dofile("nvim/lua/plugins/format.lua")[1].opts.formatters_by_ft
+eq(formats.sh[1], "shfmt", "Bash formatter retained")
+eq(formats.terraform[1], "terraform_fmt", "Terraform formatter retained")
+local snacks_opts = dofile("nvim/lua/plugins/snacks.lua")[1]
+eq(snacks_opts.priority, 1000, "Snacks startup priority retained")
+eq(snacks_opts.opts.image.enabled, false, "Use dedicated WezTerm previews")
+
+-- Azure PowerShell must pass the script as one argument, with its variables intact.
+fake = fake_vim()
+with_vim(fake, function()
+  local commands, terminal = {}, nil
+  fake.api.nvim_create_user_command = function(name, callback) commands[name] = callback end
+  package.loaded.snacks = { terminal = function(command, opts) terminal = { command = command, opts = opts } end }
+  package.loaded["config.project"] = { root = function() return home .. "/work cloud" end }
+  fake.uv.fs_stat = function(path) return path == "R:/Program Files/PowerShell/7/pwsh.exe" and {} or nil end
+  dofile("nvim/lua/config/azure.lua").setup()
+  commands.AzurePowerShell()
+  eq(terminal.command[1], "R:/Program Files/PowerShell/7/pwsh.exe", "Azure discovers PowerShell without fixed drive")
+  check(terminal.command[5]:find("$az =", 1, true), "Azure script variable passed literally")
+  eq(terminal.opts.cwd, home .. "/work cloud", "Azure keeps project path with spaces/apostrophe")
+  fake.fn.executable = function() return 1 end
+  commands.AzureAccount()
+  eq(terminal.command, "az account show -o table", "Account shortcut stays read-only")
+  fake.uv.fs_stat = function(path) return path == "R:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe" and {} or nil end
+  eq(paths.find_powershell(true), nil, "Az requires modern PowerShell")
+end)
+
+-- Simulate AI tab creation/closing: code buffers must stay out of terminal grids.
+fake = fake_vim()
+with_vim(fake, function()
+  local tabs, wins, buffers = { [1] = { 1 } }, { [1] = { tab = 1, buf = 1 } }, { [1] = true }
+  local tab, win, next_tab, next_win, next_buf = 1, 1, 1, 1, 1
+  local commands, code_root_buf = {}, nil
+  fake.bo = setmetatable({}, { __index = function(t, id)
+    local value = { buftype = "", buflisted = true }
+    rawset(t, id, value)
+    return value
+  end })
+  fake.b = setmetatable({}, { __index = function(t, id) local value = {}; rawset(t, id, value); return value end })
+  fake.t, fake.wo = {}, {}
+  fake.fn.executable = function() return 1 end
+  fake.fn.fnameescape = function(value) return value end
+  fake.api.nvim_get_current_buf = function() return wins[win].buf end
+  fake.api.nvim_get_current_win = function() return win end
+  fake.api.nvim_get_current_tabpage = function() return tab end
+  fake.api.nvim_buf_is_valid = function(buf) return buffers[buf] or false end
+  fake.api.nvim_buf_get_name = function(buf) return buf == 1 and home .. "/work/main.py" or "" end
+  fake.api.nvim_list_bufs = function() return real.tbl_keys(buffers) end
+  fake.api.nvim_tabpage_is_valid = function(id) return tabs[id] ~= nil end
+  fake.api.nvim_list_tabpages = function() return real.tbl_keys(tabs) end
+  fake.api.nvim_win_is_valid = function(id) return wins[id] ~= nil end
+  fake.api.nvim_set_current_win = function(id) win, tab = id, wins[id].tab end
+  fake.api.nvim_set_current_tabpage = function(id) tab, win = id, tabs[id][1] end
+  fake.api.nvim_create_user_command = function(name, callback) commands[name] = callback end
+  package.loaded["config.project"] = { root = function(buf) code_root_buf = buf; return home .. "/work" end }
+  local function new_buffer() next_buf = next_buf + 1; buffers[next_buf] = true; return next_buf end
+  local function new_window(buf)
+    next_win = next_win + 1
+    wins[next_win] = { tab = tab, buf = buf }
+    tabs[tab][#tabs[tab] + 1] = next_win
+    win = next_win
+  end
+  fake.cmd = function(command)
+    if command == "tabnew" then
+      next_tab = next_tab + 1; tab = next_tab; tabs[tab] = {}; new_window(new_buffer())
+    elseif command == "enew" then
+      wins[win].buf = new_buffer()
+    elseif command:find("split", 1, true) then
+      new_window(wins[win].buf)
+    elseif command:match("^terminal ") then
+      local buf = wins[win].buf; fake.bo[buf].buftype = "terminal"; fake.b[buf].terminal_job_id = buf
+    elseif command == "tabclose!" then
+      for _, id in ipairs(tabs[tab]) do
+        local buf = wins[id].buf
+        if fake.bo[buf].bufhidden == "wipe" then buffers[buf] = nil end
+        wins[id] = nil
+      end
+      tabs[tab] = nil; tab, win = 1, 1
+    end
+  end
+  dofile("nvim/lua/config/ai_sessions.lua").setup()
+  for _, invalid in ipairs({ "0", "9", "1.5", "invalid" }) do
+    commands.Codex({ args = invalid }); eq(next_tab, 1, "Reject invalid AI count " .. invalid)
+  end
+  commands.Codex({ args = "8" })
+  eq(code_root_buf, 1, "AI roots at the coding buffer")
+  eq(#tabs[2], 8, "Eight independent AI windows")
+  eq(wins[1].buf, 1, "Code stays in original window")
+  for _, id in ipairs(tabs[2]) do
+    local buf = wins[id].buf
+    check(buf ~= 1 and fake.bo[buf].buftype == "terminal", "AI windows contain terminal buffers")
+    eq(fake.bo[buf].buflisted, false, "AI terminals excluded from buffer list")
+    eq(fake.bo[buf].bufhidden, "wipe", "AI terminals cleaned on tab close")
+  end
+  commands.CodexEnd()
+  eq(tabs[2], nil, "End closes AI tab")
+  eq(tab, 1, "End returns to coding tab")
+  check(buffers[1] and wins[1].buf == 1, "End preserves coding buffer")
+end)
+
+-- Preview paths are argument lists; filename shell characters never enter titles/echo commands.
+fake = fake_vim()
+with_vim(fake, function()
+  local commands, events, calls, files, deleted = {}, {}, {}, {}, {}
+  local serial, pane = 0, 100
+  local source = home .. "/Pictures/100% O'Example & !wow!.PNG"
+  local pdf = home .. "/Documents/a b.pdf"
+  files[source], files[pdf] = true, true
+  fake.env.WEZTERM_PANE, fake.env.ComSpec = "5", "R:/Windows/System32/cmd.exe"
+  fake.fn.exepath = function(name) return ({ wezterm = "T:/Tools With Spaces/wezterm.exe", magick = "T:/Tools/magick.exe" })[name] or "" end
+  fake.fn.filereadable = function(path) return files[normalize(path)] and 1 or 0 end
+  fake.fn.tempname = function() serial = serial + 1; return home .. "/Temp/preview" .. serial end
+  fake.fn.writefile = function(lines, path) files[path] = real.deepcopy(lines) end
+  fake.fn.delete = function(path) deleted[path] = true; files[path] = nil; return 0 end
+  fake.fn.fnamemodify = function(path, modifier)
+    if modifier == ":t" then return fake.fs.basename(path) end
+    if modifier == ":h" then return path:match("^(.*)/[^/]*$") end
+    return normalize(path)
+  end
+  fake.api.nvim_create_user_command = function(name, callback) commands[name] = callback end
+  fake.api.nvim_create_autocmd = function(name, opts) events[name] = opts end
+  fake.system = function(argv, _, callback)
+    calls[#calls + 1] = real.deepcopy(argv)
+    local result = { code = 0, stdout = "", stderr = "" }
+    if argv[3] == "spawn" then pane = pane + 1; result.stdout = tostring(pane) end
+    if argv[1]:find("magick", 1, true) then files[argv[3]] = true end
+    if callback then callback(result) end
+    return { wait = function() return result end }
+  end
+  local preview = dofile("nvim/lua/config/image_preview.lua")
+  preview.setup()
+  preview.open(source)
+  local first_spawn = calls[1]
+  eq(first_spawn[3], "spawn", "Preview uses new WezTerm tab")
+  eq(first_spawn[7], home .. "/Pictures", "Preview cwd preserves spaces/apostrophe")
+  eq(first_spawn[9], fake.env.ComSpec, "Preview uses current Windows shell")
+  eq(first_spawn[11], "/v:off", "Delayed expansion disabled at launch")
+  eq(first_spawn[#first_spawn - 1], "call", "CMD preserves a batch path containing spaces")
+  local script = files[first_spawn[#first_spawn]]
+  eq(script[2], "setlocal DisableDelayedExpansion", "Batch file disables delayed expansion")
+  check(script[4]:find("100%% O'Example & !wow!.PNG", 1, true), "Percent signs escaped in batch path")
+  eq(script[3], "title Image Preview", "Filename cannot become a title shell command")
+  check(real.tbl_contains(calls[2], "Image: 100% O'Example & !wow!.PNG"), "Tab title retains ordinary filename")
+  local matched_uppercase = false
+  for _, pattern in ipairs(events.BufReadCmd.pattern) do
+    if real.api.nvim_call_function("match", { "photo.PNG", real.api.nvim_call_function("glob2regpat", { pattern }) }) >= 0 then matched_uppercase = true end
+  end
+  check(matched_uppercase, "Uppercase extensions intercepted before reading binary")
+  preview.open(source)
+  local kill_count = 0
+  for _, argv in ipairs(calls) do if argv[3] == "kill-pane" then kill_count = kill_count + 1 end end
+  eq(kill_count, 0, "Second preview preserves the first")
+  preview.close()
+  eq(calls[#calls][5], "102", "Close targets latest preview only")
+  preview.open(pdf)
+  local converted = false
+  for _, argv in ipairs(calls) do
+    if argv[1]:find("magick", 1, true) then eq(argv[2], pdf .. "[0]", "PDF converts first page"); converted = true end
+  end
+  check(converted, "PDF requests converter")
+  events.VimLeavePre.callback()
+  check(deleted[first_spawn[#first_spawn]], "Exit removes first preview script")
+  for path in pairs(files) do check(not path:find("/Temp/", 1, true), "Exit cleans preview temporaries") end
+  local count_before = #calls
+  fake.env.WEZTERM_PANE = nil
+  preview.open(source)
+  eq(#calls, count_before, "Outside WezTerm no preview process is spawned")
+end)
+
 local manual = table.concat(real.fn.readfile("MANUAL.md"), "\n")
 for key in pairs(declared) do
   local suffix = key:sub(#"<leader>" + 1)
   local label = "Space " .. suffix:gsub("(.)", "%1 "):gsub(" $", "")
   check(manual:find(label, 1, true), "Manual documents " .. key)
 end
-for _, file in ipairs({ "README.md", "MANUAL.md", "nvim/backgrounds/README.md" }) do
+for _, file in ipairs({ "README.md", "MANUAL.md", "TODO.md", "nvim/backgrounds/README.md", "nvim/backgrounds/CREDITS.md", "nvim/SETUP-CLOUD-TOOLS.md", "nvim/TODO-COMPLETED.md" }) do
   local content = table.concat(real.fn.readfile(file), "\n")
   check(content:find("Windows", 1, true), file .. " identifies Windows")
   for target in content:gmatch("%]%(([^%)]+)%)") do
@@ -347,7 +554,8 @@ check(not real.uv.fs_stat("nvim/backgrounds/anime/.git"), "Bundled Git metadata 
 local selection_file = "nvim/backgrounds/selected-background.txt"
 if real.fn.filereadable(selection_file) == 1 then
   local selected = real.fn.readfile(selection_file)[1]
-  check(selected and not selected:find("[/\\:]"), "Local selection is a filename")
+  check(selected and not selected:find(":") and not selected:match("^[/\\]")
+    and not selected:find("..", 1, true), "Local selection is a relative image path")
 else
   check(not real.uv.fs_stat(selection_file), "Local selection is optional in a fresh clone")
 end

@@ -49,3 +49,21 @@ end, { desc = "Choose background" })
 map("n", "<leader>uB", function()
   require("config.background").open_folder()
 end, { desc = "Open background folder" })
+
+-- =========================================================
+-- Multi-session AI workspaces
+-- =========================================================
+
+require("config.ai_sessions").setup()
+
+-- =========================================================
+-- Azure terminal workflows
+-- =========================================================
+
+require("config.azure").setup()
+
+-- =========================================================
+-- Stable WezTerm image / PDF preview
+-- =========================================================
+
+require("config.image_preview").setup()

@@ -84,7 +84,7 @@ local function read_selected_background()
     return nil
   end
 
-  -- Keep existing local absolute selections working; new selections are filenames.
+  -- New selections are relative paths, including subfolders. Keep local legacy paths working.
   if not path:match("^%a:[/\\]") and not path:match("^[/\\]") then
     path = join_path(backgrounds_dir, path)
   end

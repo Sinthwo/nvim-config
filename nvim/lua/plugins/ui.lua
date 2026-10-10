@@ -1,5 +1,20 @@
 local uv = vim.uv or vim.loop
 
+local function safe_buffer_delete(bufnr)
+  bufnr = tonumber(bufnr) or vim.api.nvim_get_current_buf()
+
+  if rawget(_G, "Snacks") and Snacks.bufdelete then
+    Snacks.bufdelete({ buf = bufnr })
+    return
+  end
+
+  local ok, err = pcall(vim.api.nvim_buf_delete, bufnr, { force = false })
+
+  if not ok then
+    vim.notify(tostring(err), vim.log.levels.WARN, { title = "Close buffer" })
+  end
+end
+
 -- =========================================================
 -- Helpers
 -- =========================================================
@@ -289,7 +304,115 @@ end
 -- Transparent UI
 -- =========================================================
 
+-- IMPORTANT:
+-- nvim_set_hl() replaces the full highlight definition.
+-- We therefore only touch groups that already exist and we preserve every
+-- supported foreground/style attribute. This keeps Snacks (and other plugins)
+-- from seeing an empty Normal foreground while still allowing the WezTerm
+-- wallpaper to show through Neovim.
+local function get_hl(group)
+  local ok, hl = pcall(
+    vim.api.nvim_get_hl,
+    0,
+    {
+      name = group,
+      link = false,
+      create = false,
+    }
+  )
+
+  if not ok or type(hl) ~= "table" or vim.tbl_isempty(hl) then
+    return nil
+  end
+
+  return hl
+end
+
+local function make_group_transparent(group)
+  local hl = get_hl(group)
+
+  -- Do not create empty highlight groups for plugins that have not loaded yet.
+  if not hl then
+    return
+  end
+
+  local valid_keys = {
+    "fg",
+    "sp",
+    "blend",
+    "bold",
+    "standout",
+    "underline",
+    "undercurl",
+    "underdouble",
+    "underdotted",
+    "underdashed",
+    "strikethrough",
+    "italic",
+    "reverse",
+    "nocombine",
+    "ctermfg",
+    "ctermbg",
+    "cterm",
+  }
+
+  local new_hl = {}
+
+  for _, key in ipairs(valid_keys) do
+    if hl[key] ~= nil then
+      new_hl[key] = hl[key]
+    end
+  end
+
+  -- If removing the background would leave a completely empty group, leave
+  -- that group alone. This is especially important for background-only groups.
+  if vim.tbl_isempty(new_hl) then
+    return
+  end
+
+  vim.api.nvim_set_hl(0, group, new_hl)
+end
+
+local function ensure_normal_foreground()
+  local normal = get_hl("Normal") or {}
+
+  if normal.fg ~= nil then
+    return
+  end
+
+  -- Normally TokyoNight already provides Normal.fg. These fallbacks are only
+  -- here as a guard so Snacks can always resolve a usable foreground colour.
+  local fallback_groups = {
+    "NormalNC",
+    "Identifier",
+    "Statement",
+    "Comment",
+  }
+
+  for _, group in ipairs(fallback_groups) do
+    local fallback = get_hl(group)
+
+    if fallback and fallback.fg ~= nil then
+      vim.api.nvim_set_hl(0, "Normal", {
+        fg = fallback.fg,
+        bg = "NONE",
+      })
+      return
+    end
+  end
+
+  -- TokyoNight's normal foreground as a last-resort safety fallback.
+  vim.api.nvim_set_hl(0, "Normal", {
+    fg = 0xc0caf5,
+    bg = "NONE",
+  })
+end
+
 local function make_transparent()
+  -- Ensure Normal always has a foreground before Snacks or other plugins read
+  -- it (Snacks GH/health code can blend colours using Normal as a fallback).
+  ensure_normal_foreground()
+
   local groups = {
     -- Main editor
     "Normal",
@@ -344,14 +467,7 @@ local function make_transparent()
   }
 
   for _, group in ipairs(groups) do
-    pcall(
-      vim.api.nvim_set_hl,
-      0,
-      group,
-      {
-        bg = "NONE",
-      }
-    )
+    pcall(make_group_transparent, group)
   end
 end
 
@@ -617,6 +733,13 @@ return {
       options = {
         mode = "buffers",
 
+        -- Keep the normal file tabs in the normal coding tab only. AI
+        -- workspaces use their own Neovim tab page and show only the Codex /
+        -- Claude terminal grid, never the user's coding buffers.
+        custom_filter = function()
+          return not vim.t.ai_workspace
+        end,
+
         diagnostics =
           "nvim_lsp",
 
@@ -638,17 +761,15 @@ return {
         left_mouse_command =
           "buffer %d",
 
-        -- Middle click = close
-        middle_mouse_command =
-          "bdelete %d",
+        -- Middle click = close. Modified buffers get a save/discard/cancel
+        -- prompt instead of throwing E89.
+        middle_mouse_command = safe_buffer_delete,
 
-        -- Right click = close too
-        right_mouse_command =
-          "bdelete %d",
+        -- Right click = close with the same safe behaviour.
+        right_mouse_command = safe_buffer_delete,
 
-        -- Clicking X = close
-        close_command =
-          "bdelete %d",
+        -- Clicking X = close with the same safe behaviour.
+        close_command = safe_buffer_delete,
 
         offsets = {
           {

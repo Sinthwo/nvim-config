@@ -11,6 +11,11 @@ local markers = {
   "settings.gradle",
   "settings.gradle.kts",
   "PSScriptAnalyzerSettings.psd1",
+  "bicepconfig.json",
+  "azure-pipelines.yml",
+  "azure-pipelines.yaml",
+  ".terraform",
+  "main.tf",
   ".obsidian",
 }
 
@@ -33,6 +38,14 @@ function M.label()
     lua = "LUA",
     json = "JSON",
     yaml = "YAML",
+    sh = "BASH",
+    bash = "BASH",
+    terraform = "TF",
+    ["terraform-vars"] = "TF",
+    bicep = "BICEP",
+    ["bicep-params"] = "BICEP",
+    csv = "CSV",
+    tsv = "TSV",
   }
 
   return labels[vim.bo.filetype] or vim.fs.basename(M.root()) or "NVIM"

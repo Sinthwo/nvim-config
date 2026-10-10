@@ -59,6 +59,7 @@ return {
         "debugpy",
         "stylua",
         "prettier",
+        "shfmt",
         "tree-sitter-cli",
       },
 
@@ -127,6 +128,153 @@ return {
           end,
         }
       )
+
+      -- ===================================================
+      -- Bash
+      -- ===================================================
+
+      vim.lsp.config(
+        "bashls",
+        {
+          capabilities = capabilities,
+        }
+      )
+
+      -- ===================================================
+      -- YAML
+      -- ===================================================
+
+      vim.lsp.config(
+        "yamlls",
+        {
+          capabilities = capabilities,
+
+          settings = {
+            yaml = {
+              keyOrdering = false,
+            },
+          },
+        }
+      )
+
+      -- ===================================================
+      -- Terraform
+      -- ===================================================
+
+      vim.lsp.config(
+        "terraformls",
+        {
+          capabilities = capabilities,
+        }
+      )
+
+      -- ===================================================
+      -- Azure Pipelines YAML
+      --
+      -- This only starts in workspaces that contain an
+      -- azure-pipelines.yml / azure-pipelines.yaml file.
+      -- ===================================================
+
+      vim.lsp.config(
+        "azure_pipelines_ls",
+        {
+          capabilities = capabilities,
+          workspace_required = true,
+
+          cmd = {
+            "azure-pipelines-language-server",
+            "--stdio",
+          },
+
+          filetypes = {
+            "yaml",
+          },
+
+          root_markers = {
+            "azure-pipelines.yml",
+            "azure-pipelines.yaml",
+          },
+
+          settings = {
+            yaml = {
+              schemas = {
+                ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = {
+                  "/azure-pipeline*.y*l",
+                  "/*.azure*",
+                  "Azure-Pipelines/**/*.y*l",
+                  "Pipelines/*.y*l",
+                },
+              },
+            },
+          },
+        }
+      )
+
+      -- ===================================================
+      -- Azure Bicep - official bicep-ls
+      --
+      -- Install externally with:
+      -- dotnet tool install --global Azure.Bicep.LangServer
+      -- ===================================================
+
+      local bicep_ls =
+        vim.fn.exepath("bicep-ls")
+
+      local bicep_enabled =
+        bicep_ls ~= ""
+
+      if bicep_enabled then
+        vim.lsp.config(
+          "bicep",
+          {
+            capabilities = capabilities,
+
+            cmd = {
+              bicep_ls,
+            },
+
+            filetypes = {
+              "bicep",
+              "bicep-params",
+            },
+
+            root_markers = {
+              "bicepconfig.json",
+              ".git",
+            },
+          }
+        )
+      else
+        local bicep_warning_group =
+          vim.api.nvim_create_augroup(
+            "UserBicepMissingLsp",
+            { clear = true }
+          )
+
+        local warned = false
+
+        vim.api.nvim_create_autocmd("FileType", {
+          group = bicep_warning_group,
+          pattern = {
+            "bicep",
+            "bicep-params",
+          },
+          callback = function()
+            if warned then
+              return
+            end
+
+            warned = true
+
+            vim.notify(
+              "Bicep LSP is not installed. Run:\n"
+                .. "dotnet tool install --global Azure.Bicep.LangServer",
+              vim.log.levels.WARN,
+              { title = "Bicep" }
+            )
+          end,
+        })
+      end
 
       -- ===================================================
       -- PowerShell
@@ -290,17 +438,17 @@ return {
       -- Mason automatically enabling everything.
       -- ===================================================
 
-      vim.lsp.enable(
-        "basedpyright"
-      )
+      vim.lsp.enable("basedpyright")
+      vim.lsp.enable("ruff")
+      vim.lsp.enable("bashls")
+      vim.lsp.enable("yamlls")
+      vim.lsp.enable("terraformls")
+      vim.lsp.enable("azure_pipelines_ls")
+      vim.lsp.enable("lua_ls")
 
-      vim.lsp.enable(
-        "ruff"
-      )
-
-      vim.lsp.enable(
-        "lua_ls"
-      )
+      if bicep_enabled then
+        vim.lsp.enable("bicep")
+      end
 
       if powershell_enabled then
         vim.lsp.enable(
@@ -547,6 +695,10 @@ return {
         "powershell_es",
         "jdtls",
         "lua_ls",
+        "bashls",
+        "yamlls",
+        "terraformls",
+        "azure_pipelines_ls",
       },
 
       -- IMPORTANT:

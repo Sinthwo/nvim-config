@@ -18,13 +18,19 @@ end
 return {
   {
     "folke/snacks.nvim",
-    priority = 900,
+    priority = 1000,
     lazy = false,
 
     opts = {
       bigfile = { enabled = true },
       quickfile = { enabled = true },
       terminal = { enabled = true },
+
+      -- Image rendering is handled by config.image_preview using WezTerm's
+      -- own stable `wezterm imgcat` command in a real WezTerm pane.
+      -- Keep Snacks.image disabled to avoid Kitty-protocol issues on Windows.
+      image = { enabled = false },
+
       input = { enabled = true },
       indent = {
         enabled = true,

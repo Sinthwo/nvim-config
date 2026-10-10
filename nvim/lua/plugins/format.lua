@@ -10,6 +10,10 @@ return {
         lua = { "stylua" },
         json = { "prettier" },
         yaml = { "prettier" },
+        sh = { "shfmt" },
+        bash = { "shfmt" },
+        terraform = { "terraform_fmt" },
+        ["terraform-vars"] = { "terraform_fmt" },
       },
     },
 

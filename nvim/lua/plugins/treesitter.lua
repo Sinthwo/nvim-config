@@ -7,8 +7,16 @@ return {
     config = function()
       require("nvim-treesitter").setup({})
 
+      -- Neovim filetypes that use a differently named Treesitter language.
+      vim.treesitter.language.register("bash", "sh")
+      vim.treesitter.language.register("bicep", "bicep-params")
+      vim.treesitter.language.register("terraform", "terraform-vars")
+
       local parsers = {
         "bash",
+        "bicep",
+        "csv",
+        "hcl",
         "java",
         "json",
         "lua",
@@ -18,7 +26,9 @@ return {
         "python",
         "query",
         "regex",
+        "terraform",
         "toml",
+        "tsv",
         "vim",
         "vimdoc",
         "yaml",
@@ -47,28 +57,54 @@ return {
 
       local supported = {
         bash = true,
+        bicep = true,
+        ["bicep-params"] = true,
+        csv = true,
+        hcl = true,
         java = true,
         json = true,
         lua = true,
         markdown = true,
         ps1 = true,
         python = true,
+        sh = true,
+        terraform = true,
+        ["terraform-vars"] = true,
         toml = true,
+        tsv = true,
         vim = true,
+        yaml = true,
+      }
+
+      local indent_filetypes = {
+        bash = true,
+        bicep = true,
+        ["bicep-params"] = true,
+        hcl = true,
+        java = true,
+        json = true,
+        lua = true,
+        python = true,
+        sh = true,
+        terraform = true,
+        ["terraform-vars"] = true,
         yaml = true,
       }
 
       vim.api.nvim_create_autocmd("FileType", {
         group = group,
         callback = function(args)
-          if not supported[vim.bo[args.buf].filetype] then
+          local ft = vim.bo[args.buf].filetype
+
+          if not supported[ft] then
             return
           end
 
           pcall(vim.treesitter.start, args.buf)
 
-          if vim.tbl_contains({ "java", "json", "lua", "python", "yaml" }, vim.bo[args.buf].filetype) then
-            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          if indent_filetypes[ft] then
+            vim.bo[args.buf].indentexpr =
+              "v:lua.require'nvim-treesitter'.indentexpr()"
           end
         end,
       })

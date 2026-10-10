@@ -15,3 +15,17 @@ Session.vim.lock
 
 # Temporary validation artifacts
 .validation/
+
+# Original import archive contains machine-local paths; do not publish it.
+/new-Config-nvim.zip
+
+# Local cloud state and credentials
+.env
+.env.*
+!.env.example
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
