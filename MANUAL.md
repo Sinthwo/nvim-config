@@ -1,8 +1,8 @@
 # Windows user manual
 
-**This Neovim and WezTerm configuration is designed for Windows.** Examples use
-PowerShell and resolve directories for the current user. Linux, macOS, and WSL
-installation are outside this manual's supported setup.
+**This Neovim and WezTerm configuration is for Windows.** This manual covers
+installation, everyday shortcuts, optional tools, and customization. The
+examples use PowerShell and resolve paths for the current user.
 
 ## Contents
 
@@ -25,13 +25,13 @@ installation are outside this manual's supported setup.
 
 ## Installation and first launch
 
-Follow the [README installation steps](README.md#install-on-windows). Copy the
-contents using the provided directory-copy command, rather than creating an
-extra `nvim` folder inside the destination. The first launch needs an internet
-connection so lazy.nvim and Mason can download plugins and language tools.
+Follow the [README installation steps](README.md#install-on-windows). The copy
+command puts the files directly in Neovim's configuration directory. Check that
+it has not created an extra `nvim` folder inside that directory. The first launch
+needs an internet connection to download plugins and language tools.
 
-Open a new PowerShell window after installing command-line tools so it receives
-the updated `PATH`. Check the core tools there:
+After installing command-line tools, open a new PowerShell window so it picks
+up the updated `PATH`. Check that the core tools are available:
 
 ```powershell
 nvim --version
@@ -41,19 +41,19 @@ rg --version
 wezterm --version
 ```
 
-Neovim must be 0.12 or newer because the configured Tree-sitter revision uses
-the new API. Its [requirements](https://github.com/nvim-treesitter/nvim-treesitter/blob/e289100ff98969e118c702199d88b764ce9e7fdf/README.md)
-also include Tree-sitter CLI 0.26.1+, `curl`, `tar`, and a C compiler. Mason
-requests the CLI automatically. Install the compiler yourself, and start
-WezTerm from a Developer PowerShell session when using MSVC so Neovim inherits
-the compiler environment.
+The pinned Tree-sitter version
+[requires](https://github.com/nvim-treesitter/nvim-treesitter/blob/e289100ff98969e118c702199d88b764ce9e7fdf/README.md)
+Neovim 0.12 or newer, Tree-sitter CLI 0.26.1 or newer, `curl`, `tar`, and a
+C compiler. Mason installs the CLI automatically. Install a compiler separately.
+If you use MSVC, start WezTerm from Developer PowerShell so Neovim can find
+the compiler and its environment settings.
 
-Language servers install when a source file is opened. Formatters and debugpy
-are requested shortly after startup. Leave the first session open until
+Language-server installation starts when you open a source file. Formatters and
+debugpy begin installing shortly after startup. Leave the first session open until
 `:Lazy` and `:Mason` show that installation has finished, then restart Neovim.
-Parser installation is retried after Mason completes its tool installation.
+Neovim retries parser installation after Mason finishes installing its tools.
 
-Useful first checks are:
+Use these commands to check the setup:
 
 ```vim
 :checkhealth
@@ -68,9 +68,9 @@ Neovim has normal mode for navigation and commands, insert mode for typing,
 and visual mode for selections. Press `i` to type, `Esc` to return to normal
 mode, and `v` to select text. Enter commands with `:` in normal mode.
 
-The leader is **Space**, and the local leader is **backslash**. A shortcut such
+The leader key is **Space**, and the local leader is **backslash**. A shortcut such
 as `Space b c` means press the keys one after another in normal mode. Uppercase
-letters matter. Which-Key displays available groups after pressing Space.
+letters matter. Press Space and wait for Which-Key to show the available shortcuts.
 
 | Keys or command | Action |
 | --- | --- |
@@ -92,9 +92,9 @@ letters matter. Which-Key displays available groups after pressing Space.
 | Space u z | Toggle Zen mode |
 | Space u n | Show notification history |
 
-The tabs along the top represent **buffers**, meaning open files. They are
-separate from WezTerm terminal tabs. Saving before closing avoids prompts or
-refused close operations for modified files.
+The tabs along the top show **buffers**, usually open files. WezTerm has its
+own terminal tabs. Save modified files before closing them to avoid prompts
+or a refused close.
 
 Completion uses Blink's [super-tab preset](https://cmp.saghen.dev/configuration/keymap).
 Tab accepts a suggestion or advances through a snippet; Shift+Tab moves back
@@ -116,17 +116,19 @@ delay. Automatic bracket pairing and surround editing are also enabled.
 | Ctrl+B | Open or close the file explorer |
 
 Inside the explorer, Enter opens an item, `v` or Ctrl+V opens a vertical split,
-and `s` or Ctrl+S opens a horizontal split. Ctrl+B closes the explorer. Its
-Ctrl+S mapping opens a split; the regular editor's Ctrl+S saves a file.
+and `s` or Ctrl+S opens a horizontal split. Ctrl+B closes the explorer.
+Ctrl+S therefore has two uses: it opens a split in the explorer and saves a file
+in the editor.
 
-The explorer follows the active file. Dotfiles and Git-ignored files are
-available rather than forcibly hidden. File pickers use the current working
-directory; launch Neovim from the project folder or use `:cd` to set it. Native
-Windows grep requires ripgrep, as described in the [fzf-lua Windows notes](https://github.com/ibhagwan/fzf-lua/blob/main/README-Win.md).
+The explorer follows the active file and shows dotfiles and Git-ignored files.
+File pickers search the current working directory. Launch Neovim from your
+project folder or use `:cd` to change it. Text search on Windows requires
+ripgrep; see the [fzf-lua Windows notes](https://github.com/ibhagwan/fzf-lua/blob/main/README-Win.md).
 
 ## Language support and formatting
 
-Mason stores tools in Neovim's data directory. The configuration requests:
+Mason installs tools in Neovim's data directory. The supported languages and
+their tools are listed below:
 
 | Language or feature | Tools | Requirements outside Neovim |
 | --- | --- | --- |
@@ -142,21 +144,21 @@ Mason stores tools in Neovim's data directory. The configuration requests:
 | CSV / TSV | csvview.nvim and syntax parsers | No external server required |
 | Syntax highlighting | Tree-sitter parsers | Tree-sitter CLI, curl, tar, C compiler |
 
-Java's server runtime requirements come from [nvim-jdtls](https://github.com/mfussenegger/nvim-jdtls#configuration).
-The project itself can target a different Java version. Maven and Gradle
-projects receive fuller support than standalone Java files.
+See [nvim-jdtls](https://github.com/mfussenegger/nvim-jdtls#configuration) for
+Java's server requirements. Your project can target a different Java version.
+Maven and Gradle projects have more complete support than standalone Java files.
 
-Open `:Mason` to inspect installation state. To explicitly request the configured
-tools, use:
+Open `:Mason` to check installation progress. You can also install the configured
+tools manually:
 
 ```vim
 :MasonInstall basedpyright ruff powershell-editor-services jdtls lua-language-server debugpy stylua prettier tree-sitter-cli
 :MasonInstall bash-language-server yaml-language-server terraform-ls azure-pipelines-language-server shfmt
 ```
 
-Installed servers become available to the next session. PowerShell editor
-services are enabled only when the executable and service script exist; reopen
-Neovim after installing them. Java also reports when jdtls is missing.
+Restart Neovim after installing language servers. PowerShell Editor Services
+needs both a PowerShell executable and Mason's service script. Java shows a
+notification if jdtls is missing.
 
 | Keys | Language-server action |
 | --- | --- |
@@ -171,19 +173,19 @@ Neovim after installing them. Java also reports when jdtls is missing.
 | Space x X | Toggle current-buffer diagnostics |
 | Space x s | Toggle the symbol panel |
 
-Language-server mappings are attached to buffers with an active server.
-Use `:checkhealth vim.lsp` to inspect servers and `:messages` for startup errors.
+These shortcuts are available when a language server is attached to the file.
+Use `:checkhealth vim.lsp` to check servers and `:messages` to view startup errors.
 
 Formatting is **manual**: press Space c f. Python uses Ruff, Lua uses StyLua,
 JSON/YAML use Prettier, Bash uses shfmt, and Terraform uses `terraform fmt`.
-Other languages fall back to an attached language
-server's formatter when one is available. Loading the formatter on save does
-not enable automatic formatting. Inspect providers with `:ConformInfo`.
+Other languages use the attached language server's formatter when available.
+Files are not formatted automatically on save. Use `:ConformInfo` to check
+which formatter is available for the current file.
 
 Java-specific shortcuts are Space j o to organize imports, Space j v to extract
-a variable, and Space j c to extract a constant. Each project's normalized root
-path is hashed into its workspace cache name, so equally named project folders
-have separate caches. A new cache may cause one fresh indexing pass.
+a variable, and Space j c to extract a constant. Each Java project has a separate
+workspace cache, even when two project folders have the same name. The first
+time a new cache is used, jdtls may need to index the project.
 
 ## Python debugging
 
@@ -203,8 +205,8 @@ activate the project's virtual environment before launching Neovim, or set
 
 The debugger UI loads with the debugger, opens on launch or attach, and closes
 when the session ends. Select a Python launch configuration if prompted. This
-setup includes Python debugging; Java debugging needs additional adapter
-configuration and is not enabled here.
+setup supports Python debugging. Java debugging requires an additional adapter
+and configuration.
 
 ## Git and project terminals
 
@@ -227,21 +229,21 @@ Hunk reset discards that hunk's changes. Push and pull use your existing Git
 credentials and remote configuration. This Neovim configuration does not set
 a Git author name or email.
 
-The project-root helper recognizes Git, Python project files, Java build files,
-PowerShell analyzer settings, and Obsidian vault markers. It falls back to the
-working directory. Space a c starts the `codex` CLI and Space a C starts the
-`claude` CLI if those commands are installed and available in `PATH`. These
-shortcuts only launch the external programs; install and authenticate them
-separately if you use them.
+The terminal opens at the project root, identified using Git, Python project
+files, Java build files, PowerShell analyzer settings, or Obsidian vault markers.
+If no root is found, it uses the current working directory.
+
+Space a c starts Codex, and Space a C starts Claude Code. Install the CLIs,
+sign in, and make sure their commands are available in `PATH` before using
+these shortcuts.
 
 ## AI session workspaces
 
 Install the external [Codex CLI](https://learn.chatgpt.com/docs/codex/cli) and/or
 [Claude Code](https://code.claude.com/docs/en/setup), sign in using their own
-instructions, and check `codex --version` / `claude --version` in the terminal
-used to start Neovim. The setup uses the Windows commands found in `PATH`.
-Space a c / Space a C still open one Snacks terminal. Multi-session commands
-create a dedicated **Neovim tab page**:
+instructions. Check `codex --version` and `claude --version` in the terminal
+you use to start Neovim. Space a c and Space a C each open a single terminal.
+The commands below create a dedicated **Neovim tab page** with one or more sessions:
 
 | Command | Action |
 | --- | --- |
@@ -249,23 +251,25 @@ create a dedicated **Neovim tab page**:
 | `:Codex 8` / `:Claude 8` | Open eight independent sessions |
 | `:Codex1` through `:Codex8` | Open the specified number of Codex sessions |
 | `:Claude1` through `:Claude8` | Open the specified number of Claude sessions |
-| `:CodexEnd` / `:ClaudeEnd` | Close the family's AI workspace tabs |
+| `:CodexEnd` / `:ClaudeEnd` | Close all Codex / Claude workspace tabs |
 
 Counts must be whole numbers from 1 to 8. `:Codex_8`, `:Claude_8`,
 `:Codex_End`, and `:Claude_End` are interactive command-line abbreviations.
 Use the forms without underscores in scripts and mappings.
 
-Code stays in its original tab. Bufferline hides file tabs in the AI workspace.
-One session fills the tab; two stack vertically; three to eight use two balanced
-columns. Each process starts at the current project root. Use `gt` / `gT` to
-switch Neovim tabs, Ctrl+H/J/K/L to focus a split in normal mode, `i` to enter
-terminal input, and Esc twice to return to normal mode. Eight splits require a
-sufficiently large terminal.
+Your code stays in its original tab. In the AI tab, Bufferline hides the file
+tabs so you can focus on the sessions. One session fills the tab, two are stacked
+vertically, and three to eight are arranged in two columns. Each session starts
+at the current project root. Enlarge the terminal when using many sessions.
 
-End commands close that family's workspace tabs, wipe their terminal buffers,
-and return to the original coding tab when it exists. Closing a session ends
-its process. CLI authentication, permissions, and account usage are controlled
-by the external programs.
+Use `gt` and `gT` to switch Neovim tabs. In normal mode, Ctrl+H/J/K/L moves
+between splits, and `i` enters terminal input mode. Press Esc twice to return
+to normal mode.
+
+`:CodexEnd` closes all Codex workspace tabs; `:ClaudeEnd` closes all Claude
+workspace tabs. Both return to the original coding tab if it is still open.
+Closing a session ends its process. Sign-in, permissions, and account usage
+are managed by the CLIs.
 
 ## Azure and cloud tools
 
@@ -282,9 +286,9 @@ Mason manages the configured Bash, YAML, Terraform, and Azure Pipelines servers.
 | Space z r | `:AzureResources` | List resources |
 | Space z p | `:AzurePowerShell` | Open PowerShell 7 and import Az when installed |
 
-These account/resource shortcuts display information using your existing Azure
-sign-in. `AzurePowerShell` reports how to install Az when it is missing; run
-`Connect-AzAccount` yourself to authenticate.
+The account and resource commands use your current Azure sign-in.
+`:AzurePowerShell` shows an installation command if Az is missing. Use
+`Connect-AzAccount` inside that terminal to sign in to Azure PowerShell.
 
 Bicep uses regular LSP shortcuts for diagnostics, completion, hover, definitions,
 references, rename, and code actions. Restart Neovim after installing `bicep-ls`.
@@ -298,8 +302,8 @@ and `.tfvars` use terraform-ls; formatting requires the Terraform CLI. Bash
 support applies to shell files detected as `sh` or `bash`.
 
 Project detection also recognizes `bicepconfig.json`, pipeline files, `.terraform`,
-and `main.tf`, with corresponding UI language labels. `azfunc.nvim` remains
-optional; no .NET isolated Azure Functions debug adapter is configured.
+and `main.tf`. Azure Functions debugging is an optional addition and requires
+a .NET debug adapter and the relevant tools.
 
 ## CSV and TSV tables
 
@@ -314,7 +318,8 @@ Space c v / `:CsvViewToggle` toggles the display. `:CsvViewEnable`,
 :CsvViewEnable delimiter=; header_lnum=1
 ```
 
-The underlying text remains editable. CSV adds no Tab or Shift+Tab mappings.
+You can edit the file normally while the table view is active. Tab and Shift+Tab
+keep their usual behavior.
 
 ## Image and PDF previews
 
@@ -323,10 +328,9 @@ Open a supported file in the explorer, use `:edit`, or run
 current file. Use filename completion for paths with spaces; the command accepts
 the whole path without shell quotes.
 
-Each preview opens and activates a separate **WezTerm tab** titled with the
-filename. Earlier previews stay open. Neovim intercepts the binary file before
-reading it and returns to the previous code buffer. Previews are separate from
-Neovim's Bufferline and AI workspace tabs.
+Each preview opens in a separate **WezTerm tab** named after the file. Previous
+previews stay open. Neovim returns to your previous code buffer instead of
+displaying the image or PDF as binary text.
 
 | Format | Viewer |
 | --- | --- |
@@ -343,9 +347,8 @@ PDF conversion. Conversion failures appear in notifications.
 `:ImagePreviewClose` closes the latest preview; `:ImagePreviewCloseAll` closes
 all previews created by this Neovim process. The WezTerm tab close button or
 Ctrl+Shift+W can close one directly. Neovim closes its preview panes and deletes
-temporary files on exit. The viewer uses the current Windows `%COMSPEC%`/`cmd.exe`,
-so it does not depend on PowerShell. Snacks.image stays disabled, and the image
-plugin stub declares no rendering plugin.
+temporary files on exit. The viewer runs through Windows Command Prompt
+(`cmd.exe`).
 
 ## Markdown and Obsidian
 
@@ -386,20 +389,20 @@ machine settings and do not need to be added to the shared Lua files.
 | Space o c | Check the vault and plugin setup |
 
 Run `:Obsidian` once to load its integration, then open a note in the configured
-vault. Note and tag completion uses the plugin's built-in LSP with Blink's `lsp`
-source; the removed `completion.blink` and `completion.nvim_cmp` options are
-unnecessary. Ordinary Markdown outside the vault can still use the renderer.
+vault. Note and tag completion uses the plugin's built-in language server with
+Blink. Markdown rendering also works for files outside the vault.
 
 ## WezTerm and wallpapers
 
-See [image credits](nvim/backgrounds/CREDITS.md) for the current supplied collection.
-The previous [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime)
-wallpapers have been replaced by the images from the updated configuration.
+Sources for the included wallpapers are listed in
+[image credits](nvim/backgrounds/CREDITS.md). The images from
+[ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) were removed because
+the wallpaper collection was replaced.
 
-The companion config belongs at `$HOME\.wezterm.lua`. It uses an opaque
-Tokyo Night window. A darkened wallpaper appears while Neovim signals
-`NVIM_ACTIVE=1`; it is cleared when Neovim exits or the selected file is missing.
-Neovim itself does not render a terminal wallpaper.
+Install the companion configuration at `$HOME\.wezterm.lua`. WezTerm uses
+Tokyo Night colors and displays a darkened wallpaper while Neovim is active.
+It restores the normal terminal appearance when Neovim exits or the selected
+image is missing. The terminal window stays opaque.
 
 | Keys or command | Action |
 | --- | --- |
@@ -409,17 +412,15 @@ Neovim itself does not render a terminal wallpaper.
 | Alt+Enter | Toggle WezTerm fullscreen |
 | Ctrl+Shift+L | Open the WezTerm debug overlay |
 
-The picker recursively searches this folder and its subfolders for PNG,
-JPG/JPEG, GIF, BMP, and WebP files. It uses fzf-lua when available and otherwise
-falls back to `vim.ui.select`. SVG is not listed. Three supplied images contained
-WebP data under JPEG names; their extensions now match their contents, without
-re-encoding. PNG and JPEG are good choices for terminal compatibility.
+The picker searches the image folder and its subfolders for PNG,
+JPG/JPEG, GIF, BMP, and WebP files. It uses fzf-lua when available and Neovim's
+built-in selector otherwise. SVG files are not listed.
 
 The default folder is Neovim's config directory plus `backgrounds`, normally
 `$env:LOCALAPPDATA\nvim\backgrounds`. A selection is saved as a relative path such as
 `Magi/01-Magi-Star.jpg` in `selected-background.txt`. Cancelling leaves the selection
-unchanged. WezTerm reads the choice about once a second. Old absolute selections
-still work locally; selecting an image again replaces them with a relative path.
+unchanged. WezTerm checks the selection about once a second. Older selections
+with absolute paths still work locally. Choosing another image saves a relative path.
 
 To use a custom folder, set the same environment variable before launching
 WezTerm and Neovim:
@@ -432,7 +433,7 @@ New-Item -ItemType Directory -Path $backgroundDir -Force | Out-Null
 
 Place images there, restart WezTerm, and choose one in Neovim. Use an absolute
 directory or a `~/...` home-relative directory. Both applications must receive
-the same value. The default WezTerm resolver also honors `XDG_CONFIG_HOME` and
+the same value. WezTerm also uses `XDG_CONFIG_HOME` and
 `NVIM_APPNAME` if you use those Neovim settings.
 
 ## Customization and privacy
@@ -452,51 +453,49 @@ for new local paths. PowerShell discovery uses `PATH`, `ProgramFiles`, and
 
 The main settings are in `nvim/lua/config/options.lua`, editor shortcuts in
 `nvim/lua/config/keymaps.lua`, and plugin settings under `nvim/lua/plugins/`.
-WezTerm's appearance, background brightness, and terminal shortcuts live in
-`WezTerminal-Config/.wezterm.lua`. The font is not forced; configure a locally
-installed Nerd Font if you want every icon to render.
+WezTerm's appearance, wallpaper brightness, and terminal shortcuts are set in
+`WezTerminal-Config/.wezterm.lua`. Choose a locally installed Nerd Font in
+WezTerm to display all icons.
 
-The picker saves only a relative image path; its local selection file is optional and is
-created when you choose a background. Generated selections,
-logs, sessions, and editor temporary files are ignored by Git. `.gitignore`
-does not exclude files from a hand-made ZIP or remove files already tracked:
-review what you actually share. Keep private vault paths and credentials in
-local settings. The original import ZIP and `.validation/` backups are ignored;
-these local inputs can contain old private paths and must also be excluded from
-a manually prepared ZIP. Image provenance is recorded in the credits file,
-and the asset folder has no nested local Git history.
+Choosing a wallpaper creates a local selection file containing a relative image
+path. Git ignores selections, logs, sessions, editor temporary files, and local
+validation backups. It also ignores `.env` files, `.terraform/`, Terraform state
+and plan files, and crash logs. Keep private vault paths and credentials in
+local settings.
 
-Cloud state and local environment files (`.env`, `.terraform/`, `*.tfstate`,
-`*.tfplan`, and crash logs) are ignored. Ignore rules do not sanitize files
-already tracked by Git. Keep credentials and private cloud values out of Lua,
-Markdown, and Terraform examples that you publish.
+Ignore rules apply to untracked files. They do not remove files that Git already
+tracks, and they do not filter a ZIP you create manually. Review the files you
+share, especially archives and backups that may contain old private paths.
 
-Ordinary filenames, project names, recent-file lists, and buffer paths remain
-visible during use. This setup cleans shared configuration files rather than
-providing a screen-sharing privacy mode. Git author details for commits are
-controlled by your own Git settings.
+Filenames, project names, recent files, and buffer paths are visible in the
+editor. Keep this in mind when sharing screenshots or your screen.
 
-Before committing, inspect the author metadata as well as the files:
+Git controls the author name and email attached to commits. To review the
+identities in the repository's history, run:
 
 ```powershell
 git log --all --format='%h %an <%ae>'
+```
+
+If you prefer a public alias and a GitHub noreply address for future commits,
+set them for this repository. Replace both placeholders with your own values:
+
+```powershell
 git config user.name 'YOUR_PUBLIC_ALIAS'
 git config user.email 'YOUR_GITHUB_NOREPLY_EMAIL'
 ```
 
-Copy your actual noreply address from GitHub's email settings; do not leave the
-placeholder as your email. See [GitHub's commit email instructions](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/setting-your-commit-email-address).
-These settings affect future commits. Existing commits retain their original
-author and committer details; deleting personal paths from files does not erase
-that history. Review it before publishing. Removing identity from existing
-history is a separate Git history rewrite, which this cleanup does not perform.
+Copy your actual noreply address from GitHub's email settings; see
+[GitHub's commit email instructions](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/setting-your-commit-email-address).
+Changing these settings affects future commits. Existing commits keep their
+original author and committer details unless the history is rewritten.
 
 ## Plugin management
 
 Use `:Lazy` to inspect plugin status. `:Lazy restore` returns installed plugins
-to revisions recorded in `lazy-lock.json`; `:Lazy update` deliberately updates
-them and can change the lockfile. Keep the lockfile with the shared config.
-Plugins already declared without a lock entry are installed when first needed.
+to the versions recorded in `lazy-lock.json`. `:Lazy update` installs newer
+versions and can change the lockfile. Keep the lockfile when sharing the config.
+Plugins without a lockfile entry are installed when first needed.
 
 Use `:Mason` to inspect language tools, `:MasonUpdate` to refresh its registry,
 and `:MasonInstall` to install packages. Mason's tool-installer also requests the
@@ -538,8 +537,8 @@ after a plugin update. Reopen the file if highlighting has not attached yet.
 | Image preview fails | Run Neovim inside WezTerm, check `wezterm` in PATH, and inspect `:messages`. |
 | Image or PDF conversion fails | Check `magick -version`; PDF may also need Ghostscript and policy support. |
 
-Missing external programs are reported rather than configured with personal
-fallback paths. `:messages` and Space u n help recover notifications.
+If an external program is missing, Neovim shows a notification. Use `:messages`
+or Space u n to review notifications you missed.
 
 ## Validate the configuration
 
@@ -551,11 +550,11 @@ nvim --headless -u NONE -i NONE -n -l tools/verify-config.lua
 wezterm --config-file '.\WezTerminal-Config\.wezterm.lua' show-keys
 ```
 
-The first command checks Lua syntax and regression scenarios using fake plugin
-APIs and synthetic Windows profiles. It covers wallpaper paths, cancellation,
-missing selections, debugger UI loading, unique buffer shortcuts, Obsidian
-overrides, PowerShell quoting, parser-install retries, and Java cache separation.
-It also checks documentation links and shortcut coverage.
-The suite also covers recursive/fzf wallpaper picking, cloud/filetype settings,
-AI workspace commands, and preview arguments/cleanup using test doubles.
-WezTerm's command loads the real terminal config without opening a new terminal window.
+The first command checks Lua syntax, documentation links, and shortcuts. It also
+tests path handling with sample Windows profiles, wallpaper selection,
+debugger loading, Obsidian settings, parser installation retries, Java caches,
+cloud tools, AI sessions, and preview commands.
+
+These checks simulate plugin behavior. Test interactive features in your normal
+Neovim session as well. The second command loads the WezTerm configuration and
+prints its keybindings.

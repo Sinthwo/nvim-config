@@ -1,8 +1,6 @@
 local M = {}
 
--- Each preview gets its own real WezTerm tab.
--- We keep track of every spawned preview independently so opening a new image
--- never replaces or closes an older image tab.
+-- Track each preview in its own WezTerm tab.
 local previews = {}
 local preview_order = {}
 
@@ -85,7 +83,7 @@ end
 local function kill_preview(pane_id, silent)
   if not pane_id then
     if not silent then
-      vim.notify("No image preview tab is open", vim.log.levels.INFO, { title = "Image Preview" })
+      vim.notify("No image preview tabs are open.", vim.log.levels.INFO, { title = "Image Preview" })
     end
     return
   end
@@ -106,7 +104,7 @@ local function kill_preview(pane_id, silent)
   remove_preview_record(pane_id)
 
   if not silent then
-    vim.notify("Image preview tab closed", vim.log.levels.INFO, { title = "Image Preview" })
+    vim.notify("Image preview tab closed.", vim.log.levels.INFO, { title = "Image Preview" })
   end
 end
 
@@ -126,7 +124,7 @@ local function close_all_previews(silent)
   preview_order = {}
 
   if not silent then
-    vim.notify("All image preview tabs closed", vim.log.levels.INFO, { title = "Image Preview" })
+    vim.notify("All image preview tabs closed.", vim.log.levels.INFO, { title = "Image Preview" })
   end
 end
 
@@ -151,8 +149,7 @@ local function write_preview_script(wezterm, path)
     "echo Image Preview",
     "echo Close this preview using the WezTerm tab close button or Ctrl+Shift+W.",
     "echo This tab stays open until you close it.",
-    -- Keep the preview tab alive without leaving an interactive shell prompt
-    -- and without closing on an arbitrary key press.
+    -- Keep the preview open until the tab is closed.
     "ping -t 127.0.0.1 >nul",
   }
 
@@ -181,7 +178,7 @@ local function spawn_wezterm_preview(path, original_path, temp_file)
 
   if not current_pane or current_pane == "" then
     vim.notify(
-      "This preview requires Neovim to be running inside WezTerm.",
+      "Run Neovim inside WezTerm to open image and PDF previews.",
       vim.log.levels.ERROR,
       { title = "Image Preview" }
     )
@@ -189,7 +186,7 @@ local function spawn_wezterm_preview(path, original_path, temp_file)
     return
   end
 
-  -- Do not depend on PowerShell. COMSPEC/cmd.exe is available on Windows.
+  -- Use the Windows command interpreter specified by COMSPEC.
   local cmd = vim.env.ComSpec
   if not cmd or cmd == "" then
     cmd = vim.env.COMSPEC
@@ -213,8 +210,7 @@ local function spawn_wezterm_preview(path, original_path, temp_file)
     return
   end
 
-  -- Every image is spawned as a NEW WezTerm tab. Existing image tabs remain
-  -- untouched, so multiple pictures behave like normal independent tabs.
+  -- Open each preview in a separate WezTerm tab.
   vim.system({
     wezterm,
     "cli",
@@ -247,8 +243,7 @@ local function spawn_wezterm_preview(path, original_path, temp_file)
         return
       end
 
-      -- Keep the pane id as a string. There is no reason to convert it to a
-      -- Lua number, which also avoids the tonumber(base) issue seen before.
+      -- Keep the pane identifier returned by WezTerm as a string.
       local output = trim(result.stdout)
       local pane_id = output:match("(%d+)")
 
@@ -256,7 +251,7 @@ local function spawn_wezterm_preview(path, original_path, temp_file)
         delete_file(script_path)
         delete_file(temp_file)
         vim.notify(
-          "Image tab opened, but its WezTerm pane id could not be detected.\nOutput: " .. output,
+          "The preview opened, but WezTerm did not return a pane identifier.\nOutput: " .. output,
           vim.log.levels.WARN,
           { title = "Image Preview" }
         )
@@ -272,7 +267,7 @@ local function spawn_wezterm_preview(path, original_path, temp_file)
       }
       table.insert(preview_order, pane_id)
 
-      -- Give every image preview a useful top-level WezTerm tab title.
+      -- Name the preview tab after its source file.
       vim.system({
         wezterm,
         "cli",
@@ -342,7 +337,7 @@ function M.open(path)
   path = vim.fn.fnamemodify(path or "", ":p")
 
   if path == "" or vim.fn.filereadable(path) ~= 1 then
-    vim.notify("Image file not found: " .. path, vim.log.levels.ERROR, { title = "Image Preview" })
+    vim.notify("Preview file not found: " .. path, vim.log.levels.ERROR, { title = "Image Preview" })
     return
   end
 
@@ -352,8 +347,7 @@ function M.open(path)
     return
   end
 
-  -- IMPORTANT: do NOT close an existing preview here. Every file gets its own
-  -- independent WezTerm tab, just like opening multiple normal tabs.
+  -- Existing previews stay open when another file is opened.
   if direct_extensions[ext] then
     spawn_wezterm_preview(path, path, nil)
   else
@@ -376,7 +370,7 @@ function M.setup()
   end, {
     nargs = "?",
     complete = "file",
-    desc = "Preview an image/PDF in a new dedicated WezTerm tab",
+    desc = "Preview an image or PDF in a new WezTerm tab",
   })
 
   vim.api.nvim_create_user_command("ImagePreviewClose", function()
@@ -393,9 +387,7 @@ function M.setup()
 
   local group = vim.api.nvim_create_augroup("UserStableWezTermImagePreview", { clear = true })
 
-  -- Intercept image/PDF files before Neovim reads their binary contents.
-  -- The actual image is rendered by stable WezTerm's own `imgcat` support in
-  -- a dedicated WezTerm tab. Opening more images creates more WezTerm tabs.
+  -- Open a WezTerm preview before Neovim reads the file as binary text.
   vim.api.nvim_create_autocmd("BufReadCmd", {
     group = group,
     pattern = patterns,
@@ -410,10 +402,10 @@ function M.setup()
       vim.bo[args.buf].modifiable = true
 
       vim.api.nvim_buf_set_lines(args.buf, 0, -1, false, {
-        "Image preview is opening in a new WezTerm tab...",
+        "Opening a preview in a new WezTerm tab...",
         path,
         "",
-        "Each image remains open as its own tab until you close it.",
+        "The preview stays open until you close its tab.",
       })
 
       vim.bo[args.buf].modified = false

@@ -20,7 +20,7 @@ return {
       { "<leader>gh", function() require("gitsigns").preview_hunk() end, desc = "Preview hunk" },
       { "<leader>gs", function() require("gitsigns").stage_hunk() end, desc = "Stage hunk" },
       { "<leader>gr", function() require("gitsigns").reset_hunk() end, desc = "Reset hunk" },
-      { "<leader>gb", function() require("gitsigns").blame_line({ full = true }) end, desc = "Git blame line" },
+      { "<leader>gb", function() require("gitsigns").blame_line({ full = true }) end, desc = "Show line blame" },
     },
   },
 

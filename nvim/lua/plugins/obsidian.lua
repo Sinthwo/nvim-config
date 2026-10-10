@@ -48,12 +48,12 @@ return {
     end,
 
     keys = {
-      { "<leader>oq", "<cmd>Obsidian quick_switch<CR>", desc = "Obsidian quick switch" },
-      { "<leader>os", "<cmd>Obsidian search<CR>", desc = "Obsidian search" },
-      { "<leader>on", "<cmd>Obsidian new<CR>", desc = "Obsidian new note" },
-      { "<leader>ot", "<cmd>Obsidian today<CR>", desc = "Obsidian today" },
-      { "<leader>ob", "<cmd>Obsidian backlinks<CR>", desc = "Obsidian backlinks" },
-      { "<leader>oc", "<cmd>Obsidian check<CR>", desc = "Obsidian check" },
+      { "<leader>oq", "<cmd>Obsidian quick_switch<CR>", desc = "Find an Obsidian note" },
+      { "<leader>os", "<cmd>Obsidian search<CR>", desc = "Search Obsidian vault" },
+      { "<leader>on", "<cmd>Obsidian new<CR>", desc = "Create Obsidian note" },
+      { "<leader>ot", "<cmd>Obsidian today<CR>", desc = "Open today's note" },
+      { "<leader>ob", "<cmd>Obsidian backlinks<CR>", desc = "Show Obsidian backlinks" },
+      { "<leader>oc", "<cmd>Obsidian check<CR>", desc = "Check Obsidian setup" },
     },
   },
 }

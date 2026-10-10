@@ -26,9 +26,7 @@ return {
       quickfile = { enabled = true },
       terminal = { enabled = true },
 
-      -- Image rendering is handled by config.image_preview using WezTerm's
-      -- own stable `wezterm imgcat` command in a real WezTerm pane.
-      -- Keep Snacks.image disabled to avoid Kitty-protocol issues on Windows.
+      -- config.image_preview handles image and PDF previews through WezTerm.
       image = { enabled = false },
 
       input = { enabled = true },

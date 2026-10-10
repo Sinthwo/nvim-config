@@ -304,12 +304,8 @@ end
 -- Transparent UI
 -- =========================================================
 
--- IMPORTANT:
--- nvim_set_hl() replaces the full highlight definition.
--- We therefore only touch groups that already exist and we preserve every
--- supported foreground/style attribute. This keeps Snacks (and other plugins)
--- from seeing an empty Normal foreground while still allowing the WezTerm
--- wallpaper to show through Neovim.
+-- nvim_set_hl() replaces the full highlight definition. Preserve text colors
+-- and styles when removing backgrounds from existing groups.
 local function get_hl(group)
   local ok, hl = pcall(
     vim.api.nvim_get_hl,
@@ -364,8 +360,7 @@ local function make_group_transparent(group)
     end
   end
 
-  -- If removing the background would leave a completely empty group, leave
-  -- that group alone. This is especially important for background-only groups.
+  -- Leave background-only groups intact so they do not become empty.
   if vim.tbl_isempty(new_hl) then
     return
   end
@@ -380,8 +375,7 @@ local function ensure_normal_foreground()
     return
   end
 
-  -- Normally TokyoNight already provides Normal.fg. These fallbacks are only
-  -- here as a guard so Snacks can always resolve a usable foreground colour.
+  -- Supply a text color if the theme has not defined Normal.fg.
   local fallback_groups = {
     "NormalNC",
     "Identifier",
@@ -401,7 +395,7 @@ local function ensure_normal_foreground()
     end
   end
 
-  -- TokyoNight's normal foreground as a last-resort safety fallback.
+  -- Use Tokyo Night's text color if no existing group provides one.
   vim.api.nvim_set_hl(0, "Normal", {
     fg = 0xc0caf5,
     bg = "NONE",
@@ -409,8 +403,7 @@ local function ensure_normal_foreground()
 end
 
 local function make_transparent()
-  -- Ensure Normal always has a foreground before Snacks or other plugins read
-  -- it (Snacks GH/health code can blend colours using Normal as a fallback).
+  -- Plugins need a valid Normal foreground before reading highlight colors.
   ensure_normal_foreground()
 
   local groups = {
@@ -733,9 +726,7 @@ return {
       options = {
         mode = "buffers",
 
-        -- Keep the normal file tabs in the normal coding tab only. AI
-        -- workspaces use their own Neovim tab page and show only the Codex /
-        -- Claude terminal grid, never the user's coding buffers.
+        -- Hide file tabs while viewing an AI workspace.
         custom_filter = function()
           return not vim.t.ai_workspace
         end,
@@ -761,14 +752,13 @@ return {
         left_mouse_command =
           "buffer %d",
 
-        -- Middle click = close. Modified buffers get a save/discard/cancel
-        -- prompt instead of throwing E89.
+        -- Close with the mouse using Snacks' save prompt when available.
         middle_mouse_command = safe_buffer_delete,
 
-        -- Right click = close with the same safe behaviour.
+        -- Use the same close action for right-click.
         right_mouse_command = safe_buffer_delete,
 
-        -- Clicking X = close with the same safe behaviour.
+        -- Use the same close action for the X button.
         close_command = safe_buffer_delete,
 
         offsets = {
@@ -883,7 +873,7 @@ return {
         "<cmd>BufferLineCloseLeft<CR>",
 
         desc =
-          "Close files left",
+          "Close files to the left",
       },
 
       {
@@ -892,7 +882,7 @@ return {
         "<cmd>BufferLineCloseRight<CR>",
 
         desc =
-          "Close files right",
+          "Close files to the right",
       },
     },
   },
@@ -967,7 +957,7 @@ return {
 
         {
           "<leader>t",
-          group = "Terminal / Test",
+          group = "Terminal",
         },
 
         {

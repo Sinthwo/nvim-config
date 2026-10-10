@@ -10,13 +10,13 @@ Session.vim.lock
 *.swo
 *~
 
-# Do not bundle another repository's local Git metadata.
+# Nested Git metadata
 **/.git/
 
 # Temporary validation artifacts
 .validation/
 
-# Original import archive contains machine-local paths; do not publish it.
+# Local import archive
 /new-Config-nvim.zip
 
 # Local cloud state and credentials

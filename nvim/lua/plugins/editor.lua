@@ -4,9 +4,9 @@ return {
     cmd = "Trouble",
     opts = {},
     keys = {
-      { "<leader>xx", "<cmd>Trouble diagnostics toggle<CR>", desc = "Problems" },
-      { "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<CR>", desc = "Buffer problems" },
-      { "<leader>xs", "<cmd>Trouble symbols toggle focus=false<CR>", desc = "Symbols" },
+      { "<leader>xx", "<cmd>Trouble diagnostics toggle<CR>", desc = "Toggle project diagnostics" },
+      { "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<CR>", desc = "Toggle file diagnostics" },
+      { "<leader>xs", "<cmd>Trouble symbols toggle focus=false<CR>", desc = "Toggle symbols" },
     },
   },
 

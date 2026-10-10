@@ -72,7 +72,7 @@ local function save_selection(item)
 
   local dir = background_dir()
   local selected = vim.fs.joinpath(dir, "selected-background.txt")
-  -- Keep subfolders without saving a username or machine-specific drive.
+  -- Save the path relative to the wallpaper folder, including any subfolders.
   local ok, err = pcall(vim.fn.writefile, { (item.display:gsub("\\", "/")) }, selected)
 
   if not ok then
@@ -85,7 +85,7 @@ local function save_selection(item)
   end
 
   vim.notify(
-    "Selected background: " .. item.display,
+    "Selected wallpaper: " .. item.display,
     vim.log.levels.INFO,
     { title = "Background" }
   )
@@ -101,7 +101,7 @@ local function native_select(images)
   end
 
   vim.ui.select(labels, {
-    prompt = "Choose terminal background",
+    prompt = "Choose a terminal wallpaper",
   }, function(choice)
     if choice then
       save_selection(by_label[choice])
@@ -125,7 +125,7 @@ local function fzf_select(images)
   end
 
   fzf.fzf_exec(labels, {
-    prompt = "Background> ",
+    prompt = "Wallpaper> ",
     actions = {
       ["default"] = function(selected)
         local choice = selected and selected[1]
@@ -159,15 +159,14 @@ function M.pick()
 
   if #images == 0 then
     vim.notify(
-      "No images found in " .. dir .. "\nUse :BackgroundFolder to open it.",
+      "No wallpapers found in " .. dir .. "\nUse :BackgroundFolder to open the folder.",
       vim.log.levels.WARN,
       { title = "Background" }
     )
     return
   end
 
-  -- Prefer the same fzf-lua UI already used elsewhere in this config. If it
-  -- is unavailable for any reason, fall back to Neovim's built-in selector.
+  -- Use fzf-lua when available, or Neovim's built-in selector otherwise.
   if not fzf_select(images) then
     native_select(images)
   end

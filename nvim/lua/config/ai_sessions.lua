@@ -2,8 +2,7 @@ local M = {}
 
 local MAX_SESSIONS = 8
 
--- Keep track of AI workspaces so :Codex_End / :Claude_End can shut down
--- every terminal process and close the workspace tab cleanly.
+-- Track AI tabs so CodexEnd and ClaudeEnd can close their sessions.
 local workspaces = {
   Codex = {},
   Claude = {},
@@ -46,9 +45,8 @@ local function mark_scratch_buffer(buf)
 end
 
 local function start_terminal(command, cwd, label, family, index, total)
-  -- Splits inherit the buffer from the source window. Replace it with a tiny
-  -- unlisted scratch buffer before starting :terminal so normal coding buffers
-  -- never become part of the AI workspace.
+  -- Start the terminal in an unlisted scratch buffer so splits do not reuse
+  -- a code buffer.
   vim.cmd("enew")
 
   local scratch = vim.api.nvim_get_current_buf()
@@ -94,16 +92,12 @@ end
 
 local function cleanup_workspace(workspace)
   if not workspace or workspace.closing then
-    return
+    return false
   end
 
   workspace.closing = true
 
-  -- Close ONLY the dedicated AI tab page.
-  -- We intentionally do not call jobstop() or delete terminal buffers here.
-  -- The terminal buffers use bufhidden=wipe, so closing the AI tab naturally
-  -- wipes those terminal buffers and ends their jobs without touching normal
-  -- coding tabs or buffers.
+  -- Closing the AI tab wipes its terminal buffers and ends their jobs.
   local tab = workspace.tab
   local origin_tab = workspace.origin_tab
 
@@ -111,8 +105,20 @@ local function cleanup_workspace(workspace)
     local tabs = vim.api.nvim_list_tabpages()
 
     if #tabs > 1 then
-      pcall(vim.api.nvim_set_current_tabpage, tab)
-      pcall(vim.cmd, "tabclose!")
+      local ok, err = pcall(function()
+        vim.api.nvim_set_current_tabpage(tab)
+        vim.cmd("tabclose!")
+      end)
+
+      if not ok then
+        workspace.closing = false
+        vim.notify(
+          "Could not close the " .. workspace.family .. " workspace:\n" .. tostring(err),
+          vim.log.levels.WARN,
+          { title = workspace.family }
+        )
+        return false
+      end
 
       -- Return to the tab the user had open before starting the AI workspace.
       if origin_tab and vim.api.nvim_tabpage_is_valid(origin_tab) then
@@ -120,14 +126,17 @@ local function cleanup_workspace(workspace)
       end
     else
       vim.notify(
-        "Cannot close the only remaining tab page.",
+        "Cannot close the only remaining Neovim tab. Open another tab first.",
         vim.log.levels.WARN,
         { title = workspace.family }
       )
+      workspace.closing = false
+      return false
     end
   end
 
   remove_workspace_record(workspace.family, workspace)
+  return true
 end
 
 local function end_family(family)
@@ -135,32 +144,36 @@ local function end_family(family)
 
   if #entries == 0 then
     vim.notify(
-      "No " .. family .. " workspace is currently open.",
+      "No " .. family .. " workspace tabs are open.",
       vim.log.levels.INFO,
       { title = family }
     )
     return
   end
 
-  -- Shallow-copy the list so cleanup can remove the original workspace
-  -- records while we iterate over stable references.
+  -- Copy the list before closing tabs, since closing removes their records.
   local targets = {}
 
   for i, workspace in ipairs(entries) do
     targets[i] = workspace
   end
 
+  local closed = 0
   for _, workspace in ipairs(targets) do
-    cleanup_workspace(workspace)
+    if cleanup_workspace(workspace) then
+      closed = closed + 1
+    end
   end
 
   vim.cmd("redrawtabline")
 
-  vim.notify(
-    family .. " workspace tab closed.",
-    vim.log.levels.INFO,
-    { title = family }
-  )
+  if closed > 0 then
+    vim.notify(
+      string.format("Closed %d %s workspace tab%s.", closed, family, closed == 1 and "" or "s"),
+      vim.log.levels.INFO,
+      { title = family }
+    )
+  end
 end
 
 local function create_workspace(command, display_name, count)
@@ -168,7 +181,7 @@ local function create_workspace(command, display_name, count)
 
   if not count or count < 1 or count > MAX_SESSIONS or count ~= math.floor(count) then
     vim.notify(
-      display_name .. " session count must be between 1 and " .. MAX_SESSIONS .. ".",
+      display_name .. " session count must be a whole number between 1 and " .. MAX_SESSIONS .. ".",
       vim.log.levels.WARN
     )
     return
@@ -186,8 +199,7 @@ local function create_workspace(command, display_name, count)
   local root = project_root()
   local origin_tab = vim.api.nvim_get_current_tabpage()
 
-  -- AI sessions live in their own tab page. The original tab remains exactly
-  -- as it was: only the user's normal coding files stay there.
+  -- Create a dedicated tab for the terminal sessions.
   vim.cmd("tabnew")
 
   local workspace_tab = vim.api.nvim_get_current_tabpage()
@@ -209,7 +221,7 @@ local function create_workspace(command, display_name, count)
 
   table.insert(workspaces[display_name], workspace)
 
-  -- Session 1 uses the initial window. No code buffer is copied into this tab.
+  -- Start the first session in the tab's initial window.
   local first = start_terminal(
     command,
     root,
@@ -274,7 +286,7 @@ local function create_workspace(command, display_name, count)
     end
   end
 
-  -- Fill the complete second tab with the AI terminal grid.
+  -- Give the terminal splits equal space.
   vim.cmd("wincmd =")
 
   if workspace.terminals[1] and vim.api.nvim_win_is_valid(workspace.terminals[1].win) then
@@ -325,8 +337,7 @@ local function create_family(command, display_name, command_name)
       desc = string.format("Open %d %s sessions", session_count, display_name),
     })
 
-    -- User-command names cannot contain underscores, so keep the requested
-    -- :Codex_8 / :Claude_8 syntax as a command-line abbreviation.
+    -- Use command-line abbreviations for aliases containing underscores.
     create_command_alias(alias_name, actual_name)
   end
 
@@ -336,7 +347,7 @@ local function create_family(command, display_name, command_name)
   vim.api.nvim_create_user_command(end_command, function()
     end_family(display_name)
   end, {
-    desc = "Close the dedicated " .. display_name .. " workspace tab",
+    desc = "Close all " .. display_name .. " workspace tabs",
   })
 
   create_command_alias(end_alias, end_command)

@@ -1,10 +1,9 @@
 # Wallpaper sources for the Windows configuration
 
-The repository owner supplied these source links for the replacement images.
-The links identify the download pages or collections; artist and publisher
-credits remain with the original sources.
+The following links point to the source pages or collections for the current
+wallpapers. See each source for artist and publisher credits.
 
-| Image folder / file | Source supplied by the owner |
+| Image folder / file | Source |
 | --- | --- |
 | Agents of the Four Seasons Dance of Spring / `Change_01-agents-of-spring-Change-to-spring.webp` | [Anime Atelier: Agents of the Four Seasons](https://www.anime-atelier.com/agents-of-the-four-seasons-dance-of-spring-anime/) |
 | Bleach / `01-Bleach-Bankai.png` | [Alpha Coders wallpaper 1409651](https://wall.alphacoders.com/big.php?i=1409651) |
@@ -19,10 +18,6 @@ credits remain with the original sources.
 
 ## Previous collection
 
-The owner deleted the previous images from
-[ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) from the current
-wallpaper collection. The source credit is retained here for the earlier release.
-Those images are no longer bundled in the current configuration.
-
-Three replacement files were WebP images with JPEG extensions. Their filenames
-now use `.webp`; their image bytes, dimensions, and embedded credits were preserved.
+The images from [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime)
+were removed because this configuration now uses the wallpapers listed above.
+The link credits the collection used in earlier releases.

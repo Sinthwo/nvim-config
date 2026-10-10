@@ -432,10 +432,7 @@ return {
       )
 
       -- ===================================================
-      -- Enable LSPs manually
-      --
-      -- We intentionally control this ourselves instead of
-      -- Mason automatically enabling everything.
+      -- Enable the configured language servers
       -- ===================================================
 
       vim.lsp.enable("basedpyright")
@@ -701,10 +698,7 @@ return {
         "azure_pipelines_ls",
       },
 
-      -- IMPORTANT:
-      --
-      -- Do not automatically start LSPs.
-      -- lsp.lua controls startup itself.
+      -- Server startup is controlled by the configuration above.
       automatic_enable = false,
     },
   },

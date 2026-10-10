@@ -31,7 +31,7 @@ return {
           "t",
         },
 
-        desc = "Toggle Explorer",
+        desc = "Toggle file explorer",
       },
     },
 
@@ -89,23 +89,23 @@ return {
         width = 34,
 
         mappings = {
-          -- Close explorer immediately.
+          -- Close the explorer.
           ["<C-b>"] =
             "close_window",
 
-          -- Normal open.
+          -- Open the selected file or folder.
           ["<CR>"] =
             "open",
 
-          -- Side-by-side.
+          -- Open in a vertical split.
           ["v"] =
             "open_vsplit",
 
-          -- Above/below.
+          -- Open in a horizontal split.
           ["s"] =
             "open_split",
 
-          -- Keep Ctrl variants too.
+          -- Alternate shortcuts for opening splits.
           ["<C-v>"] =
             "open_vsplit",
 

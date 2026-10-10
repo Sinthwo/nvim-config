@@ -32,8 +32,7 @@ return {
         },
       },
 
-      -- Keep Tab/Shift-Tab untouched so the terminal/Bufferline mappings
-      -- remain exactly as they are now.
+      -- Use the existing Tab and Shift+Tab mappings.
       keymaps = {},
     },
 

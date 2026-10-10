@@ -20,7 +20,7 @@ local function start_jdtls()
 
   if cmd == "" then
     vim.notify(
-      "jdtls is not installed yet. Run :MasonInstall jdtls and reopen the Java file.",
+      "jdtls was not found. Run :MasonInstall jdtls, then reopen the Java file.",
       vim.log.levels.ERROR,
       { title = "Java" }
     )
@@ -90,21 +90,21 @@ return {
         function()
           require("jdtls").organize_imports()
         end,
-        desc = "Java organize imports",
+        desc = "Organize Java imports",
       },
       {
         "<leader>jv",
         function()
           require("jdtls").extract_variable()
         end,
-        desc = "Java extract variable",
+        desc = "Extract Java variable",
       },
       {
         "<leader>jc",
         function()
           require("jdtls").extract_constant()
         end,
-        desc = "Java extract constant",
+        desc = "Extract Java constant",
       },
     },
   },

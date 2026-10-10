@@ -21,13 +21,13 @@ return {
     "mfussenegger/nvim-dap",
     dependencies = { "rcarriga/nvim-dap-ui" },
     keys = {
-      { "<F5>", function() require("dap").continue() end, desc = "Debug continue" },
+      { "<F5>", function() require("dap").continue() end, desc = "Start or continue debugging" },
       { "<F9>", function() require("dap").toggle_breakpoint() end, desc = "Toggle breakpoint" },
       { "<F10>", function() require("dap").step_over() end, desc = "Step over" },
       { "<F11>", function() require("dap").step_into() end, desc = "Step into" },
       { "<S-F11>", function() require("dap").step_out() end, desc = "Step out" },
-      { "<leader>dr", function() require("dap").repl.open() end, desc = "Debug REPL" },
-      { "<leader>dt", function() require("dap").terminate() end, desc = "Stop debugger" },
+      { "<leader>dr", function() require("dap").repl.open() end, desc = "Open debug REPL" },
+      { "<leader>dt", function() require("dap").terminate() end, desc = "Terminate debugging" },
     },
   },
 

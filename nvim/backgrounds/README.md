@@ -1,50 +1,47 @@
 # Background images for Windows
 
-Sources for the current images are listed in [CREDITS.md](CREDITS.md).
-The owner deleted the previous [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime)
-images from this collection; the historical credit remains in that document.
+Put your wallpapers in this folder or its subfolders. The picker supports PNG,
+JPG/JPEG, GIF, BMP, and WebP files. Sources for the included images are listed
+in [CREDITS.md](CREDITS.md).
 
-Put your wallpaper images in this folder.
+The images from [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime)
+were removed because the wallpaper collection was replaced. The credits file
+keeps a link to that earlier collection.
 
-Supported by the included picker:
+## Choose a wallpaper
 
-- PNG
-- JPG / JPEG
-- GIF
-- BMP
-- WEBP
+Inside Neovim, use these commands or shortcuts:
 
-Inside Neovim:
+| Command | Keys | Action |
+| --- | --- | --- |
+| `:BackgroundPick` | Space u b | Choose a wallpaper |
+| `:BackgroundFolder` | Space u B | Open the image folder in Windows Explorer |
 
-- `:BackgroundPick` chooses an image.
-- `<Space>ub` does the same.
-- `:BackgroundFolder` opens this folder in Explorer.
-- `<Space>uB` opens this folder in Explorer.
+The picker searches this folder and its subfolders. It uses fzf-lua when
+available, or Neovim's built-in selector otherwise. SVG files are not listed.
 
-The selected **relative image path**, rather than a user-specific absolute path, is written
-to `selected-background.txt`. This generated file is ignored by Git.
+Your choice is saved in `selected-background.txt` as a **relative image path**,
+such as `Magi/01-Magi-Star.jpg`. Git ignores this generated file. Cancelling
+the picker keeps your previous choice.
+
+## Use a different image folder
 
 The default folder is Neovim's `stdpath("config")` plus `backgrounds`, normally
 `$env:LOCALAPPDATA\nvim\backgrounds` on Windows. Set `NVIM_BACKGROUND_DIR` to the
-same absolute directory (or `~/...` home-relative directory) for Neovim and
-WezTerm to use a different location. Restart both after changing their environment.
+same absolute directory, or the same `~/...` home-relative directory, in
+Neovim and WezTerm. Restart both applications after changing the variable.
 
-The picker searches this folder and subfolders recursively using fzf-lua when
-available, with a built-in selector fallback. SVG files are not listed.
-Selections retain subfolders, for example `Magi/01-Magi-Star.jpg`.
+## Display the wallpaper in WezTerm
 
-Neovim itself cannot draw a real image *behind* terminal text. The included
-[`WezTerminal-Config/.wezterm.lua`](../../WezTerminal-Config/.wezterm.lua) reads this file and renders the selected image as an
-opaque, darkened terminal background. The terminal window itself remains fully
-opaque; only the image brightness is reduced for readability.
+Install the included
+[`WezTerminal-Config/.wezterm.lua`](../../WezTerminal-Config/.wezterm.lua)
+at `$HOME\.wezterm.lua`. WezTerm reads your selection and displays a darkened
+wallpaper while Neovim is active. The terminal window stays opaque, and the
+image is dimmed to keep text readable.
 
-Install that config at `$HOME\.wezterm.lua`. The wallpaper appears while Neovim
-is active. A missing image or an empty selection restores the normal terminal
-appearance. Existing local absolute selections remain supported; choosing an
-image again saves only its relative path. Cancelling leaves the selection unchanged.
-
-Three supplied files were WebP data under `.jpg`/`.jpeg` names. They now have
-`.webp` extensions so the picker and terminal can identify them correctly.
+An empty selection or a missing image restores the normal terminal appearance.
+Older selections that contain an absolute path still work locally. Choosing
+another wallpaper replaces that path with a relative one.
 
 See the [Windows manual](../../MANUAL.md#wezterm-and-wallpapers) and the
 [current image sources](CREDITS.md).

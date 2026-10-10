@@ -34,7 +34,7 @@ end
 local function azure_cli(command)
   if not require_executable(
     "az",
-    "Install Azure CLI, then restart WezTerm/Neovim."
+    "Install Azure CLI, then restart WezTerm and Neovim."
   ) then
     return
   end
@@ -45,7 +45,7 @@ end
 local function azure_powershell()
   local powershell = require("config.paths").find_powershell(true)
   if not powershell then
-    vim.notify("PowerShell 7 was not found. Install it and restart WezTerm/Neovim.", vim.log.levels.ERROR, { title = "Azure" })
+    vim.notify("PowerShell 7 was not found. Install it, then restart WezTerm and Neovim.", vim.log.levels.ERROR, { title = "Azure" })
     return
   end
 
@@ -61,7 +61,7 @@ local function azure_powershell()
     "}",
   })
 
-  -- An argument list keeps PowerShell variables and paths out of the outer shell.
+  -- Pass the script directly to PowerShell so another shell cannot expand it.
   open_terminal({ powershell, "-NoLogo", "-NoExit", "-Command", script })
 end
 
@@ -69,13 +69,13 @@ function M.setup()
   vim.api.nvim_create_user_command("AzureTerminal", function()
     open_terminal(nil)
   end, {
-    desc = "Open an Azure-ready Snacks terminal",
+    desc = "Open a project terminal for Azure commands",
   })
 
   vim.api.nvim_create_user_command("AzureLogin", function()
     azure_cli("az login")
   end, {
-    desc = "Azure CLI login",
+    desc = "Sign in to Azure CLI",
   })
 
   vim.api.nvim_create_user_command("AzureAccount", function()

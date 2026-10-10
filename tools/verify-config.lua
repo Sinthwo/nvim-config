@@ -355,7 +355,7 @@ with_vim(fake, function()
   eq(workspaces[2], workspaces[3], "Java cache is stable for the same project")
 end)
 
--- New filetypes and providers must remain enabled after bringing over old fixes.
+-- Check filetype detection and the configured formatting providers.
 dofile("nvim/lua/config/filetypes.lua")
 for filename, ft in pairs({
   ["main.bicep"] = "bicep", ["main.bicepparam"] = "bicep-params",
@@ -396,7 +396,8 @@ fake = fake_vim()
 with_vim(fake, function()
   local tabs, wins, buffers = { [1] = { 1 } }, { [1] = { tab = 1, buf = 1 } }, { [1] = true }
   local tab, win, next_tab, next_win, next_buf = 1, 1, 1, 1, 1
-  local commands, code_root_buf = {}, nil
+  local commands, code_root_buf, notices, fail_close = {}, nil, {}, false
+  fake.notify = function(message, level) notices[#notices + 1] = { message = message, level = level } end
   fake.bo = setmetatable({}, { __index = function(t, id)
     local value = { buftype = "", buflisted = true }
     rawset(t, id, value)
@@ -436,12 +437,13 @@ with_vim(fake, function()
     elseif command:match("^terminal ") then
       local buf = wins[win].buf; fake.bo[buf].buftype = "terminal"; fake.b[buf].terminal_job_id = buf
     elseif command == "tabclose!" then
+      if fail_close then error("Simulated tab-close failure") end
       for _, id in ipairs(tabs[tab]) do
         local buf = wins[id].buf
         if fake.bo[buf].bufhidden == "wipe" then buffers[buf] = nil end
         wins[id] = nil
       end
-      tabs[tab] = nil; tab, win = 1, 1
+      tabs[tab] = nil; tab = real.tbl_keys(tabs)[1]; win = tab and tabs[tab][1] or nil
     end
   end
   dofile("nvim/lua/config/ai_sessions.lua").setup()
@@ -462,6 +464,29 @@ with_vim(fake, function()
   eq(tabs[2], nil, "End closes AI tab")
   eq(tab, 1, "End returns to coding tab")
   check(buffers[1] and wins[1].buf == 1, "End preserves coding buffer")
+
+  commands.Codex1()
+  local last_ai_tab = tab
+  tabs[1], wins[1] = nil, nil
+  notices = {}
+  commands.CodexEnd()
+  check(tabs[last_ai_tab], "End preserves the only remaining tab")
+  eq(#notices, 1, "Refused close reports only one notification")
+  eq(notices[1].level, fake.log.levels.WARN, "Refused close does not report success")
+  fake.cmd("tabnew")
+  commands.CodexEnd()
+  eq(tabs[last_ai_tab], nil, "Workspace can be closed after another tab is opened")
+
+  commands.Claude1()
+  local failed_tab = tab
+  fail_close, notices = true, {}
+  commands.ClaudeEnd()
+  check(tabs[failed_tab], "Failed tab close preserves the workspace")
+  eq(#notices, 1, "Failed close reports only one notification")
+  eq(notices[1].level, fake.log.levels.WARN, "Failed close does not report success")
+  fail_close = false
+  commands.ClaudeEnd()
+  eq(tabs[failed_tab], nil, "Failed workspace close can be retried")
 end)
 
 -- Preview paths are argument lists; filename shell characters never enter titles/echo commands.
@@ -539,7 +564,7 @@ for key in pairs(declared) do
   local label = "Space " .. suffix:gsub("(.)", "%1 "):gsub(" $", "")
   check(manual:find(label, 1, true), "Manual documents " .. key)
 end
-for _, file in ipairs({ "README.md", "MANUAL.md", "TODO.md", "nvim/backgrounds/README.md", "nvim/backgrounds/CREDITS.md", "nvim/SETUP-CLOUD-TOOLS.md", "nvim/TODO-COMPLETED.md" }) do
+for _, file in ipairs({ "README.md", "MANUAL.md", "nvim/backgrounds/README.md", "nvim/backgrounds/CREDITS.md", "nvim/SETUP-CLOUD-TOOLS.md" }) do
   local content = table.concat(real.fn.readfile(file), "\n")
   check(content:find("Windows", 1, true), file .. " identifies Windows")
   for target in content:gmatch("%]%(([^%)]+)%)") do

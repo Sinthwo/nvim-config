@@ -7,7 +7,7 @@ return {
     config = function()
       require("nvim-treesitter").setup({})
 
-      -- Neovim filetypes that use a differently named Treesitter language.
+      -- Map Neovim filetypes to their Tree-sitter parser names.
       vim.treesitter.language.register("bash", "sh")
       vim.treesitter.language.register("bicep", "bicep-params")
       vim.treesitter.language.register("terraform", "terraform-vars")

@@ -84,7 +84,7 @@ local function read_selected_background()
     return nil
   end
 
-  -- New selections are relative paths, including subfolders. Keep local legacy paths working.
+  -- Resolve relative selections while supporting older local absolute paths.
   if not path:match("^%a:[/\\]") and not path:match("^[/\\]") then
     path = join_path(backgrounds_dir, path)
   end
@@ -118,19 +118,15 @@ config.status_update_interval =
 config.color_scheme =
   "Tokyo Night"
 
--- The actual WezTerm window remains opaque.
+-- Keep the terminal window opaque.
 config.window_background_opacity =
   1.0
 
--- Normal PowerShell / CMD:
--- no wallpaper visible.
+-- Use an opaque text background outside Neovim.
 config.text_background_opacity =
   1.0
 
--- IMPORTANT:
--- Do NOT define window_background_image globally here.
---
--- It will only be added while Neovim is active.
+-- Apply wallpaper settings only while Neovim is active.
 
 -- =========================================================
 -- Font

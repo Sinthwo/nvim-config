@@ -1,17 +1,21 @@
 # Neovim and WezTerm configuration for Windows
 
-**This configuration is for Windows.** It combines Neovim, PowerShell, and
-WezTerm with a file explorer, completion, language servers, Git tools, Python
-debugging, Markdown rendering, optional Obsidian integration, Azure/Bicep,
-Terraform, YAML, Bash, CSV/TSV tables, AI session tabs, and image/PDF previews.
+**This configuration is for Windows.** It brings together Neovim, PowerShell,
+and WezTerm for editing code, working with Git, and debugging Python.
+It includes a file explorer, completion, language servers, Markdown rendering,
+and optional Obsidian integration.
+
+Additional features include Azure/Bicep, Terraform, YAML, and Bash support,
+CSV/TSV table editing, dedicated Codex and Claude sessions, image/PDF previews,
+and terminal wallpapers.
 
 Source repository: [Sinthwo/nvim-config](https://github.com/Sinthwo/nvim-config).
 
-Paths are resolved for the current Windows user. You do not need to put your
-username or a fixed drive letter into the configuration.
+Paths are resolved automatically for the current Windows user, so you can use
+the configuration without adding your username or a fixed drive letter.
 
 Read the [Windows user manual](MANUAL.md) for the complete shortcut reference,
-language setup, backgrounds, customization, and troubleshooting.
+language setup, wallpapers, customization, and troubleshooting.
 
 ## Requirements
 
@@ -20,7 +24,7 @@ language setup, backgrounds, customization, and troubleshooting.
   and [ripgrep](https://github.com/BurntSushi/ripgrep) available in `PATH`.
 - [WezTerm](https://wezterm.org/installation.html) for the terminal wallpaper
   and Ctrl+Tab integration; Neovim also works without those terminal features.
-- PowerShell 7 for the preferred shell; Windows PowerShell is a fallback for
+- PowerShell 7 is the preferred shell. Windows PowerShell is also supported for
   editor services and the CPU status indicator.
 - For syntax parsers: Tree-sitter CLI **0.26.1 or newer**, `curl`, `tar`, and a
   C compiler in `PATH`, such as MSVC in a Developer PowerShell session or Clang.
@@ -37,9 +41,9 @@ git clone https://github.com/Sinthwo/nvim-config.git
 Set-Location -LiteralPath '.\nvim-config'
 ```
 
-Close Neovim before replacing an existing installation. Open PowerShell in
-the repository folder and run the following. Existing configuration
-files are moved to timestamped backups first; plugin data is kept.
+Close Neovim, then open PowerShell in the repository folder and run the commands
+below. Any existing configuration is moved to a timestamped backup before the
+new files are copied. Installed plugin data is kept.
 
 ```powershell
 # Ask Neovim for its actual config directory, including environment overrides.
@@ -60,13 +64,13 @@ if (Test-Path -LiteralPath $weztermFile) {
 Copy-Item -LiteralPath '.\WezTerminal-Config\.wezterm.lua' -Destination $weztermFile
 ```
 
-The usual Neovim destination is `$env:LOCALAPPDATA\nvim`. WezTerm reads
+Neovim normally uses `$env:LOCALAPPDATA\nvim`. WezTerm reads
 `$HOME\.wezterm.lua`. Restart WezTerm, launch `nvim`, and allow the initial
 plugin and tool downloads to finish. Open a source file to trigger language
 server installation. Restart Neovim after the first installation, then run
 `:checkhealth` and `:Mason`.
 
-## First shortcuts
+## Useful shortcuts
 
 The leader key is **Space**. Press the listed keys in sequence; for example,
 `Space f f` opens the file picker. Press Space and wait to see Which-Key help.
@@ -86,12 +90,11 @@ The leader key is **Space**. Press the listed keys in sequence; for example,
 | Space c v | Toggle CSV/TSV table view |
 | Space z t | Open an Azure project terminal |
 
-Use `:Codex 8` or `:Claude 8` for up to eight independent CLI sessions in a
+Use `:Codex 8` or `:Claude 8` to open eight independent CLI sessions in a
 dedicated Neovim tab. Opening an image or PDF creates a separate WezTerm preview
-tab. These optional features need their external tools; see the
-[manual](MANUAL.md#ai-session-workspaces),
-[cloud setup guide](nvim/SETUP-CLOUD-TOOLS.md), and
-[completed task list](nvim/TODO-COMPLETED.md).
+tab. Install the required external tools before using these features; see the
+[manual](MANUAL.md#ai-session-workspaces) and
+[cloud setup guide](nvim/SETUP-CLOUD-TOOLS.md).
 
 ## Files and sharing
 
@@ -100,16 +103,14 @@ tab. These optional features need their external tools; see the
 - [MANUAL.md](MANUAL.md) explains all configured features and local settings.
 - `nvim/lazy-lock.json` records plugin revisions; keep it when sharing the config.
 
-Wallpaper selections contain a path relative to the image folder, and `.gitignore` excludes them along
-with logs and temporary files. Personal paths belong in local environment
-variables, such as `OBSIDIAN_VAULT` and `NVIM_BACKGROUND_DIR`.
+Wallpaper selections use paths relative to the image folder. Git ignores the
+selection file, logs, temporary files, local environment files, and Terraform
+state and plan files. Set personal paths through local environment variables
+such as `OBSIDIAN_VAULT` and `NVIM_BACKGROUND_DIR`.
 
-The current wallpaper collection comes from the supplied updated configuration.
-See [image credits](nvim/backgrounds/CREDITS.md). Earlier releases used
-[ThePrimeagen/anime](https://github.com/ThePrimeagen/anime); that collection has
-been replaced. The original import ZIP is kept locally and ignored because it
-contains an old user-specific path. Local environment files and Terraform
-state/plan files are also ignored.
+The images from [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime)
+were removed because the wallpaper collection was replaced. Sources for the
+current images are listed in [wallpaper credits](nvim/backgrounds/CREDITS.md).
 
 Before sharing new changes, run the [validation commands](MANUAL.md#validate-the-configuration)
 and review any personal customization you added.

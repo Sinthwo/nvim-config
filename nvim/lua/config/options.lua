@@ -8,8 +8,7 @@ local opt = vim.opt
 -- Line numbers
 -- =========================================================
 
--- Current line = absolute number
--- Other lines = relative distance
+-- Show the current line number and relative distances for the other lines.
 --
 -- Example:
 --
@@ -30,8 +29,7 @@ opt.relativenumber = true
 -- Highlight current line
 opt.cursorline = true
 
--- Keep sign column permanently visible
--- Prevents the editor shifting when Git/LSP signs appear
+-- Keep space for Git and diagnostic signs so the text does not shift.
 opt.signcolumn = "yes"
 
 -- =========================================================
@@ -67,8 +65,7 @@ opt.autoindent = true
 -- Ignore case normally
 opt.ignorecase = true
 
--- But become case-sensitive when uppercase characters
--- are used in the search
+-- Match case when the search contains uppercase letters.
 opt.smartcase = true
 
 -- Highlight matches
@@ -81,13 +78,13 @@ opt.incsearch = true
 -- Scrolling
 -- =========================================================
 
--- Keep context above/below cursor
+-- Keep eight lines visible above and below the cursor when possible.
 opt.scrolloff = 8
 
--- Keep horizontal context
+-- Keep eight columns visible to either side of the cursor when possible.
 opt.sidescrolloff = 8
 
--- Smooth horizontal scrolling
+-- Scroll horizontally one column at a time.
 opt.sidescroll = 1
 
 -- =========================================================
@@ -109,7 +106,7 @@ opt.wrap = false
 -- Better wrapped-line behaviour when enabled locally
 opt.linebreak = true
 
--- Don't visually break words
+-- Indent wrapped lines to match the start of the original line.
 opt.breakindent = true
 
 -- Show invisible characters
@@ -128,7 +125,7 @@ opt.listchars = {
 -- Command line height
 opt.cmdheight = 1
 
--- Better completion menu
+-- Show completion options without selecting one automatically.
 opt.completeopt = {
   "menu",
   "menuone",
@@ -146,7 +143,7 @@ opt.laststatus = 3
 -- Editing
 -- =========================================================
 
--- Backspace behaves normally
+-- Allow Backspace across indentation, line breaks, and the start of an insertion.
 opt.backspace = {
   "indent",
   "eol",
@@ -225,7 +222,7 @@ opt.conceallevel = 2
 -- Cursor
 -- =========================================================
 
--- Always show current cursor location
+-- Show the cursor position in the status area.
 opt.ruler = true
 
 -- =========================================================
@@ -245,7 +242,7 @@ opt.fillchars = {
 -- Folding
 -- =========================================================
 
--- Let Treesitter/LSP plugins manage folds later
+-- Keep folding available.
 opt.foldenable = true
 
 -- Start files unfolded
