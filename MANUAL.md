@@ -1,5 +1,7 @@
 # Windows user manual
 
+**Languages:** English | [Français](MANUAL.fr.md) | [Deutsch](MANUAL.de.md) | [日本語](MANUAL.ja.md)
+
 **This Neovim and WezTerm configuration is for Windows.** This manual covers
 installation, everyday shortcuts, optional tools, and customization. The
 examples use PowerShell and resolve paths for the current user.

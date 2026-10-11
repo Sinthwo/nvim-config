@@ -1,5 +1,7 @@
 # Windows setup for cloud, AI, and image tools
 
+**Languages:** English | [Français](SETUP-CLOUD-TOOLS.fr.md) | [Deutsch](SETUP-CLOUD-TOOLS.de.md) | [日本語](SETUP-CLOUD-TOOLS.ja.md)
+
 Use this guide to install the optional cloud, AI, and image tools used by the
 configuration. Start with the [installation README](../README.md), then see
 the [Windows manual](../MANUAL.md) for everyday commands and shortcuts.

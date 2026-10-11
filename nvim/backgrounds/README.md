@@ -1,5 +1,7 @@
 # Background images for Windows
 
+**Languages:** English | [Français](README.fr.md) | [Deutsch](README.de.md) | [日本語](README.ja.md)
+
 Put your wallpapers in this folder or its subfolders. The picker supports PNG,
 JPG/JPEG, GIF, BMP, and WebP files. Sources for the included images are listed
 in [CREDITS.md](CREDITS.md).

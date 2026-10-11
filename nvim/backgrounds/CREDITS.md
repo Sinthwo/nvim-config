@@ -1,5 +1,7 @@
 # Wallpaper sources for the Windows configuration
 
+**Languages:** English | [Français](CREDITS.fr.md) | [Deutsch](CREDITS.de.md) | [日本語](CREDITS.ja.md)
+
 The following links point to the source pages or collections for the current
 wallpapers. See each source for artist and publisher credits.
 

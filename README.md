@@ -1,5 +1,7 @@
 # Neovim and WezTerm configuration for Windows
 
+**Languages:** English | [Français](README.fr.md) | [Deutsch](README.de.md) | [日本語](README.ja.md)
+
 **This configuration is for Windows.** It brings together Neovim, PowerShell,
 and WezTerm for editing code, working with Git, and debugging Python.
 It includes a file explorer, completion, language servers, Markdown rendering,
