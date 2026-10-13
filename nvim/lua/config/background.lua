@@ -91,53 +91,21 @@ local function save_selection(item)
   )
 end
 
-local function native_select(images)
-  local labels = {}
-  local by_label = {}
-
-  for _, item in ipairs(images) do
-    table.insert(labels, item.display)
-    by_label[item.display] = item
-  end
-
-  vim.ui.select(labels, {
+local function choose_image(images)
+  -- Keep the image record with its label when using the configured selection UI.
+  local ok, err = pcall(vim.ui.select, images, {
     prompt = "Choose a terminal wallpaper",
-  }, function(choice)
-    if choice then
-      save_selection(by_label[choice])
+    format_item = function(item)
+      return item.display
+    end,
+  }, function(item)
+    if item then
+      save_selection(item)
     end
   end)
-end
-
-local function fzf_select(images)
-  local ok, fzf = pcall(require, "fzf-lua")
-
   if not ok then
-    return false
+    vim.notify("Wallpaper selection failed: " .. tostring(err), vim.log.levels.ERROR, { title = "Background" })
   end
-
-  local labels = {}
-  local by_label = {}
-
-  for _, item in ipairs(images) do
-    table.insert(labels, item.display)
-    by_label[item.display] = item
-  end
-
-  fzf.fzf_exec(labels, {
-    prompt = "Wallpaper> ",
-    actions = {
-      ["default"] = function(selected)
-        local choice = selected and selected[1]
-
-        if choice then
-          save_selection(by_label[choice])
-        end
-      end,
-    },
-  })
-
-  return true
 end
 
 function M.open_folder()
@@ -166,10 +134,7 @@ function M.pick()
     return
   end
 
-  -- Use fzf-lua when available, or Neovim's built-in selector otherwise.
-  if not fzf_select(images) then
-    native_select(images)
-  end
+  choose_image(images)
 end
 
 return M

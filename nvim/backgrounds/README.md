@@ -19,8 +19,8 @@ Inside Neovim, use these commands or shortcuts:
 | `:BackgroundPick` | Space u b | Choose a wallpaper |
 | `:BackgroundFolder` | Space u B | Open the image folder in Windows Explorer |
 
-The picker searches this folder and its subfolders. It uses fzf-lua when
-available, or Neovim's built-in selector otherwise. SVG files are not listed.
+The picker searches this folder and its subfolders. It uses the Snacks selection
+menu when available, or Neovim's built-in selector otherwise. SVG files are not listed.
 
 Your choice is saved in `selected-background.txt` as a **relative image path**,
 such as `Magi/01-Magi-Star.jpg`. Git ignores this generated file. Cancelling

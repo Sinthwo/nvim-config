@@ -11,6 +11,11 @@ Additional features include Azure/Bicep, Terraform, YAML, and Bash support,
 CSV/TSV table editing, dedicated Codex and Claude sessions, image/PDF previews,
 and terminal wallpapers.
 
+The startup dashboard includes a shark logo and shortcuts for files, search,
+plugins, and terminals. Additional commands focus or enlarge existing AI
+sessions, open terminal panels, and browse Git information. See the
+[manual](MANUAL.md#dashboard-and-notifications) for the complete reference.
+
 Source repository: [Sinthwo/nvim-config](https://github.com/Sinthwo/nvim-config).
 
 Paths are resolved automatically for the current Windows user, so you can use

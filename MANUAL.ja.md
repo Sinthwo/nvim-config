@@ -4,32 +4,29 @@
 
 **この Neovim・WezTerm 設定は Windows 向けです。** インストール、日常のショートカット、任意のツール、カスタマイズについて説明します。例では PowerShell を使い、現在のユーザーに合わせてパスを解決します。
 
-<a id="contents"></a>
-
 ## 目次
 
-- [インストールと初回起動](#installation-and-first-launch)
-- [編集とショートカット](#editing-and-shortcuts)
-- [ファイル検索とエクスプローラー](#finding-files-and-using-the-explorer)
-- [言語サポートと整形](#language-support-and-formatting)
-- [Python のデバッグ](#python-debugging)
-- [Git とプロジェクトターミナル](#git-and-project-terminals)
-- [AI セッションのワークスペース](#ai-session-workspaces)
-- [Azure とクラウドツール](#azure-and-cloud-tools)
-- [CSV・TSV の表](#csv-and-tsv-tables)
-- [画像・PDF のプレビュー](#image-and-pdf-previews)
-- [Markdown と Obsidian](#markdown-and-obsidian)
-- [WezTerm と壁紙](#wezterm-and-wallpapers)
-- [カスタマイズとプライバシー](#customization-and-privacy)
-- [プラグイン管理](#plugin-management)
-- [トラブルシューティング](#troubleshooting)
-- [設定の検証](#validate-the-configuration)
-
-<a id="installation-and-first-launch"></a>
+- [インストールと初回起動](#インストールと初回起動)
+- [ダッシュボードと通知](#ダッシュボードと通知)
+- [編集とショートカット](#編集とショートカット)
+- [ファイル検索とエクスプローラー](#ファイル検索とエクスプローラー)
+- [言語サポートと整形](#言語サポートと整形)
+- [Python のデバッグ](#python-のデバッグ)
+- [Git とプロジェクトターミナル](#git-とプロジェクトターミナル)
+- [AI セッションのワークスペース](#ai-セッションのワークスペース)
+- [Azure とクラウドツール](#azure-とクラウドツール)
+- [CSV・TSV の表](#csvtsv-の表)
+- [画像・PDF のプレビュー](#画像pdf-のプレビュー)
+- [Markdown と Obsidian](#markdown-と-obsidian)
+- [WezTerm と壁紙](#wezterm-と壁紙)
+- [カスタマイズとプライバシー](#カスタマイズとプライバシー)
+- [プラグイン管理](#プラグイン管理)
+- [トラブルシューティング](#トラブルシューティング)
+- [設定の検証](#設定の検証)
 
 ## インストールと初回起動
 
-[README のインストール手順](README.ja.md#install-on-windows)に従ってください。コピーコマンドは Neovim の設定ディレクトリに直接ファイルを配置します。その中に余分な `nvim` フォルダーが作成されていないことを確認してください。初回起動時は、プラグインと言語ツールのダウンロードにインターネット接続が必要です。
+[README のインストール手順](README.ja.md#windows-へのインストール)に従ってください。コピーコマンドは Neovim の設定ディレクトリに直接ファイルを配置します。その中に余分な `nvim` フォルダーが作成されていないことを確認してください。初回起動時は、プラグインと言語ツールのダウンロードにインターネット接続が必要です。
 
 コマンドラインツールをインストールした後は、新しい PowerShell ウィンドウを開き、更新された `PATH` を反映させてください。基本ツールが利用できるか確認します。
 
@@ -52,7 +49,18 @@ wezterm --version
 :ConformInfo
 :messages
 ```
-<a id="editing-and-shortcuts"></a>
+## ダッシュボードと通知
+
+ファイルを指定せずに Neovim を起動すると Snacks ダッシュボードが開きます。`:Dashboard` または Space u D で再度開けます。WezTerm では付属の設定がメニューの上にサメのロゴを表示します。小さいウィンドウやロゴ表示に対応していないターミナルでは、文字の見出しを使います。画像の出典は[クレジット](nvim/backgrounds/CREDITS.ja.md#ダッシュボードのロゴ)をご覧ください。
+
+| ダッシュボードのキー | 操作 |
+| --- | --- |
+| f / g / r | ファイル検索 / テキスト検索 / 最近のファイルを開く |
+| e / n | エクスプローラーを開く / ファイルを作成 |
+| l / c | プラグイン管理 / 設定ファイル検索 |
+| t / q | ターミナルパネルを開く / Neovim を終了 |
+
+Space u n または `:Notifications` で通知履歴を開きます。Space u d、Space u N、`:NotifyDismiss` は表示中の通知を閉じます。
 
 ## 編集とショートカット
 
@@ -84,8 +92,6 @@ Neovim には、移動とコマンド用のノーマルモード、文字入力�
 
 補完には Blink の [super-tab プリセット](https://cmp.saghen.dev/configuration/keymap)を使用します。Tab は候補を確定するかスニペット内を進み、Shift+Tab はスニペット内を戻ります。Ctrl+Space で補完を開き、Ctrl+N/P で候補を選択し、Ctrl+E でメニューを閉じます。少し待つとドキュメントが自動表示されます。括弧の自動ペア入力と、囲み文字の編集も有効です。
 
-<a id="finding-files-and-using-the-explorer"></a>
-
 ## ファイル検索とエクスプローラー
 
 | キー | 操作 |
@@ -99,11 +105,9 @@ Neovim には、移動とコマンド用のノーマルモード、文字入力�
 | `]t` / `[t` | 次 / 前の TODO コメント |
 | Ctrl+B | ファイルエクスプローラーを開閉 |
 
-エクスプローラーでは Enter で項目を開き、`v` または Ctrl+V で縦に、`s` または Ctrl+S で横に分割します。Ctrl+B はエクスプローラーを閉じます。そのため Ctrl+S は、エクスプローラーでは分割、エディターでは保存という 2 つの役割があります。
+エクスプローラーでは Enter で項目を開き、`v` または Ctrl+V で縦に、`s` または Ctrl+S で横に分割します。Ctrl+B はエクスプローラーを閉じます。そのため Ctrl+S は、エクスプローラーでは分割、エディターでは保存という 2 つの役割があります。ファイルを開いてもエクスプローラーは残り、ターミナル、ダッシュボード、診断のウィンドウは置き換えません。名前変更や移動は Snacks を通して言語サーバーに通知し、ファイルへの参照を更新できるようにします。
 
 エクスプローラーは現在のファイルに追従し、隠しファイルと Git が無視するファイルも表示します。ファイル選択は現在の作業ディレクトリを検索します。プロジェクトフォルダーから Neovim を起動するか、`:cd` で移動してください。Windows のテキスト検索には ripgrep が必要です。[fzf-lua の Windows 向け説明](https://github.com/ibhagwan/fzf-lua/blob/main/README-Win.md)をご覧ください。
-
-<a id="language-support-and-formatting"></a>
 
 ## 言語サポートと整形
 
@@ -152,8 +156,6 @@ Java サーバーの要件は [nvim-jdtls](https://github.com/mfussenegger/nvim-
 
 Java 専用の操作は、Space j o で import の整理、Space j v で変数の抽出、Space j c で定数の抽出です。同名のプロジェクトフォルダーでも、各 Java プロジェクトに専用のワークスペースキャッシュがあります。新しいキャッシュを初めて使う際、jdtls がプロジェクトを索引化する場合があります。
 
-<a id="python-debugging"></a>
-
 ## Python のデバッグ
 
 Python ファイルを開き、Mason で debugpy のインストール完了を確認してください。アダプターは Mason の debugpy インタープリターを使用します。アプリケーション用インタープリターについては、Neovim 起動前にプロジェクトの仮想環境を有効にするか、必要に応じてローカル設定で `require("dap-python").resolve_python` を指定してください。
@@ -168,8 +170,6 @@ Python ファイルを開き、Mason で debugpy のインストール完了を�
 | Space d t | セッションを終了 |
 
 デバッガー UI はデバッガーとともに読み込まれ、起動または接続時に開き、セッション終了時に閉じます。求められた場合は Python の起動設定を選択してください。この構成は Python デバッグに対応しています。Java のデバッグには追加アダプターと設定が必要です。
-
-<a id="git-and-project-terminals"></a>
 
 ## Git とプロジェクトターミナル
 
@@ -194,7 +194,19 @@ Python ファイルを開き、Mason で debugpy のインストール完了を�
 
 Space a c は Codex、Space a C は Claude Code を起動します。使用前に CLI をインストールしてサインインし、`PATH` からコマンドを実行できることを確認してください。
 
-<a id="ai-session-workspaces"></a>
+`:TerminalPanel` は下部のターミナルパネル、`:TerminalFloat` / Space t f はフローティングターミナルを開きます。`:TerminalNew` / Space t N は別のセッションを開始します。いずれも現在のプロジェクトルートを使います。
+
+| キー | コマンド | 操作 |
+| --- | --- | --- |
+| Space g G | `:LazyGitFloat` | LazyGit を開く。`lazygit` が必要 |
+| Space g B | `:GitBrowse` | 現在のファイルをリモート Git ホストで開く |
+| Space g L | `:GitLogPicker` | コミットを確認 |
+| Space g F | `:GitBranches` | ブランチを確認 |
+| Space g S | `:GitStatusPicker` | 変更したファイルを確認 |
+| Space g R | `:GitRebaseStatus` | Git の状態と最近のコミットグラフを表示 |
+| Space u . | `:FloatScratch` | ローカルのメモを開く |
+
+`:GitDiffPicker` は差分、`:GitLogLine` は現在の行の履歴、`:GitBlame` は行の作者情報を表示します。`GitRebaseStatus` は情報を表示するコマンドです。リベースは Neogit、LazyGit、Git コマンドで行ってください。メモはローカルに保存されます。
 
 ## AI セッションのワークスペース
 
@@ -216,7 +228,21 @@ Space a c は Codex、Space a C は Claude Code を起動します。使用前�
 
 `:CodexEnd` は Codex の全ワークスペースタブ、`:ClaudeEnd` は Claude の全ワークスペースタブを閉じます。元のコードタブが開いていれば、どちらもそこへ戻ります。セッションを閉じると、そのプロセスが終了します。サインイン、権限、アカウントの使用量は各 CLI が管理します。
 
-<a id="azure-and-cloud-tools"></a>
+起動済みのセッションを選択したり、大きく表示したりするには次のコマンドを使います。
+
+| コマンド | 操作 |
+| --- | --- |
+| `:CT1` から `:CT8` | Codex セッションを選択 |
+| `:CCT1` から `:CCT8` | Claude セッションを選択 |
+| `:MC1` から `:MC8` | Codex セッションを拡大 |
+| `:MCC1` から `:MCC8` | Claude セッションを拡大 |
+| `:UC` | 拡大表示を閉じてグリッドへ戻る |
+
+拡大表示には同じターミナルバッファを使うため、プロセスは動き続け、分割レイアウトも維持されます。これらのコマンドは新しいセッションを起動しません。小文字の別名 `:ct2`、`:mc2`、`:uc` は対話入力で使えます。スクリプトでは大文字のコマンド名を使ってください。`i` でターミナル入力に入ります。
+
+`:CodexVoice` と `:ClaudeVoice` はそれぞれ別のセッションを開き、音声または音声入力の案内を表示します。`:VoiceHelp` は案内のみ表示します。対応する Codex CLI では F8 と `/voice settings` を使えます。[OpenAI 公式ドキュメント](https://learn.chatgpt.com/docs/changelog)をご覧ください。Claude ターミナルで Windows の音声入力を使うには、入力モードにして Win+H を押します。
+
+AI タブだけが残っている場合は、`:CodexEnd` または `:ClaudeEnd` の前に `:tabnew` で別のタブを開いてください。閉じる操作に失敗しても、再試行できます。
 
 ## Azure とクラウドツール
 
@@ -239,8 +265,6 @@ Azure Pipelines LSP には、`azure-pipelines.yml` または `azure-pipelines.ya
 
 プロジェクト判定は `bicepconfig.json`、パイプラインファイル、`.terraform`、`main.tf` も認識します。Azure Functions のデバッグは任意の追加機能で、.NET デバッグアダプターと関連ツールが必要です。
 
-<a id="csv-and-tsv-tables"></a>
-
 ## CSV・TSV の表
 
 `.csv` または `.tsv` を開くと、csvview.nvim が枠線付きの整列した表を表示し、固定ヘッダーを自動判定します。CSV はコンマ、TSV はタブを区切りに使用します。`#` または `//` で始まる行はコメントとして扱います。
@@ -251,8 +275,6 @@ Space c v / `:CsvViewToggle` で表示を切り替えます。`:CsvViewEnable`�
 :CsvViewEnable delimiter=; header_lnum=1
 ```
 表表示中も通常どおり編集できます。Tab と Shift+Tab の動作は変わりません。
-
-<a id="image-and-pdf-previews"></a>
 
 ## 画像・PDF のプレビュー
 
@@ -269,8 +291,6 @@ Space c v / `:CsvViewToggle` で表示を切り替えます。`:CsvViewEnable`�
 Neovim は WezTerm 内で実行し、`PATH` に `wezterm.exe` があり、ターミナルから `WEZTERM_PANE` を継承している必要があります。追加形式には [ImageMagick](https://imagemagick.org/script/download.php#windows) が必要です。PDF の読み込みには Ghostscript と、PDF 変換を許可するローカルの ImageMagick ポリシーが必要な場合があります。変換失敗は通知に表示されます。
 
 `:ImagePreviewClose` は最新のプレビューを閉じ、`:ImagePreviewCloseAll` はこの Neovim プロセスが作成した全プレビューを閉じます。WezTerm のタブを閉じるボタンや Ctrl+Shift+W でも個別に閉じられます。Neovim 終了時にはプレビューペインと一時ファイルを片付けます。表示処理は Windows コマンドプロンプト（`cmd.exe`）で実行します。
-
-<a id="markdown-and-obsidian"></a>
 
 ## Markdown と Obsidian
 
@@ -306,8 +326,6 @@ nvim
 
 一度 `:Obsidian` を実行して連携機能を読み込み、設定した保管庫のノートを開いてください。ノートとタグの補完は、プラグイン内蔵の言語サーバーと Blink を使用します。Markdown 表示は保管庫の外でも動作します。
 
-<a id="wezterm-and-wallpapers"></a>
-
 ## WezTerm と壁紙
 
 付属の壁紙の出典は[画像クレジット](nvim/backgrounds/CREDITS.ja.md)に記載されています。壁紙コレクションの入れ替えにより、[ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) の画像は削除されました。
@@ -322,7 +340,7 @@ nvim
 | Alt+Enter | WezTerm の全画面を切り替え |
 | Ctrl+Shift+L | WezTerm のデバッグ表示を開く |
 
-選択画面は画像フォルダーとサブフォルダーから PNG、JPG/JPEG、GIF、BMP、WebP を検索します。利用できれば fzf-lua、それ以外は Neovim 内蔵の選択画面を使います。SVG は一覧に表示されません。
+選択画面は画像フォルダーとサブフォルダーから PNG、JPG/JPEG、GIF、BMP、WebP を検索します。利用できれば Snacks の選択メニュー、それ以外は Neovim 内蔵の選択画面を使います。SVG は一覧に表示されません。
 
 既定のフォルダーは Neovim の設定ディレクトリ内の `backgrounds` で、通常は `$env:LOCALAPPDATA\nvim\backgrounds` です。選択は `Magi/01-Magi-Star.jpg` のような相対パスとして `selected-background.txt` に保存されます。キャンセルすると選択を保持します。WezTerm は約 1 秒ごとに選択を確認します。以前の絶対パスもローカルでは使えますが、別の画像を選ぶと相対パスで保存します。
 
@@ -334,8 +352,6 @@ New-Item -ItemType Directory -Path $backgroundDir -Force | Out-Null
 [Environment]::SetEnvironmentVariable('NVIM_BACKGROUND_DIR', $backgroundDir, 'User')
 ```
 そのフォルダーに画像を置き、WezTerm を再起動して Neovim で選択してください。絶対パス、またはホームからの相対パス `~/...` を使います。両方のアプリケーションに同じ値が必要です。Neovim の `XDG_CONFIG_HOME` や `NVIM_APPNAME` を使用している場合、WezTerm もそれらを利用します。
-
-<a id="customization-and-privacy"></a>
 
 ## カスタマイズとプライバシー
 
@@ -369,8 +385,6 @@ git config user.email 'YOUR_GITHUB_NOREPLY_EMAIL'
 ```
 実際の noreply アドレスは GitHub のメール設定からコピーしてください。[GitHub のコミット用メールアドレスの説明](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/setting-your-commit-email-address)をご覧ください。変更は今後のコミットに適用されます。履歴を書き換えない限り、既存のコミットの作者・コミッター情報は変わりません。
 
-<a id="plugin-management"></a>
-
 ## プラグイン管理
 
 `:Lazy` でプラグインの状態を確認します。`:Lazy restore` は `lazy-lock.json` に記録されたバージョンに戻します。`:Lazy update` は新しいバージョンをインストールし、ロックファイルを変更する場合があります。設定を共有する際はロックファイルを保持してください。記録のないプラグインは最初に必要になったときにインストールされます。
@@ -384,8 +398,6 @@ git config user.email 'YOUR_GITHUB_NOREPLY_EMAIL'
 :TSUpdate
 ```
 `TSInstall` は指定パーサーを追加し、`TSUpdate` はプラグイン更新後にインストール済みのパーサーを更新します。強調表示が有効にならない場合はファイルを開き直してください。
-
-<a id="troubleshooting"></a>
 
 ## トラブルシューティング
 
@@ -414,8 +426,6 @@ git config user.email 'YOUR_GITHUB_NOREPLY_EMAIL'
 | 画像・PDF 変換の失敗 | `magick -version` を確認。PDF は Ghostscript と適切なポリシーも必要な場合がある。 |
 
 外部プログラムがない場合は Neovim が通知します。見逃した通知は `:messages` または Space u n で確認できます。
-
-<a id="validate-the-configuration"></a>
 
 ## 設定の検証
 

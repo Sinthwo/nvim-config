@@ -14,7 +14,7 @@ Azure/Bicep、Terraform、YAML、Bash のサポート、CSV/TSV の表編集、C
 
 ショートカットの一覧、言語ツールの設定、壁紙、カスタマイズ、トラブルシューティングの詳細は、[Windows ユーザーマニュアル](MANUAL.ja.md)をご覧ください。
 
-<a id="requirements"></a>
+起動時のダッシュボードにはサメのロゴと、ファイル、検索、プラグイン、ターミナル用のショートカットがあります。追加コマンドで起動済みの AI セッションを選択・拡大したり、ターミナルパネルや Git 情報を開いたりできます。詳しくは[マニュアル](MANUAL.ja.md#ダッシュボードと通知)をご覧ください。
 
 ## 必要なもの
 
@@ -24,8 +24,6 @@ Azure/Bicep、Terraform、YAML、Bash のサポート、CSV/TSV の表編集、C
 - 推奨シェルは PowerShell 7 です。Windows PowerShell も Editor Services と CPU 状態表示に対応しています。
 - 構文解析には Tree-sitter CLI **0.26.1 以降**、`curl`、`tar`、`PATH` から実行できる C コンパイラが必要です。例えば Developer PowerShell で利用する MSVC、または Clang を使用できます。これらは[固定された Tree-sitter のバージョンの要件](https://github.com/nvim-treesitter/nvim-treesitter/blob/e289100ff98969e118c702199d88b764ce9e7fdf/README.md)に対応しています。
 - マニュアルに記載された言語ツールに応じて、Python、Node.js/npm、JDK が必要です。アイコンを表示するための Nerd Font は任意です。
-
-<a id="install-on-windows"></a>
 
 ## Windows へのインストール
 
@@ -57,8 +55,6 @@ Copy-Item -LiteralPath '.\WezTerminal-Config\.wezterm.lua' -Destination $wezterm
 ```
 通常、Neovim は `$env:LOCALAPPDATA\nvim` を使用し、WezTerm は `$HOME\.wezterm.lua` を読み込みます。WezTerm を再起動して `nvim` を起動し、最初のプラグインとツールのダウンロードが完了するまで待ってください。ソースファイルを開くと、言語サーバーのインストールが始まります。初回インストール後に Neovim を再起動し、`:checkhealth` と `:Mason` を実行してください。
 
-<a id="useful-shortcuts"></a>
-
 ## 便利なショートカット
 
 リーダーキーは **Space** です。表のキーを順番に押してください。例えば `Space f f` はファイル選択を開きます。Space を押して待つと、Which-Key のヘルプが表示されます。
@@ -78,9 +74,7 @@ Copy-Item -LiteralPath '.\WezTerminal-Config\.wezterm.lua' -Destination $wezterm
 | Space c v | CSV/TSV の表表示を切り替え |
 | Space z t | Azure 用のプロジェクトターミナルを開く |
 
-`:Codex 8` または `:Claude 8` を使うと、専用の Neovim タブに独立した CLI セッションを 8 個開けます。画像や PDF を開くと、別の WezTerm プレビュータブが作成されます。これらの機能を使う前に、必要な外部ツールをインストールしてください。[マニュアル](MANUAL.ja.md#ai-session-workspaces)と[クラウド設定ガイド](nvim/SETUP-CLOUD-TOOLS.ja.md)をご覧ください。
-
-<a id="files-and-sharing"></a>
+`:Codex 8` または `:Claude 8` を使うと、専用の Neovim タブに独立した CLI セッションを 8 個開けます。画像や PDF を開くと、別の WezTerm プレビュータブが作成されます。これらの機能を使う前に、必要な外部ツールをインストールしてください。[マニュアル](MANUAL.ja.md#ai-セッションのワークスペース)と[クラウド設定ガイド](nvim/SETUP-CLOUD-TOOLS.ja.md)をご覧ください。
 
 ## ファイルと共有
 
@@ -93,4 +87,4 @@ Copy-Item -LiteralPath '.\WezTerminal-Config\.wezterm.lua' -Destination $wezterm
 
 壁紙コレクションの入れ替えに伴い、[ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) の画像は削除されました。現在の画像の出典は[壁紙のクレジット](nvim/backgrounds/CREDITS.ja.md)に記載されています。
 
-新しい変更を共有する前に、[検証コマンド](MANUAL.ja.md#validate-the-configuration)を実行し、追加した個人用のカスタマイズを確認してください。
+新しい変更を共有する前に、[検証コマンド](MANUAL.ja.md#設定の検証)を実行し、追加した個人用のカスタマイズを確認してください。

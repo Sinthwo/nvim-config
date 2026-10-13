@@ -6,8 +6,6 @@ Lege deine Hintergrundbilder in diesem Ordner oder dessen Unterordnern ab. Die A
 
 Bilder aus [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) wurden entfernt, weil die Hintergrundsammlung ersetzt wurde. Die Nachweisdatei behält einen Link zu dieser früheren Sammlung.
 
-<a id="choose-a-wallpaper"></a>
-
 ## Hintergrundbild auswählen
 
 Verwende in Neovim diese Befehle oder Kürzel:
@@ -17,17 +15,13 @@ Verwende in Neovim diese Befehle oder Kürzel:
 | `:BackgroundPick` | Space u b | Hintergrundbild auswählen |
 | `:BackgroundFolder` | Space u B | Bildordner im Windows-Explorer öffnen |
 
-Die Auswahl durchsucht diesen Ordner und dessen Unterordner. Sie nutzt fzf-lua, wenn verfügbar, sonst Neovims eingebaute Auswahl. SVG-Dateien werden nicht gelistet.
+Die Auswahl durchsucht diesen Ordner und dessen Unterordner. Sie nutzt das Snacks-Auswahlmenü, wenn verfügbar, sonst Neovims eingebaute Auswahl. SVG-Dateien werden nicht gelistet.
 
 Deine Auswahl wird als **relativer Bildpfad**, etwa `Magi/01-Magi-Star.jpg`, in `selected-background.txt` gespeichert. Git ignoriert diese erzeugte Datei. Abbrechen behält die vorherige Auswahl.
-
-<a id="use-a-different-image-folder"></a>
 
 ## Anderen Bildordner verwenden
 
 Der Standardordner ist Neovims `stdpath("config")` plus `backgrounds`, unter Windows normalerweise `$env:LOCALAPPDATA\nvim\backgrounds`. Setze `NVIM_BACKGROUND_DIR` in Neovim und WezTerm auf denselben absoluten Ordner oder denselben zum Benutzerordner relativen Pfad `~/...`. Starte nach der Änderung beide Anwendungen neu.
-
-<a id="display-the-wallpaper-in-wezterm"></a>
 
 ## Hintergrundbild in WezTerm anzeigen
 
@@ -35,4 +29,4 @@ Installiere die enthaltene [`WezTerminal-Config/.wezterm.lua`](../../WezTerminal
 
 Eine leere Auswahl oder ein fehlendes Bild stellt das normale Terminalaussehen wieder her. Ältere Auswahlen mit absoluten Pfaden funktionieren lokal weiterhin. Die nächste Hintergrundauswahl ersetzt diesen Pfad durch einen relativen.
 
-Siehe [Windows-Handbuch](../../MANUAL.de.md#wezterm-and-wallpapers) und [aktuelle Bildquellen](CREDITS.de.md).
+Siehe [Windows-Handbuch](../../MANUAL.de.md#wezterm-und-hintergrundbilder) und [aktuelle Bildquellen](CREDITS.de.md).

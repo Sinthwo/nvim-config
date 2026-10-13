@@ -162,6 +162,24 @@ Git ignores wallpaper selections, logs, `.env` files, Terraform state and plan
 files, and local validation backups. Review manually created archives before
 sharing them, since Git ignore rules do not filter their contents.
 
+## Dashboard, terminal panels, and Git tools
+
+Copy the complete `nvim/` folder, including `dashboard-logo.png` and
+`wezterm_dashboard_logo.lua`, and install the companion WezTerm configuration.
+The dashboard uses the current user's config directory, including
+`XDG_CONFIG_HOME` and `NVIM_APPNAME` overrides. Restart WezTerm after installation.
+Small terminal windows use a text header.
+
+`:TerminalPanel`, `:TerminalFloat`, and `:TerminalNew` provide project terminals.
+The Git pickers use Git from `PATH`. `:LazyGitFloat` additionally requires
+[LazyGit](https://github.com/jesseduffield/lazygit#installation); check it with
+`lazygit --version`. See the
+[manual](../MANUAL.md#git-and-project-terminals) for commands and shortcuts.
+
+AI commands such as `:CT2`, `:MC2`, and `:UC` focus existing sessions and restore
+their grid. `:CodexVoice`, `:ClaudeVoice`, and `:VoiceHelp` show voice or dictation
+instructions. See the [AI session reference](../MANUAL.md#ai-session-workspaces).
+
 ## Optional Azure Functions debugging
 
 The included debugger supports Python. To add debugging for .NET isolated

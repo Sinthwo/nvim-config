@@ -236,7 +236,7 @@ local function create_workspace(command, display_name, count)
   if count == 1 then
     pcall(vim.cmd, "stopinsert")
     vim.cmd("redrawtabline")
-    return
+    return workspace
   end
 
   local first_column = { first.win }
@@ -295,6 +295,7 @@ local function create_workspace(command, display_name, count)
 
   pcall(vim.cmd, "stopinsert")
   vim.cmd("redrawtabline")
+  return workspace
 end
 
 local function complete_count()
@@ -353,9 +354,206 @@ local function create_family(command, display_name, command_name)
   create_command_alias(end_alias, end_command)
 end
 
+-- ============================================================================
+-- Focus and enlarge sessions that are already running.
+-- ============================================================================
+
+local function active_workspace(family)
+  local entries = workspaces[family] or {}
+  local here = vim.api.nvim_get_current_tabpage()
+  for i = #entries, 1, -1 do
+    local ws = entries[i]
+    if ws.tab == here and vim.api.nvim_tabpage_is_valid(ws.tab) then
+      return ws
+    end
+  end
+  for i = #entries, 1, -1 do
+    local ws = entries[i]
+    if ws.tab and vim.api.nvim_tabpage_is_valid(ws.tab) and not ws.closing then
+      return ws
+    end
+  end
+  return nil
+end
+
+-- Show the same terminal in a floating window without changing the split grid.
+local function zoom_config()
+  local reserved = vim.o.cmdheight
+    + ((vim.o.laststatus == 0) and 0 or 1)
+    + ((vim.o.showtabline == 0) and 0 or 1)
+  return {
+    relative = "editor",
+    row = 0,
+    col = 0,
+    width = math.max(1, vim.o.columns),
+    height = math.max(1, vim.o.lines - reserved),
+    style = "minimal",
+    border = "none",
+    focusable = true,
+    zindex = 150,
+  }
+end
+
+local function unzoom(ws)
+  if not ws or not ws.zoom then
+    return
+  end
+  local saved = ws.zoom
+  ws.zoom = nil
+  if not vim.api.nvim_tabpage_is_valid(ws.tab) then
+    return
+  end
+  pcall(vim.api.nvim_set_current_tabpage, ws.tab)
+  if saved.float and vim.api.nvim_win_is_valid(saved.float) then
+    -- The grid still displays the terminal, so closing the float keeps it running.
+    pcall(vim.api.nvim_win_close, saved.float, true)
+  end
+  local target = ws.terminals[saved.index]
+  if target and vim.api.nvim_win_is_valid(target.win) then
+    pcall(vim.api.nvim_set_current_win, target.win)
+  end
+  pcall(vim.cmd, "stopinsert")
+end
+
+local function select_session(family, index, maximize)
+  local ws = active_workspace(family)
+  if not ws then
+    vim.notify("Open " .. family .. " sessions first, for example with :" .. family .. " 8.", vim.log.levels.WARN)
+    return
+  end
+
+  local target = ws.terminals[index]
+  if not target or not vim.api.nvim_win_is_valid(target.win) or not vim.api.nvim_buf_is_valid(target.buf) then
+    vim.notify(family .. " session " .. index .. " is not open in that workspace.", vim.log.levels.WARN)
+    return
+  end
+
+  -- Close the previous enlarged view before focusing another session.
+  unzoom(ws)
+  vim.api.nvim_set_current_tabpage(ws.tab)
+  vim.api.nvim_set_current_win(target.win)
+
+  if maximize then
+    local ok, float_or_error = pcall(vim.api.nvim_open_win, target.buf, true, zoom_config())
+    if not ok then
+      vim.notify("Could not maximize " .. family .. " session: " .. tostring(float_or_error), vim.log.levels.ERROR)
+      return
+    end
+    local float = float_or_error
+    ws.zoom = { float = float, index = index }
+    vim.wo[float].number = false
+    vim.wo[float].relativenumber = false
+    vim.wo[float].signcolumn = "no"
+    vim.wo[float].winbar = string.format(" %s %d/%d (maximized) | :UC to restore ", family, index, #ws.terminals)
+  end
+
+  -- Stay in normal mode for navigation commands; press i to enter terminal input.
+  pcall(vim.cmd, "stopinsert")
+end
+
+local function restore_active_layout()
+  local tab = vim.api.nvim_get_current_tabpage()
+  for _, family in ipairs({ "Codex", "Claude" }) do
+    for _, ws in ipairs(workspaces[family]) do
+      if ws.tab == tab and ws.zoom then
+        unzoom(ws)
+        return
+      end
+    end
+  end
+  -- Allow :UC from the normal coding tab to restore the last zoomed AI tab.
+  for _, family in ipairs({ "Codex", "Claude" }) do
+    for i = #workspaces[family], 1, -1 do
+      local ws = workspaces[family][i]
+      if ws.zoom and vim.api.nvim_tabpage_is_valid(ws.tab) then
+        unzoom(ws)
+        return
+      end
+    end
+  end
+  vim.notify("No maximized AI session to restore.", vim.log.levels.INFO)
+end
+
+local function command_with_lowercase(name, callback, desc)
+  vim.api.nvim_create_user_command(name, callback, { desc = desc })
+  create_command_alias(name:lower(), name)
+end
+
+local function setup_agent_shortcuts()
+  for i = 1, MAX_SESSIONS do
+    local idx = i
+    command_with_lowercase("CT" .. idx, function()
+      select_session("Codex", idx, false)
+    end, "Focus existing Codex session " .. i)
+
+    command_with_lowercase("CCT" .. idx, function()
+      select_session("Claude", idx, false)
+    end, "Focus existing Claude session " .. i)
+
+    command_with_lowercase("MC" .. idx, function()
+      select_session("Codex", idx, true)
+    end, "Maximize existing Codex session " .. i)
+
+    command_with_lowercase("MCC" .. idx, function()
+      select_session("Claude", idx, true)
+    end, "Maximize existing Claude session " .. i)
+  end
+  command_with_lowercase("UC", restore_active_layout, "Restore the AI session grid")
+end
+
+local function explain_voice(family)
+  if family == "Codex" then
+    vim.notify(
+      "Codex voice: focus the Codex terminal, enter terminal input mode (i), " ..
+      "then press F8 if your Codex CLI version supports voice. " ..
+      "Try /voice settings inside Codex. Update Codex if the feature is missing.",
+      vim.log.levels.INFO, { title = "Codex voice" }
+    )
+  else
+    vim.notify(
+      "For Windows dictation, focus the Claude terminal, enter input mode (i), " ..
+      "then press Win+H. Voice typing depends on Windows support and terminal focus.",
+      vim.log.levels.INFO, { title = "Claude dictation" }
+    )
+  end
+end
+
+local function setup_voice_shortcuts()
+  command_with_lowercase("CodexVoice", function()
+    if create_workspace("codex", "Codex", 1) then
+      vim.schedule(function() explain_voice("Codex") end)
+    end
+  end, "Open a Codex session with voice instructions")
+  command_with_lowercase("ClaudeVoice", function()
+    if create_workspace("claude", "Claude", 1) then
+      vim.schedule(function() explain_voice("Claude") end)
+    end
+  end, "Open Claude Code session for Windows dictation")
+  command_with_lowercase("VoiceHelp", function()
+    explain_voice("Codex")
+    explain_voice("Claude")
+  end, "Voice instructions for Codex and Claude Code")
+end
+
 function M.setup()
   create_family("codex", "Codex", "Codex")
   create_family("claude", "Claude", "Claude")
+  setup_agent_shortcuts()
+  setup_voice_shortcuts()
+
+  vim.api.nvim_create_autocmd("VimResized", {
+    group = vim.api.nvim_create_augroup("UserAIWorkspaceZoom", { clear = true }),
+    callback = function()
+      for _, family in ipairs({ "Codex", "Claude" }) do
+        for _, ws in ipairs(workspaces[family]) do
+          local zoom = ws.zoom
+          if zoom and zoom.float and vim.api.nvim_win_is_valid(zoom.float) then
+            pcall(vim.api.nvim_win_set_config, zoom.float, zoom_config())
+          end
+        end
+      end
+    end,
+  })
 end
 
 return M

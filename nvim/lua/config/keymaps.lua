@@ -67,3 +67,5 @@ require("config.azure").setup()
 -- =========================================================
 
 require("config.image_preview").setup()
+
+require("config.snacks_extras").setup()

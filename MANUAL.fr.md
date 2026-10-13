@@ -4,32 +4,29 @@
 
 **Cette configuration Neovim et WezTerm est destinée à Windows.** Ce manuel couvre l’installation, les raccourcis courants, les outils facultatifs et la personnalisation. Les exemples utilisent PowerShell et résolvent les chemins pour l’utilisateur actuel.
 
-<a id="contents"></a>
-
 ## Sommaire
 
-- [Installation et premier lancement](#installation-and-first-launch)
-- [Édition et raccourcis](#editing-and-shortcuts)
-- [Recherche de fichiers et explorateur](#finding-files-and-using-the-explorer)
-- [Prise en charge des langages et formatage](#language-support-and-formatting)
-- [Débogage Python](#python-debugging)
-- [Git et terminaux du projet](#git-and-project-terminals)
-- [Espaces de travail des sessions IA](#ai-session-workspaces)
-- [Azure et outils cloud](#azure-and-cloud-tools)
-- [Tableaux CSV et TSV](#csv-and-tsv-tables)
-- [Aperçus d’images et de PDF](#image-and-pdf-previews)
-- [Markdown et Obsidian](#markdown-and-obsidian)
-- [WezTerm et fonds d’écran](#wezterm-and-wallpapers)
-- [Personnalisation et confidentialité](#customization-and-privacy)
-- [Gestion des plugins](#plugin-management)
-- [Dépannage](#troubleshooting)
-- [Validation de la configuration](#validate-the-configuration)
-
-<a id="installation-and-first-launch"></a>
+- [Installation et premier lancement](#installation-et-premier-lancement)
+- [Tableau de bord et notifications](#tableau-de-bord-et-notifications)
+- [Édition et raccourcis](#édition-et-raccourcis)
+- [Recherche de fichiers et explorateur](#recherche-de-fichiers-et-explorateur)
+- [Prise en charge des langages et formatage](#prise-en-charge-des-langages-et-formatage)
+- [Débogage Python](#débogage-python)
+- [Git et terminaux du projet](#git-et-terminaux-du-projet)
+- [Espaces de travail des sessions IA](#espaces-de-travail-des-sessions-ia)
+- [Azure et outils cloud](#azure-et-outils-cloud)
+- [Tableaux CSV et TSV](#tableaux-csv-et-tsv)
+- [Aperçus d’images et de PDF](#aperçus-dimages-et-de-pdf)
+- [Markdown et Obsidian](#markdown-et-obsidian)
+- [WezTerm et fonds d’écran](#wezterm-et-fonds-décran)
+- [Personnalisation et confidentialité](#personnalisation-et-confidentialité)
+- [Gestion des plugins](#gestion-des-plugins)
+- [Dépannage](#dépannage)
+- [Validation de la configuration](#validation-de-la-configuration)
 
 ## Installation et premier lancement
 
-Suivez les [étapes d’installation du README](README.fr.md#install-on-windows). La commande de copie place les fichiers directement dans le répertoire de configuration Neovim. Vérifiez qu’elle n’a pas créé de dossier `nvim` supplémentaire dans ce répertoire. Le premier lancement nécessite une connexion Internet pour télécharger les plugins et les outils de langage.
+Suivez les [étapes d’installation du README](README.fr.md#installation-sous-windows). La commande de copie place les fichiers directement dans le répertoire de configuration Neovim. Vérifiez qu’elle n’a pas créé de dossier `nvim` supplémentaire dans ce répertoire. Le premier lancement nécessite une connexion Internet pour télécharger les plugins et les outils de langage.
 
 Après l’installation d’outils en ligne de commande, ouvrez une nouvelle fenêtre PowerShell pour récupérer le `PATH` mis à jour. Vérifiez la disponibilité des outils principaux :
 
@@ -52,7 +49,18 @@ Vérifiez la configuration avec ces commandes :
 :ConformInfo
 :messages
 ```
-<a id="editing-and-shortcuts"></a>
+## Tableau de bord et notifications
+
+Le tableau de bord Snacks s’affiche lorsque Neovim démarre sans fichier. Utilisez `:Dashboard` ou Space u D pour le rouvrir. Dans WezTerm, la configuration associée affiche le logo de requin au-dessus du menu. Les petites fenêtres et les terminaux sans cette intégration utilisent un titre textuel. La source de l’image figure dans les [crédits](nvim/backgrounds/CREDITS.fr.md#logo-du-tableau-de-bord).
+
+| Touche du tableau de bord | Action |
+| --- | --- |
+| f / g / r | Chercher un fichier / chercher du texte / ouvrir un fichier récent |
+| e / n | Ouvrir l’explorateur / créer un fichier |
+| l / c | Gérer les plugins / chercher un fichier de configuration |
+| t / q | Ouvrir le panneau terminal / quitter Neovim |
+
+Space u n ou `:Notifications` ouvre l’historique des notifications. Space u d, Space u N et `:NotifyDismiss` masquent les notifications visibles.
 
 ## Édition et raccourcis
 
@@ -84,8 +92,6 @@ Les onglets en haut représentent les **tampons**, généralement des fichiers o
 
 La complétion utilise le [préréglage super-tab](https://cmp.saghen.dev/configuration/keymap) de Blink. Tab accepte une suggestion ou avance dans un extrait ; Shift+Tab recule dans un extrait. Ctrl+Space ouvre la complétion, Ctrl+N/P sélectionne les suggestions et Ctrl+E ferme le menu. La documentation s’ouvre automatiquement après un court délai. L’appariement automatique des délimiteurs et l’édition des caractères d’encadrement sont également activés.
 
-<a id="finding-files-and-using-the-explorer"></a>
-
 ## Recherche de fichiers et explorateur
 
 | Touches | Action |
@@ -99,11 +105,9 @@ La complétion utilise le [préréglage super-tab](https://cmp.saghen.dev/config
 | `]t` / `[t` | Commentaire TODO suivant / précédent |
 | Ctrl+B | Ouvrir ou fermer l’explorateur de fichiers |
 
-Dans l’explorateur, Entrée ouvre un élément, `v` ou Ctrl+V ouvre une division verticale, et `s` ou Ctrl+S une division horizontale. Ctrl+B ferme l’explorateur. Ctrl+S a donc deux usages : ouvrir une division dans l’explorateur et enregistrer un fichier dans l’éditeur.
+Dans l’explorateur, Entrée ouvre un élément, `v` ou Ctrl+V ouvre une division verticale, et `s` ou Ctrl+S une division horizontale. Ctrl+B ferme l’explorateur. Ctrl+S a donc deux usages : ouvrir une division dans l’explorateur et enregistrer un fichier dans l’éditeur. L’ouverture d’un fichier conserve l’explorateur et évite de remplacer les fenêtres de terminal, de tableau de bord ou de diagnostics. Les renommages et déplacements avertissent le serveur de langage via Snacks afin de mettre à jour les références aux fichiers.
 
 L’explorateur suit le fichier actif et affiche les fichiers cachés et ceux ignorés par Git. Les sélecteurs cherchent dans le répertoire de travail actuel. Lancez Neovim depuis le dossier du projet ou utilisez `:cd` pour changer de répertoire. La recherche de texte sous Windows nécessite ripgrep ; consultez les [notes Windows de fzf-lua](https://github.com/ibhagwan/fzf-lua/blob/main/README-Win.md).
-
-<a id="language-support-and-formatting"></a>
 
 ## Prise en charge des langages et formatage
 
@@ -152,8 +156,6 @@ Le formatage est **manuel** : appuyez sur Space c f. Python utilise Ruff, Lua ut
 
 Pour Java, Space j o organise les imports, Space j v extrait une variable et Space j c extrait une constante. Chaque projet Java possède un cache d’espace de travail distinct, même si deux dossiers portent le même nom. Lors de la première utilisation d’un cache, jdtls peut devoir indexer le projet.
 
-<a id="python-debugging"></a>
-
 ## Débogage Python
 
 Ouvrez un fichier Python et vérifiez que l’installation de debugpy dans Mason est terminée. L’adaptateur utilise l’interpréteur debugpy fourni par Mason. Pour l’interpréteur de l’application, activez l’environnement virtuel du projet avant de lancer Neovim ou définissez `require("dap-python").resolve_python` dans votre configuration locale si nécessaire.
@@ -168,8 +170,6 @@ Ouvrez un fichier Python et vérifiez que l’installation de debugpy dans Mason
 | Space d t | Terminer la session |
 
 L’interface de débogage se charge avec le débogueur, s’ouvre au lancement ou à l’attachement et se ferme à la fin de la session. Sélectionnez une configuration de lancement Python si demandé. Cette configuration prend en charge le débogage Python. Java nécessite un adaptateur et une configuration supplémentaires.
-
-<a id="git-and-project-terminals"></a>
 
 ## Git et terminaux du projet
 
@@ -194,7 +194,19 @@ Le terminal s’ouvre à la racine du projet, identifiée à partir de Git, des 
 
 Space a c lance Codex et Space a C lance Claude Code. Installez les CLI, connectez-vous et assurez-vous que leurs commandes sont disponibles dans `PATH` avant d’utiliser ces raccourcis.
 
-<a id="ai-session-workspaces"></a>
+`:TerminalPanel` ouvre un panneau terminal en bas ; `:TerminalFloat` / Space t f ouvre un terminal flottant. `:TerminalNew` / Space t N démarre une autre session. Ces terminaux utilisent la racine du projet courant.
+
+| Touches | Commande | Action |
+| --- | --- | --- |
+| Space g G | `:LazyGitFloat` | Ouvrir LazyGit ; nécessite `lazygit` |
+| Space g B | `:GitBrowse` | Ouvrir le fichier courant sur l’hôte Git distant |
+| Space g L | `:GitLogPicker` | Parcourir les commits |
+| Space g F | `:GitBranches` | Parcourir les branches |
+| Space g S | `:GitStatusPicker` | Parcourir les fichiers modifiés |
+| Space g R | `:GitRebaseStatus` | Afficher l’état Git et le graphe des commits récents |
+| Space u . | `:FloatScratch` | Ouvrir des notes locales |
+
+`:GitDiffPicker` affiche les blocs de différences, `:GitLogLine` l’historique de la ligne courante et `:GitBlame` ses informations d’auteur. `GitRebaseStatus` affiche des informations ; effectuez un rebase avec Neogit, LazyGit ou Git. Les notes sont enregistrées localement.
 
 ## Espaces de travail des sessions IA
 
@@ -216,7 +228,21 @@ Utilisez `gt` et `gT` pour changer d’onglet Neovim. En mode normal, Ctrl+H/J/K
 
 `:CodexEnd` ferme tous les onglets de travail Codex ; `:ClaudeEnd` ferme tous ceux de Claude. Les deux reviennent à l’onglet de code d’origine s’il est encore ouvert. Fermer une session termine son processus. La connexion, les autorisations et l’utilisation du compte sont gérées par les CLI.
 
-<a id="azure-and-cloud-tools"></a>
+Utilisez ces commandes pour sélectionner ou agrandir une session déjà ouverte :
+
+| Commande | Action |
+| --- | --- |
+| `:CT1` à `:CT8` | Sélectionner une session Codex |
+| `:CCT1` à `:CCT8` | Sélectionner une session Claude |
+| `:MC1` à `:MC8` | Agrandir une session Codex |
+| `:MCC1` à `:MCC8` | Agrandir une session Claude |
+| `:UC` | Fermer la vue agrandie et retrouver la grille |
+
+La vue agrandie utilise le même buffer terminal. Le processus continue et la disposition des divisions est conservée. Ces commandes ne créent pas de session. Les alias minuscules `:ct2`, `:mc2` et `:uc` fonctionnent en saisie interactive ; utilisez les noms majuscules dans les scripts. Appuyez sur `i` pour saisir du texte dans le terminal.
+
+`:CodexVoice` et `:ClaudeVoice` ouvrent chacun une session distincte avec des instructions vocales ou de dictée. `:VoiceHelp` affiche uniquement les instructions. Les versions compatibles de Codex CLI proposent F8 et `/voice settings` ; voir la [documentation officielle OpenAI](https://learn.chatgpt.com/docs/changelog). Pour la dictée Windows dans le terminal Claude, passez en mode de saisie puis appuyez sur Win+H.
+
+Si l’onglet IA est le seul restant, ouvrez-en un autre avec `:tabnew` avant `:CodexEnd` ou `:ClaudeEnd`. Une fermeture qui échoue peut être réessayée.
 
 ## Azure et outils cloud
 
@@ -239,8 +265,6 @@ Le LSP Azure Pipelines nécessite un espace de travail contenant `azure-pipeline
 
 La détection des projets reconnaît également `bicepconfig.json`, les fichiers de pipeline, `.terraform` et `main.tf`. Le débogage Azure Functions est facultatif et nécessite un adaptateur de débogage .NET et les outils appropriés.
 
-<a id="csv-and-tsv-tables"></a>
-
 ## Tableaux CSV et TSV
 
 Ouvrir `.csv` ou `.tsv` active l’affichage aligné de csvview.nvim, avec bordures et en-tête fixe détecté automatiquement. CSV utilise des virgules et TSV des tabulations. Les lignes commençant par `#` ou `//` sont considérées comme des commentaires.
@@ -251,8 +275,6 @@ Space c v / `:CsvViewToggle` active ou désactive l’affichage. `:CsvViewEnable
 :CsvViewEnable delimiter=; header_lnum=1
 ```
 Vous pouvez modifier le fichier normalement lorsque l’affichage tabulaire est actif. Tab et Shift+Tab conservent leur comportement habituel.
-
-<a id="image-and-pdf-previews"></a>
 
 ## Aperçus d’images et de PDF
 
@@ -269,8 +291,6 @@ Chaque aperçu s’ouvre dans un **onglet WezTerm** distinct nommé d’après l
 Neovim doit s’exécuter dans WezTerm, avec `wezterm.exe` dans `PATH` et `WEZTERM_PANE` hérité du terminal. Les formats supplémentaires nécessitent [ImageMagick](https://imagemagick.org/script/download.php#windows). La lecture des PDF peut nécessiter Ghostscript et une politique ImageMagick locale autorisant leur conversion. Les échecs de conversion apparaissent dans les notifications.
 
 `:ImagePreviewClose` ferme le dernier aperçu ; `:ImagePreviewCloseAll` ferme tous ceux créés par ce processus Neovim. Le bouton de fermeture de l’onglet WezTerm ou Ctrl+Shift+W permet d’en fermer un directement. À sa fermeture, Neovim ferme ses panneaux d’aperçu et supprime les fichiers temporaires. L’affichage passe par l’invite de commandes Windows (`cmd.exe`).
-
-<a id="markdown-and-obsidian"></a>
 
 ## Markdown et Obsidian
 
@@ -306,8 +326,6 @@ Redémarrez WezTerm après une modification des variables persistantes. Ces para
 
 Exécutez `:Obsidian` une fois pour charger l’intégration, puis ouvrez une note du coffre configuré. La complétion des notes et des étiquettes utilise le serveur de langage intégré du plugin avec Blink. Le rendu Markdown fonctionne aussi hors du coffre.
 
-<a id="wezterm-and-wallpapers"></a>
-
 ## WezTerm et fonds d’écran
 
 Les sources des fonds d’écran inclus figurent dans les [crédits des images](nvim/backgrounds/CREDITS.fr.md). Les images de [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) ont été retirées, car la collection de fonds d’écran a été remplacée.
@@ -322,7 +340,7 @@ Installez la configuration complémentaire à `$HOME\.wezterm.lua`. WezTerm util
 | Alt+Enter | Activer ou désactiver le plein écran WezTerm |
 | Ctrl+Shift+L | Ouvrir le panneau de débogage WezTerm |
 
-Le sélecteur cherche les fichiers PNG, JPG/JPEG, GIF, BMP et WebP dans le dossier des images et ses sous-dossiers. Il utilise fzf-lua s’il est disponible, sinon le sélecteur intégré de Neovim. Les fichiers SVG ne sont pas affichés.
+Le sélecteur cherche les fichiers PNG, JPG/JPEG, GIF, BMP et WebP dans le dossier des images et ses sous-dossiers. Il utilise le menu de sélection Snacks s’il est disponible, sinon le sélecteur intégré de Neovim. Les fichiers SVG ne sont pas affichés.
 
 Le dossier par défaut est le répertoire de configuration Neovim suivi de `backgrounds`, normalement `$env:LOCALAPPDATA\nvim\backgrounds`. Une sélection est enregistrée sous forme de chemin relatif, par exemple `Magi/01-Magi-Star.jpg`, dans `selected-background.txt`. Annuler conserve la sélection. WezTerm la vérifie environ une fois par seconde. Les anciennes sélections avec des chemins absolus fonctionnent encore localement. Choisir une autre image enregistre un chemin relatif.
 
@@ -334,8 +352,6 @@ New-Item -ItemType Directory -Path $backgroundDir -Force | Out-Null
 [Environment]::SetEnvironmentVariable('NVIM_BACKGROUND_DIR', $backgroundDir, 'User')
 ```
 Placez-y les images, redémarrez WezTerm et choisissez-en une dans Neovim. Utilisez un répertoire absolu ou un chemin relatif au dossier utilisateur `~/...`. Les deux applications doivent recevoir la même valeur. WezTerm utilise aussi `XDG_CONFIG_HOME` et `NVIM_APPNAME` si vous utilisez ces paramètres Neovim.
-
-<a id="customization-and-privacy"></a>
 
 ## Personnalisation et confidentialité
 
@@ -369,8 +385,6 @@ git config user.email 'YOUR_GITHUB_NOREPLY_EMAIL'
 ```
 Copiez votre adresse noreply réelle depuis les paramètres e-mail de GitHub ; consultez les [instructions GitHub relatives à l’adresse e-mail des commits](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/setting-your-commit-email-address). Ces paramètres concernent les prochains commits. Les commits existants conservent les coordonnées d’auteur et de committer d’origine, sauf réécriture de l’historique.
 
-<a id="plugin-management"></a>
-
 ## Gestion des plugins
 
 Utilisez `:Lazy` pour inspecter l’état des plugins. `:Lazy restore` restaure les versions enregistrées dans `lazy-lock.json`. `:Lazy update` installe des versions plus récentes et peut modifier le fichier de verrouillage. Conservez-le lors du partage de la configuration. Les plugins sans entrée sont installés au premier besoin.
@@ -384,8 +398,6 @@ Avec un compilateur disponible, vous pouvez installer explicitement les analyseu
 :TSUpdate
 ```
 `TSInstall` ajoute les analyseurs demandés ; `TSUpdate` met à jour les analyseurs installés après une mise à jour de plugin. Rouvrez le fichier si la coloration n’est pas encore active.
-
-<a id="troubleshooting"></a>
 
 ## Dépannage
 
@@ -414,8 +426,6 @@ Avec un compilateur disponible, vous pouvez installer explicitement les analyseu
 | La conversion d’image ou de PDF échoue | Vérifiez `magick -version` ; les PDF peuvent aussi nécessiter Ghostscript et une politique adaptée. |
 
 Si un programme externe manque, Neovim affiche une notification. Utilisez `:messages` ou Space u n pour revoir les notifications manquées.
-
-<a id="validate-the-configuration"></a>
 
 ## Validation de la configuration
 

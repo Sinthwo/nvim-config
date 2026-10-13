@@ -36,6 +36,27 @@ return {
     },
 
     opts = {
+      open_files_do_not_replace_types = {
+        "terminal", "snacks_terminal", "trouble", "qf", "snacks_dashboard",
+      },
+      event_handlers = {
+        {
+          event = "file_renamed",
+          handler = function(data)
+            if rawget(_G, "Snacks") and Snacks.rename then
+              Snacks.rename.on_rename_file(data.source, data.destination)
+            end
+          end,
+        },
+        {
+          event = "file_moved",
+          handler = function(data)
+            if rawget(_G, "Snacks") and Snacks.rename then
+              Snacks.rename.on_rename_file(data.source, data.destination)
+            end
+          end,
+        },
+      },
       close_if_last_window = false,
 
       popup_border_style =

@@ -64,6 +64,7 @@ local function fake_vim()
     schedule = function(fn) fn() end,
     tbl_contains = contains,
     tbl_extend = real.tbl_extend,
+    list_extend = real.list_extend,
     deepcopy = real.deepcopy,
     validate = real.validate,
   }
@@ -80,7 +81,7 @@ end
 
 local paths = dofile("nvim/lua/config/paths.lua")
 package.loaded["config.paths"] = paths
-for _, module in ipairs({ "ai_sessions", "azure", "image_preview", "project" }) do
+for _, module in ipairs({ "ai_sessions", "azure", "image_preview", "project", "snacks_extras", "dashboard_logo" }) do
   package.loaded["config." .. module] = dofile("nvim/lua/config/" .. module .. ".lua")
 end
 
@@ -128,13 +129,21 @@ with_vim(fake, function()
     handle.index = handle.index + 1
     if handle.entries[handle.index] then return unpack(handle.entries[handle.index]) end
   end
-  fake.ui = { select = function(items, _, callback) listed = items; callback(choice) end }
+  fake.ui = { select = function(items, opts, callback)
+    listed = items
+    local selected
+    for _, item in ipairs(items) do
+      eq(opts.format_item(item), item.display, "Wallpaper menu uses the image's relative label")
+      if item.display == choice then selected = item end
+    end
+    callback(selected)
+  end }
   fake.fn.writefile = function(lines, file) writes[#writes + 1] = { lines = lines, file = file } end
   fake.notify = function() notices = notices + 1 end
   local background = dofile("nvim/lua/config/background.lua")
   background.pick()
   eq(#listed, 3, "Picker finds subfolder images and excludes non-images")
-  eq(listed[1], "a picture.png", "Picker sorts filenames")
+  eq(listed[1].display, "a picture.png", "Picker sorts filenames")
   eq(writes[1].lines[1], "a picture.png", "Selection contains only filename")
   eq(#writes[1].lines, 1, "Selection has exactly one line")
   eq(writes[1].file, profile.config .. "/backgrounds/selected-background.txt", "Selection uses current profile")
@@ -148,20 +157,19 @@ with_vim(fake, function()
   choice = "z.jpg"
   background.pick()
   eq(writes[3].file, home .. "/Pictures/Terminal Backgrounds/selected-background.txt", "Picker shares directory override")
-  package.loaded["fzf-lua"] = { fzf_exec = function(items, opts)
-    eq(items[2], "nested/O'Example.webp", "fzf receives sorted recursive paths")
-    opts.actions.default({ items[2] })
-  end }
+  choice = "nested/O'Example.webp"
   background.pick()
-  eq(writes[4].lines[1], "nested/O'Example.webp", "fzf selection stays portable")
-  package.loaded["fzf-lua"].fzf_exec = function(_, opts) opts.actions.default(nil) end
+  eq(writes[4].lines[1], choice, "Selection records keep subfolder paths portable")
+  choice = nil
   background.pick()
-  eq(#writes, 4, "fzf cancellation preserves selection")
-  package.loaded["fzf-lua"] = nil
+  eq(#writes, 4, "Selection menu cancellation preserves the previous choice")
+  fake.ui.select = function() error("Selection menu unavailable") end
+  background.pick()
+  eq(#writes, 4, "Selection menu failure preserves the previous choice")
   fake.uv.fs_scandir = function() return nil end
   background.pick()
   eq(#writes, 4, "Empty folder leaves selection unchanged")
-  eq(notices, 5, "Empty folder reports a notice")
+  eq(notices, 6, "Selection failure and empty folder report notices")
 end)
 
 -- Load the standalone WezTerm config in a sandbox with virtual files and panes.
@@ -175,7 +183,14 @@ local function wezterm_fixture(environment, selection, existing)
     config_builder = function() return {} end,
     action = actions,
     action_callback = function(fn) return fn end,
-    on = function(event, callback) events[event] = callback end,
+    on = function(event, callback)
+      local previous = events[event]
+      events[event] = previous and function(...)
+        previous(...)
+        callback(...)
+      end or callback
+    end,
+    log_warn = function() end,
     add_to_config_reload_watch_list = function(path) watched = path end,
   }
   local sandbox = setmetatable({
@@ -188,6 +203,10 @@ local function wezterm_fixture(environment, selection, existing)
       if existing[normalize(file)] then return { close = function() end } end
     end },
   }, { __index = _G })
+  sandbox.dofile = function(path)
+    check(path:match("/wezterm_dashboard_logo.lua$"), "WezTerm loads only the dashboard helper")
+    return setfenv(assert(loadfile("nvim/wezterm_dashboard_logo.lua")), sandbox)()
+  end
   local config = setfenv(assert(loadfile("WezTerminal-Config/.wezterm.lua")), sandbox)()
   return { config = config, events = events, watched = watched }
 end
@@ -245,6 +264,118 @@ local shell = wezterm_fixture({ PATH = '"T:/Tools With Spaces";R:/Other', Progra
 eq(shell.config.default_prog[1], "T:/Tools With Spaces/pwsh.exe", "WezTerm discovers PowerShell in PATH")
 local shell_fallback = wezterm_fixture(environment, nil, { ["R:/Program Files/PowerShell/7/pwsh.exe"] = true })
 eq(shell_fallback.config.default_prog[1], "R:/Program Files/PowerShell/7/pwsh.exe", "WezTerm ProgramFiles fallback")
+
+-- Dashboard layers share portable paths and preserve wallpaper and user settings.
+local logo = profile.config .. "/dashboard-logo.png"
+local helper = profile.config .. "/wezterm_dashboard_logo.lua"
+local dashboard_files = { [logo] = true, [helper] = true, [custom_dir .. "/z.jpg"] = true }
+local logo_fixture = wezterm_fixture({
+  LOCALAPPDATA = home .. "/AppData/Local",
+  NVIM_BACKGROUND_DIR = "~/Pictures/Terminal Backgrounds",
+}, "z.jpg", dashboard_files)
+local dashboard_vars = { NVIM_ACTIVE = "1", NVIM_DASHBOARD = "1" }
+local logo_rows, logo_calls = 40, 0
+local other_layer = { source = { Color = "#112233" } }
+local logo_overrides = { font_size = 18, background = { other_layer } }
+local logo_pane = {
+  get_user_vars = function() return dashboard_vars end,
+  get_dimensions = function() return { viewport_rows = logo_rows } end,
+}
+local logo_window = {
+  get_config_overrides = function() return logo_overrides end,
+  set_config_overrides = function(_, value) logo_overrides = value; logo_calls = logo_calls + 1 end,
+}
+logo_fixture.events["update-right-status"](logo_window, logo_pane)
+eq(#logo_overrides.background, 2, "Dashboard preserves an existing background layer")
+eq(logo_overrides.background[2].source.File, logo, "Dashboard logo uses current-user config path")
+eq(logo_overrides.background[2].height, "10cell", "Large dashboard logo fits reserved rows")
+eq(logo_overrides.window_background_image, custom_dir .. "/z.jpg", "Dashboard preserves selected wallpaper")
+eq(logo_overrides.text_background_opacity, 0, "Dashboard logo shows without opaque text cells")
+eq(logo_overrides.font_size, 18, "Dashboard preserves font overrides")
+local stable_logo_calls = logo_calls
+logo_fixture.events["update-right-status"](logo_window, logo_pane)
+eq(logo_calls, stable_logo_calls, "Unchanged logo does not refresh the window")
+logo_rows = 30
+logo_fixture.events["update-right-status"](logo_window, logo_pane)
+eq(logo_overrides.background[2].height, "8cell", "Smaller dashboard logo fits reserved rows")
+dashboard_vars.NVIM_DASHBOARD = "0"
+logo_fixture.events["user-var-changed"](logo_window, logo_pane, "NVIM_DASHBOARD", "0")
+eq(#logo_overrides.background, 1, "Leaving dashboard removes only its logo")
+eq(logo_overrides.background[1], other_layer, "Other background layer remains unchanged")
+eq(logo_overrides.text_background_opacity, 0.72, "Leaving dashboard restores wallpaper opacity")
+dashboard_vars.NVIM_DASHBOARD = "1"
+dashboard_files[logo] = nil
+logo_fixture.events["update-right-status"](logo_window, logo_pane)
+eq(#logo_overrides.background, 1, "Missing logo does not add a background layer")
+eq(logo_overrides.text_background_opacity, 0.72, "Missing logo preserves the wallpaper appearance")
+dashboard_vars.NVIM_ACTIVE = "0"
+logo_fixture.events["user-var-changed"](logo_window, logo_pane, "NVIM_ACTIVE", "0")
+eq(logo_overrides.text_background_opacity, 1, "Exiting Neovim restores normal text opacity")
+local alternate_logo_dir = "S:/Configs/alternate"
+local alternate_logo_files = {
+  [alternate_logo_dir .. "/dashboard-logo.png"] = true,
+  [alternate_logo_dir .. "/wezterm_dashboard_logo.lua"] = true,
+}
+local alternate_logo = wezterm_fixture({ XDG_CONFIG_HOME = "S:/Configs", NVIM_APPNAME = "alternate" }, nil, alternate_logo_files)
+dashboard_vars.NVIM_ACTIVE = "1"
+logo_overrides = {}
+alternate_logo.events["update-right-status"](logo_window, logo_pane)
+eq(logo_overrides.background[1].source.File, alternate_logo_dir .. "/dashboard-logo.png", "Logo honors XDG and app-name overrides")
+dashboard_vars.NVIM_DASHBOARD = "0"
+alternate_logo.events["update-right-status"](logo_window, logo_pane)
+eq(logo_overrides.background, nil, "Leaving dashboard removes its sole background override")
+
+-- Dashboard headers and state signals fall back cleanly on small or other terminals.
+fake = fake_vim()
+with_vim(fake, function()
+  fake.o = { lines = 40, columns = 120 }
+  fake.env.WEZTERM_PANE = "5"
+  local available, filetype, events, signals = true, "snacks_dashboard", {}, {}
+  fake.fn.filereadable = function() return available and 1 or 0 end
+  fake.api.nvim_get_current_buf = function() return 1 end
+  fake.bo = setmetatable({}, { __index = function() return { filetype = filetype } end })
+  local dashboard = package.loaded["config.dashboard_logo"]
+  local header = dashboard.section()
+  local _, rows = header.header:gsub("\n", "")
+  eq(rows + 1, 12, "Dashboard reserves twelve rows in a large window")
+  fake.o.lines = 30
+  _, rows = dashboard.section().header:gsub("\n", "")
+  eq(rows + 1, 10, "Dashboard reserves ten rows in a smaller window")
+  fake.o.lines = 20
+  eq(dashboard.section().header, "NEOVIM", "Small windows get a text header")
+  fake.o.lines, available = 40, false
+  eq(dashboard.section().header, "NEOVIM", "Missing logo gets a text header")
+  available, fake.env.WEZTERM_PANE = true, nil
+  eq(dashboard.section().header, "NEOVIM", "Other terminals get a text header")
+  fake.env.WEZTERM_PANE = "5"
+  fake.api.nvim_create_autocmd = function(names, opts)
+    for _, event in ipairs(type(names) == "table" and names or { names }) do
+      events[event] = events[event] or {}
+      table.insert(events[event], opts.callback)
+    end
+  end
+  local sandbox = setmetatable({ io = { stdout = {
+    write = function(_, value) signals[#signals + 1] = value end,
+    flush = function() end,
+  } } }, { __index = _G })
+  setfenv(assert(loadfile("nvim/lua/config/autocmds.lua")), sandbox)()
+  local function fire(event) for _, callback in ipairs(events[event] or {}) do callback() end end
+  fire("VimEnter")
+  check(signals[1]:find("NVIM_ACTIVE=MQ==", 1, true), "Startup signals active Neovim")
+  check(signals[2]:find("NVIM_DASHBOARD=MQ==", 1, true), "Dashboard signals logo visibility")
+  fire("BufEnter")
+  eq(#signals, 2, "Unchanged dashboard state sends no duplicate signal")
+  filetype = "python"
+  fire("BufEnter")
+  check(signals[#signals]:find("NVIM_DASHBOARD=MA==", 1, true), "Opening code clears the dashboard signal")
+  filetype = "snacks_dashboard"
+  fire("BufEnter")
+  fake.o.lines = 20
+  fire("VimResized")
+  check(signals[#signals]:find("NVIM_DASHBOARD=MA==", 1, true), "Shrinking the terminal hides the logo")
+  fire("VimLeavePre")
+  check(signals[#signals]:find("NVIM_ACTIVE=MA==", 1, true), "Exit signals inactive Neovim")
+end)
 
 -- The debugger dependency graph must initialize UI listeners before launch.
 local open_count, close_count, launched = 0, 0, 0
@@ -393,6 +524,94 @@ end)
 
 -- Simulate AI tab creation/closing: code buffers must stay out of terminal grids.
 fake = fake_vim()
+local saved_snacks = rawget(_G, "Snacks")
+with_vim(fake, function()
+  local commands, calls, git_available = {}, {}, true
+  fake.api.nvim_create_user_command = function(name, callback) commands[name] = callback end
+  fake.fn.executable = function() return git_available and 1 or 0 end
+  fake.v = { shell_error = 0 }
+  fake.fn.systemlist = function(argv)
+    calls[#calls + 1] = { name = "git", argv = argv }
+    return argv[4] == "rev-parse" and { "true" } or { "example status" }
+  end
+  local function record(name)
+    return function(opts) calls[#calls + 1] = { name = name, opts = opts } end
+  end
+  _G.Snacks = {
+    terminal = setmetatable({ open = function(command, opts)
+      calls[#calls + 1] = { name = "new terminal", command = command, opts = opts }
+    end }, { __call = function(_, command, opts)
+      calls[#calls + 1] = { name = "terminal", command = command, opts = opts }
+    end }),
+    dashboard = record("dashboard"),
+    notifier = { show_history = record("notifications"), hide = record("dismiss") },
+    lazygit = record("lazygit"),
+    picker = {},
+    gitbrowse = record("browse"),
+    scratch = record("scratch"),
+    win = record("window"),
+    rename = { on_rename_file = function(source, destination)
+      calls[#calls + 1] = { name = "rename", source = source, destination = destination }
+    end },
+  }
+  for _, method in ipairs({ "git_log", "git_branches", "git_diff", "git_status", "git_log_line" }) do
+    Snacks.picker[method] = record(method)
+  end
+  package.loaded["config.project"] = { root = function() return home .. "/work cloud" end }
+  local explorer = dofile("nvim/lua/plugins/explorer.lua")[1].opts
+  check(contains(explorer.open_files_do_not_replace_types, "terminal"), "Explorer preserves terminal windows")
+  check(contains(explorer.open_files_do_not_replace_types, "snacks_dashboard"), "Explorer preserves dashboard windows")
+  local renamed = { source = home .. "/work cloud/old file.py", destination = home .. "/work cloud/new file.py" }
+  for _, handler in ipairs(explorer.event_handlers) do
+    handler.handler(renamed)
+    eq(calls[#calls].source, renamed.source, "Explorer passes the original rename path")
+    eq(calls[#calls].destination, renamed.destination, "Explorer passes the new rename path")
+  end
+  dofile("nvim/lua/config/snacks_extras.lua").setup()
+  commands.TerminalPanel()
+  eq(calls[#calls].opts.cwd, home .. "/work cloud", "Terminal panel preserves a project path with spaces and apostrophes")
+  eq(calls[#calls].opts.win.position, "bottom", "Terminal panel opens below the editor")
+  commands.TerminalFloat()
+  eq(calls[#calls].opts.win.position, "float", "Floating terminal opens as a float")
+  commands.TerminalNew()
+  local first_terminal = calls[#calls].opts.count
+  commands.TerminalNew()
+  check(calls[#calls].opts.count ~= first_terminal, "New terminals have independent session identifiers")
+  commands.LazyGitFloat()
+  eq(calls[#calls].name, "lazygit", "LazyGit command opens its integration")
+  eq(calls[#calls].opts.cwd, home .. "/work cloud", "LazyGit uses the project root")
+  commands.GitBranches()
+  eq(calls[#calls].name, "git_branches", "Branches command selects the branch picker")
+  eq(calls[#calls].opts.cwd, home .. "/work cloud", "Git picker uses the project root")
+  commands.GitBrowse()
+  eq(calls[#calls].opts.what, "file", "Git browse targets the current file")
+  commands.GitRebaseStatus()
+  eq(calls[#calls].opts.bo.modifiable, false, "Git status float is read-only")
+  commands.Dashboard()
+  eq(calls[#calls].name, "dashboard", "Dashboard command opens the dashboard")
+  commands.Notifications()
+  eq(calls[#calls].name, "notifications", "Notification command opens history")
+  commands.NotifyDismiss()
+  eq(calls[#calls].name, "dismiss", "Dismiss command hides notifications")
+  git_available = false
+  local previous_calls = #calls
+  commands.LazyGitFloat()
+  commands.GitBranches()
+  eq(#calls, previous_calls, "Missing Git or LazyGit does not invoke the integrations")
+
+  local chosen_dir
+  package.loaded["fzf-lua"] = { files = function(opts) chosen_dir = opts.cwd end }
+  local dashboard_opts = dofile("nvim/lua/plugins/snacks.lua")[1].opts.dashboard
+  for _, key in ipairs(dashboard_opts.preset.keys) do
+    if key.key == "c" then key.action() end
+  end
+  eq(chosen_dir, profile.config, "Dashboard config picker passes the path directly to fzf-lua")
+  package.loaded["fzf-lua"] = nil
+end)
+_G.Snacks = saved_snacks
+
+-- Focus and floating zoom reuse existing terminals without changing the grid.
+fake = fake_vim()
 with_vim(fake, function()
   local tabs, wins, buffers = { [1] = { 1 } }, { [1] = { tab = 1, buf = 1 } }, { [1] = true }
   local tab, win, next_tab, next_win, next_buf = 1, 1, 1, 1, 1
@@ -404,7 +623,11 @@ with_vim(fake, function()
     return value
   end })
   fake.b = setmetatable({}, { __index = function(t, id) local value = {}; rawset(t, id, value); return value end })
-  fake.t, fake.wo = {}, {}
+  fake.t = {}
+  fake.wo = setmetatable({}, { __index = function(t, id) local value = {}; rawset(t, id, value); return value end })
+  fake.o = { cmdheight = 1, laststatus = 3, showtabline = 2, columns = 160, lines = 50 }
+  local ai_events = {}
+  fake.api.nvim_create_autocmd = function(name, opts) ai_events[name] = opts.callback end
   fake.fn.executable = function() return 1 end
   fake.fn.fnameescape = function(value) return value end
   fake.api.nvim_get_current_buf = function() return wins[win].buf end
@@ -419,6 +642,20 @@ with_vim(fake, function()
   fake.api.nvim_set_current_win = function(id) win, tab = id, wins[id].tab end
   fake.api.nvim_set_current_tabpage = function(id) tab, win = id, tabs[id][1] end
   fake.api.nvim_create_user_command = function(name, callback) commands[name] = callback end
+  fake.api.nvim_open_win = function(buf, enter, opts)
+    next_win = next_win + 1
+    wins[next_win] = { tab = tab, buf = buf, float = true, config = real.deepcopy(opts) }
+    tabs[tab][#tabs[tab] + 1] = next_win
+    if enter then win = next_win end
+    return next_win
+  end
+  fake.api.nvim_win_set_config = function(id, opts) wins[id].config = real.deepcopy(opts) end
+  fake.api.nvim_win_close = function(id)
+    for i, value in ipairs(tabs[wins[id].tab]) do
+      if value == id then table.remove(tabs[wins[id].tab], i); break end
+    end
+    wins[id] = nil
+  end
   package.loaded["config.project"] = { root = function(buf) code_root_buf = buf; return home .. "/work" end }
   local function new_buffer() next_buf = next_buf + 1; buffers[next_buf] = true; return next_buf end
   local function new_window(buf)
@@ -460,6 +697,28 @@ with_vim(fake, function()
     eq(fake.bo[buf].buflisted, false, "AI terminals excluded from buffer list")
     eq(fake.bo[buf].bufhidden, "wipe", "AI terminals cleaned on tab close")
   end
+  local grid_windows = real.deepcopy(tabs[2])
+  local buffer_count = next_buf
+  commands.CT3()
+  eq(win, grid_windows[3], "Focus selects the requested running Codex session")
+  eq(next_buf, buffer_count, "Focus does not start another terminal")
+  commands.MC7()
+  local zoom_window = win
+  eq(wins[zoom_window].buf, wins[grid_windows[7]].buf, "Zoom displays the same terminal buffer")
+  eq(#tabs[2], 9, "Zoom adds one floating window to the eight-session grid")
+  eq(next_buf, buffer_count, "Zoom does not start another terminal")
+  fake.o.columns, fake.o.lines = 120, 40
+  ai_events.VimResized()
+  eq(wins[zoom_window].config.width, 120, "Zoom width follows terminal resizing")
+  eq(wins[zoom_window].config.height, 37, "Zoom height leaves room for terminal UI")
+  commands.UC()
+  eq(wins[zoom_window], nil, "Restore closes only the floating view")
+  eq(#tabs[2], 8, "Restore retains all eight original sessions")
+  eq(win, grid_windows[7], "Restore focuses the selected grid session")
+  for index, id in ipairs(tabs[2]) do eq(id, grid_windows[index], "Restore preserves grid window " .. index) end
+  local previous_tabs = next_tab
+  commands.VoiceHelp()
+  eq(next_tab, previous_tabs, "Voice help does not start a session")
   commands.CodexEnd()
   eq(tabs[2], nil, "End closes AI tab")
   eq(tab, 1, "End returns to coding tab")
@@ -487,6 +746,12 @@ with_vim(fake, function()
   fail_close = false
   commands.ClaudeEnd()
   eq(tabs[failed_tab], nil, "Failed workspace close can be retried")
+  fake.fn.executable = function() return 0 end
+  notices = {}
+  previous_tabs = next_tab
+  commands.CodexVoice()
+  eq(next_tab, previous_tabs, "Missing CLI does not open a voice workspace")
+  eq(#notices, 1, "Missing CLI does not show misleading voice instructions")
 end)
 
 -- Preview paths are argument lists; filename shell characters never enter titles/echo commands.
@@ -558,20 +823,47 @@ with_vim(fake, function()
   eq(#calls, count_before, "Outside WezTerm no preview process is spawned")
 end)
 
-local manual = table.concat(real.fn.readfile("MANUAL.md"), "\n")
-for key in pairs(declared) do
-  local suffix = key:sub(#"<leader>" + 1)
-  local label = "Space " .. suffix:gsub("(.)", "%1 "):gsub(" $", "")
-  check(manual:find(label, 1, true), "Manual documents " .. key)
+for _, file in ipairs({ "MANUAL.md", "MANUAL.de.md", "MANUAL.fr.md", "MANUAL.ja.md" }) do
+  local manual = table.concat(real.fn.readfile(file), "\n")
+  for key in pairs(declared) do
+    local suffix = key:sub(#"<leader>" + 1)
+    local label = "Space " .. suffix:gsub("(.)", "%1 "):gsub(" $", "")
+    check(manual:find(label, 1, true), file .. " documents " .. key)
+  end
+  for _, command in ipairs({ "CT1", "CT8", "CCT1", "CCT8", "MC1", "MC8", "MCC1", "MCC8", "UC", "CodexVoice", "ClaudeVoice", "VoiceHelp", "Dashboard", "TerminalPanel", "TerminalFloat", "TerminalNew", "GitLogLine", "GitDiffPicker", "GitBlame" }) do
+    check(manual:find(":" .. command, 1, true), file .. " documents command " .. command)
+  end
 end
-for _, file in ipairs({ "README.md", "MANUAL.md", "nvim/backgrounds/README.md", "nvim/backgrounds/CREDITS.md", "nvim/SETUP-CLOUD-TOOLS.md" }) do
+local documents = real.fn.glob("README*.md", false, true)
+real.list_extend(documents, real.fn.glob("MANUAL*.md", false, true))
+real.list_extend(documents, real.fn.glob("nvim/**/*.md", false, true))
+local function has_anchor(content, anchor)
+  -- Keep accented and Japanese letters when checking automatic heading anchors.
+  for heading in content:gmatch("#+ ([^\n]+)") do
+    local slug = real.fn.tolower(heading):gsub("%p", function(char)
+      return (char == "-" or char == "_") and char or ""
+    end)
+    -- These Unicode punctuation marks occur in the translated headings.
+    slug = slug:gsub("’", ""):gsub("・", ""):gsub("%s", "-")
+    if slug == anchor then return true end
+  end
+  return false
+end
+for _, file in ipairs(documents) do
   local content = table.concat(real.fn.readfile(file), "\n")
   check(content:find("Windows", 1, true), file .. " identifies Windows")
+  check(not content:find("<a%s+id="), file .. " uses automatic Markdown heading anchors")
   for target in content:gmatch("%]%(([^%)]+)%)") do
-    if not target:match("^https?://") and target:sub(1, 1) ~= "#" then
+    if not target:match("^https?://") then
       local path = target:gsub("#.*$", "")
       local dir = real.fs.dirname(file) or "."
-      check(real.uv.fs_stat(real.fs.joinpath(dir, path)), file .. " has valid link " .. target)
+      local destination = path == "" and file or real.fs.joinpath(dir, path)
+      check(real.uv.fs_stat(destination), file .. " has valid link " .. target)
+      local anchor = target:match("#(.+)$")
+      if anchor then
+        local destination_content = table.concat(real.fn.readfile(destination), "\n")
+        check(has_anchor(destination_content, anchor), file .. " has valid anchor " .. target)
+      end
     end
   end
 end

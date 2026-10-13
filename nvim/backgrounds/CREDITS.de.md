@@ -17,7 +17,9 @@ Die folgenden Links führen zu den Quellseiten oder Sammlungen der aktuellen Hin
 | Your lie in April / `01-YLIA-Finalscene.png` | [Alpha Coders picture 159820](https://pics.alphacoders.com/pictures/view/159820) |
 | My Teen Romantic Comedy SNAFU / `change_01-Oregairu-MC.webp` | [Live Wallpaper For You: Yukino, OreGairu](https://livewallpaperforyou.com/ice-queen-yukino-4k-live-wallpaper/) |
 
-<a id="previous-collection"></a>
+## Dashboard-Logo
+
+Quelle des Hai-Bildes für das Dashboard, `nvim/dashboard-logo.png`: [Reddit-Beitrag in r/marvelrivals](https://www.reddit.com/r/marvelrivals/comments/1hc1b32/dear_jeff_haters_this_is_what_your_hatred_will/).
 
 ## Frühere Sammlung
 

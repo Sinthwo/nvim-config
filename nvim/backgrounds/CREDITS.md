@@ -18,6 +18,11 @@ wallpapers. See each source for artist and publisher credits.
 | Your lie in April / `01-YLIA-Finalscene.png` | [Alpha Coders picture 159820](https://pics.alphacoders.com/pictures/view/159820) |
 | My Teen Romantic Comedy SNAFU / `change_01-Oregairu-MC.webp` | [Live Wallpaper For You: Yukino, OreGairu](https://livewallpaperforyou.com/ice-queen-yukino-4k-live-wallpaper/) |
 
+## Dashboard logo
+
+Source for the shark dashboard image, `nvim/dashboard-logo.png`:
+[r/marvelrivals Reddit post](https://www.reddit.com/r/marvelrivals/comments/1hc1b32/dear_jeff_haters_this_is_what_your_hatred_will/).
+
 ## Previous collection
 
 The images from [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime)

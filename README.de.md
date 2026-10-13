@@ -12,7 +12,7 @@ Pfade werden automatisch für den aktuellen Windows-Benutzer ermittelt. Du kanns
 
 Im [Windows-Benutzerhandbuch](MANUAL.de.md) findest du die vollständige Übersicht der Tastenkürzel, die Einrichtung der Sprachunterstützung, Hintergrundbilder, Anpassungen und Fehlerbehebung.
 
-<a id="requirements"></a>
+Das Start-Dashboard enthält ein Hai-Logo und Tastenkürzel für Dateien, Suche, Plugins und Terminals. Weitere Befehle fokussieren oder vergrößern laufende KI-Sitzungen und öffnen Terminalpanels sowie Git-Ansichten. Einzelheiten stehen im [Handbuch](MANUAL.de.md#dashboard-und-benachrichtigungen).
 
 ## Voraussetzungen
 
@@ -22,8 +22,6 @@ Im [Windows-Benutzerhandbuch](MANUAL.de.md) findest du die vollständige Übersi
 - PowerShell 7 ist die bevorzugte Shell. Windows PowerShell wird ebenfalls für Editor Services und die CPU-Statusanzeige unterstützt.
 - Für Syntaxparser: Tree-sitter CLI **0.26.1 oder neuer**, `curl`, `tar` und ein C-Compiler in `PATH`, etwa MSVC in einer Developer-PowerShell-Sitzung oder Clang. Dies entspricht den [Anforderungen der festgelegten Tree-sitter-Version](https://github.com/nvim-treesitter/nvim-treesitter/blob/e289100ff98969e118c702199d88b764ce9e7fdf/README.md).
 - Python, Node.js/npm und ein JDK nach Bedarf für die im Handbuch beschriebenen Sprachwerkzeuge. Eine Nerd Font ist optional, um Symbole darzustellen.
-
-<a id="install-on-windows"></a>
 
 ## Installation unter Windows
 
@@ -55,8 +53,6 @@ Copy-Item -LiteralPath '.\WezTerminal-Config\.wezterm.lua' -Destination $wezterm
 ```
 Neovim verwendet normalerweise `$env:LOCALAPPDATA\nvim`. WezTerm liest `$HOME\.wezterm.lua`. Starte WezTerm neu, führe `nvim` aus und warte auf den Abschluss der ersten Plugin- und Werkzeugdownloads. Öffne eine Quelldatei, um die Sprachserverinstallation auszulösen. Starte Neovim nach der ersten Installation neu und führe `:checkhealth` und `:Mason` aus.
 
-<a id="useful-shortcuts"></a>
-
 ## Nützliche Tastenkürzel
 
 Die Leader-Taste ist **Leertaste**. Drücke die aufgeführten Tasten nacheinander; zum Beispiel öffnet `Space f f` die Dateiauswahl. Drücke die Leertaste und warte auf die Which-Key-Hilfe.
@@ -76,9 +72,7 @@ Die Leader-Taste ist **Leertaste**. Drücke die aufgeführten Tasten nacheinande
 | Space c v | CSV/TSV-Tabellenansicht umschalten |
 | Space z t | Azure-Projektterminal öffnen |
 
-Mit `:Codex 8` oder `:Claude 8` öffnest du acht unabhängige CLI-Sitzungen in einem eigenen Neovim-Tab. Beim Öffnen eines Bildes oder PDFs entsteht ein separater WezTerm-Vorschautab. Installiere die erforderlichen externen Werkzeuge vor der Verwendung dieser Funktionen; siehe [Handbuch](MANUAL.de.md#ai-session-workspaces) und [Cloud-Einrichtungsanleitung](nvim/SETUP-CLOUD-TOOLS.de.md).
-
-<a id="files-and-sharing"></a>
+Mit `:Codex 8` oder `:Claude 8` öffnest du acht unabhängige CLI-Sitzungen in einem eigenen Neovim-Tab. Beim Öffnen eines Bildes oder PDFs entsteht ein separater WezTerm-Vorschautab. Installiere die erforderlichen externen Werkzeuge vor der Verwendung dieser Funktionen; siehe [Handbuch](MANUAL.de.md#arbeitsbereiche-für-ki-sitzungen) und [Cloud-Einrichtungsanleitung](nvim/SETUP-CLOUD-TOOLS.de.md).
 
 ## Dateien und Weitergabe
 
@@ -91,4 +85,4 @@ Hintergrundauswahlen verwenden Pfade relativ zum Bildordner. Git ignoriert die A
 
 Die Bilder aus [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) wurden entfernt, weil die Hintergrundsammlung ersetzt wurde. Quellen der aktuellen Bilder sind in den [Hintergrundbildnachweisen](nvim/backgrounds/CREDITS.de.md) aufgeführt.
 
-Führe vor dem Weitergeben neuer Änderungen die [Validierungsbefehle](MANUAL.de.md#validate-the-configuration) aus und überprüfe deine persönlichen Anpassungen.
+Führe vor dem Weitergeben neuer Änderungen die [Validierungsbefehle](MANUAL.de.md#konfiguration-prüfen) aus und überprüfe deine persönlichen Anpassungen.

@@ -29,8 +29,9 @@ end
 local config_home = env("XDG_CONFIG_HOME")
   or env("LOCALAPPDATA")
   or join_path(wezterm.home_dir, "AppData", "Local")
+local nvim_config_dir = expand_home(join_path(config_home, env("NVIM_APPNAME") or "nvim"))
 local backgrounds_dir = expand_home(env("NVIM_BACKGROUND_DIR")
-  or join_path(config_home, env("NVIM_APPNAME") or "nvim", "backgrounds"))
+  or join_path(nvim_config_dir, "backgrounds"))
 local selected_file = join_path(backgrounds_dir, "selected-background.txt")
 
 -- =========================================================
@@ -50,6 +51,24 @@ local function file_exists(path)
   end
 
   return false
+end
+
+-- Load the dashboard logo helper from the current user's Neovim directory.
+local dashboard_logo
+local dashboard_helper = join_path(nvim_config_dir, "wezterm_dashboard_logo.lua")
+if file_exists(dashboard_helper) then
+  wezterm.add_to_config_reload_watch_list(dashboard_helper)
+  local ok, module = pcall(dofile, dashboard_helper)
+  if ok and type(module) == "table" and type(module.setup) == "function" then
+    local ready, integration = pcall(module.setup, wezterm, nvim_config_dir)
+    if ready then
+      dashboard_logo = integration
+    else
+      wezterm.log_warn("Could not initialize the Neovim dashboard logo helper.")
+    end
+  else
+    wezterm.log_warn("Could not load the Neovim dashboard logo helper.")
+  end
 end
 
 local function trim(value)
@@ -254,7 +273,8 @@ local function update_nvim_background(
     or {}
 
   local background = nvim_active and read_selected_background() or nil
-  local opacity = background and 0.72 or 1.0
+  local dashboard_active = dashboard_logo and dashboard_logo.visible(pane)
+  local opacity = dashboard_active and 0.0 or (background and 0.72 or 1.0)
 
   if overrides.window_background_image ~= background
     or overrides.text_background_opacity ~= opacity
@@ -284,7 +304,7 @@ wezterm.on(
     name,
     value
   )
-    if name ~= "NVIM_ACTIVE" then
+    if name ~= "NVIM_ACTIVE" and name ~= "NVIM_DASHBOARD" then
       return
     end
 

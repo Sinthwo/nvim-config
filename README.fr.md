@@ -14,7 +14,7 @@ Les chemins sont résolus automatiquement pour l’utilisateur Windows actuel. V
 
 Consultez le [manuel utilisateur Windows](MANUAL.fr.md) pour la liste complète des raccourcis, la configuration des langages, les fonds d’écran, la personnalisation et le dépannage.
 
-<a id="requirements"></a>
+Le tableau de bord de démarrage comporte un logo de requin et des raccourcis pour les fichiers, la recherche, les plugins et les terminaux. D’autres commandes sélectionnent ou agrandissent les sessions IA existantes et ouvrent des panneaux terminaux ou des vues Git. Consultez le [manuel](MANUAL.fr.md#tableau-de-bord-et-notifications).
 
 ## Prérequis
 
@@ -24,8 +24,6 @@ Consultez le [manuel utilisateur Windows](MANUAL.fr.md) pour la liste complète 
 - PowerShell 7 est le shell recommandé. Windows PowerShell est également pris en charge pour les services de l’éditeur et l’indicateur d’utilisation du processeur.
 - Pour les analyseurs syntaxiques : Tree-sitter CLI **0.26.1 ou version ultérieure**, `curl`, `tar` et un compilateur C dans `PATH`, par exemple MSVC dans une session Developer PowerShell ou Clang. Ces prérequis correspondent à ceux de la [version verrouillée de Tree-sitter](https://github.com/nvim-treesitter/nvim-treesitter/blob/e289100ff98969e118c702199d88b764ce9e7fdf/README.md).
 - Python, Node.js/npm et un JDK selon les outils de langage décrits dans le manuel. Une Nerd Font est facultative pour afficher les icônes.
-
-<a id="install-on-windows"></a>
 
 ## Installation sous Windows
 
@@ -57,8 +55,6 @@ Copy-Item -LiteralPath '.\WezTerminal-Config\.wezterm.lua' -Destination $wezterm
 ```
 Neovim utilise normalement `$env:LOCALAPPDATA\nvim`. WezTerm lit `$HOME\.wezterm.lua`. Redémarrez WezTerm, lancez `nvim` et laissez les téléchargements initiaux des plugins et des outils se terminer. Ouvrez un fichier source pour déclencher l’installation du serveur de langage. Redémarrez Neovim après la première installation, puis exécutez `:checkhealth` et `:Mason`.
 
-<a id="useful-shortcuts"></a>
-
 ## Raccourcis utiles
 
 La touche leader est **Espace**. Appuyez successivement sur les touches indiquées ; par exemple, `Space f f` ouvre le sélecteur de fichiers. Appuyez sur Espace et attendez pour afficher l’aide de Which-Key.
@@ -78,9 +74,7 @@ La touche leader est **Espace**. Appuyez successivement sur les touches indiqué
 | Space c v | Activer ou désactiver l’affichage tabulaire CSV/TSV |
 | Space z t | Ouvrir un terminal du projet pour Azure |
 
-Utilisez `:Codex 8` ou `:Claude 8` pour ouvrir huit sessions CLI indépendantes dans un onglet Neovim dédié. L’ouverture d’une image ou d’un PDF crée un onglet d’aperçu WezTerm distinct. Installez les outils externes requis avant d’utiliser ces fonctionnalités ; consultez le [manuel](MANUAL.fr.md#ai-session-workspaces) et le [guide de configuration cloud](nvim/SETUP-CLOUD-TOOLS.fr.md).
-
-<a id="files-and-sharing"></a>
+Utilisez `:Codex 8` ou `:Claude 8` pour ouvrir huit sessions CLI indépendantes dans un onglet Neovim dédié. L’ouverture d’une image ou d’un PDF crée un onglet d’aperçu WezTerm distinct. Installez les outils externes requis avant d’utiliser ces fonctionnalités ; consultez le [manuel](MANUAL.fr.md#espaces-de-travail-des-sessions-ia) et le [guide de configuration cloud](nvim/SETUP-CLOUD-TOOLS.fr.md).
 
 ## Fichiers et partage
 
@@ -93,4 +87,4 @@ Les fonds d’écran sélectionnés utilisent des chemins relatifs au dossier de
 
 Les images de [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) ont été retirées, car la collection de fonds d’écran a été remplacée. Les sources des images actuelles figurent dans les [crédits des fonds d’écran](nvim/backgrounds/CREDITS.fr.md).
 
-Avant de partager de nouvelles modifications, exécutez les [commandes de validation](MANUAL.fr.md#validate-the-configuration) et vérifiez les personnalisations personnelles que vous avez ajoutées.
+Avant de partager de nouvelles modifications, exécutez les [commandes de validation](MANUAL.fr.md#validation-de-la-configuration) et vérifiez les personnalisations personnelles que vous avez ajoutées.

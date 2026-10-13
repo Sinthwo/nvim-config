@@ -46,3 +46,49 @@ vim.api.nvim_create_autocmd(
     end,
   }
 )
+-- Dashboard logo state for the companion WezTerm configuration.
+
+local last_dashboard_state = nil
+
+local function set_dashboard_state(active)
+  if not vim.env.WEZTERM_PANE then
+    return
+  end
+  if last_dashboard_state == active then
+    return
+  end
+  last_dashboard_state = active
+  local encoded = active and "MQ==" or "MA==" -- base64("1") or base64("0")
+  io.stdout:write("\027]1337;SetUserVar=NVIM_DASHBOARD=" .. encoded .. "\007")
+  io.stdout:flush()
+end
+
+local function refresh_dashboard_state()
+  local ok, ft = pcall(function()
+    return vim.bo[vim.api.nvim_get_current_buf()].filetype
+  end)
+  set_dashboard_state(ok and ft == "snacks_dashboard" and require("config.dashboard_logo").visible())
+end
+
+local dashboard_group = vim.api.nvim_create_augroup("UserWeztermDashboardLogo", { clear = true })
+
+vim.api.nvim_create_autocmd("User", {
+  group = dashboard_group,
+  pattern = "SnacksDashboardOpened",
+  callback = function() vim.schedule(refresh_dashboard_state) end,
+})
+
+vim.api.nvim_create_autocmd({ "BufEnter", "BufLeave", "WinEnter", "TabEnter", "BufWipeout", "VimResized" }, {
+  group = dashboard_group,
+  callback = function() vim.schedule(refresh_dashboard_state) end,
+})
+
+vim.api.nvim_create_autocmd("VimEnter", {
+  group = dashboard_group,
+  callback = function() vim.schedule(refresh_dashboard_state) end,
+})
+
+vim.api.nvim_create_autocmd("VimLeavePre", {
+  group = dashboard_group,
+  callback = function() set_dashboard_state(false) end,
+})

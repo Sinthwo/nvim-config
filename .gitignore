@@ -18,6 +18,7 @@ Session.vim.lock
 
 # Local import archive
 /new-Config-nvim.zip
+/New_NVIM-Config.zip
 
 # Local cloud state and credentials
 .env

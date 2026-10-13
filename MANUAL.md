@@ -9,6 +9,7 @@ examples use PowerShell and resolve paths for the current user.
 ## Contents
 
 - [Installation and first launch](#installation-and-first-launch)
+- [Dashboard and notifications](#dashboard-and-notifications)
 - [Editing and shortcuts](#editing-and-shortcuts)
 - [Finding files and using the explorer](#finding-files-and-using-the-explorer)
 - [Language support and formatting](#language-support-and-formatting)
@@ -63,6 +64,24 @@ Use these commands to check the setup:
 :ConformInfo
 :messages
 ```
+
+## Dashboard and notifications
+
+The Snacks dashboard opens when Neovim starts without a file. Use `:Dashboard`
+or Space u D to open it again. In WezTerm, the companion configuration displays
+the shark logo above the menu. Small windows and terminals without the logo
+integration use a text header. The image source is recorded in
+[image credits](nvim/backgrounds/CREDITS.md#dashboard-logo).
+
+| Dashboard key | Action |
+| --- | --- |
+| f / g / r | Find a file / search text / open a recent file |
+| e / n | Open the explorer / create a file |
+| l / c | Manage plugins / find a configuration file |
+| t / q | Open the terminal panel / quit Neovim |
+
+Space u n or `:Notifications` opens notification history. Space u d,
+Space u N, and `:NotifyDismiss` dismiss visible notifications.
 
 ## Editing and shortcuts
 
@@ -120,7 +139,9 @@ delay. Automatic bracket pairing and surround editing are also enabled.
 Inside the explorer, Enter opens an item, `v` or Ctrl+V opens a vertical split,
 and `s` or Ctrl+S opens a horizontal split. Ctrl+B closes the explorer.
 Ctrl+S therefore has two uses: it opens a split in the explorer and saves a file
-in the editor.
+in the editor. Opening files keeps the explorer available and avoids replacing
+terminal, dashboard, and diagnostic windows. Rename and move actions notify
+the language server through Snacks so it can update file references.
 
 The explorer follows the active file and shows dotfiles and Git-ignored files.
 File pickers search the current working directory. Launch Neovim from your
@@ -239,6 +260,27 @@ Space a c starts Codex, and Space a C starts Claude Code. Install the CLIs,
 sign in, and make sure their commands are available in `PATH` before using
 these shortcuts.
 
+You can also open a bottom terminal panel with `:TerminalPanel`, or a floating
+terminal with `:TerminalFloat` / Space t f. `:TerminalNew` / Space t N starts
+another terminal session. These terminals open at the current project root.
+
+Additional Git tools use Snacks pickers and floating windows:
+
+| Keys | Command | Action |
+| --- | --- | --- |
+| Space g G | `:LazyGitFloat` | Open LazyGit; requires the `lazygit` executable |
+| Space g B | `:GitBrowse` | Open the current file on the remote Git host |
+| Space g L | `:GitLogPicker` | Browse commits |
+| Space g F | `:GitBranches` | Browse branches |
+| Space g S | `:GitStatusPicker` | Browse changed files |
+| Space g R | `:GitRebaseStatus` | Show Git status and a recent commit graph |
+| Space u . | `:FloatScratch` | Open scratch notes |
+
+`:GitDiffPicker` shows diff hunks, `:GitLogLine` shows the current line's history,
+and `:GitBlame` shows line blame. `GitRebaseStatus` displays information;
+use Neogit, LazyGit, or Git commands to perform a rebase. Scratch notes are
+stored locally.
+
 ## AI session workspaces
 
 Install the external [Codex CLI](https://learn.chatgpt.com/docs/codex/cli) and/or
@@ -272,6 +314,33 @@ to normal mode.
 workspace tabs. Both return to the original coding tab if it is still open.
 Closing a session ends its process. Sign-in, permissions, and account usage
 are managed by the CLIs.
+
+To focus or enlarge a session that is already running, use:
+
+| Command | Action |
+| --- | --- |
+| `:CT1` through `:CT8` | Focus a Codex session |
+| `:CCT1` through `:CCT8` | Focus a Claude session |
+| `:MC1` through `:MC8` | Enlarge a Codex session |
+| `:MCC1` through `:MCC8` | Enlarge a Claude session |
+| `:UC` | Close the enlarged view and return to the grid |
+
+The enlarged view uses the same terminal buffer, so restoring the grid keeps
+the process running and preserves the split layout. These commands do not start
+new sessions. Lowercase aliases such as `:ct2`, `:mc2`, and `:uc` work when typed
+interactively; use uppercase command names in scripts. Press `i` to enter
+terminal input mode after switching sessions.
+
+`:CodexVoice` and `:ClaudeVoice` each open a separate single-session tab and
+show voice or dictation instructions. `:VoiceHelp` shows those instructions
+without starting a session. In a supported Codex CLI, enter terminal input mode
+and use F8 or `/voice settings`; see the
+[official OpenAI documentation](https://learn.chatgpt.com/docs/changelog).
+For Windows dictation in the Claude terminal, enter input mode and press Win+H.
+
+If an AI workspace is the only remaining Neovim tab, open another tab with
+`:tabnew` before using `:CodexEnd` or `:ClaudeEnd`. A failed close keeps the
+workspace available so you can retry.
 
 ## Azure and cloud tools
 
@@ -415,8 +484,8 @@ image is missing. The terminal window stays opaque.
 | Ctrl+Shift+L | Open the WezTerm debug overlay |
 
 The picker searches the image folder and its subfolders for PNG,
-JPG/JPEG, GIF, BMP, and WebP files. It uses fzf-lua when available and Neovim's
-built-in selector otherwise. SVG files are not listed.
+JPG/JPEG, GIF, BMP, and WebP files. It uses the Snacks selection menu when
+available, or Neovim's built-in selector otherwise. SVG files are not listed.
 
 The default folder is Neovim's config directory plus `backgrounds`, normally
 `$env:LOCALAPPDATA\nvim\backgrounds`. A selection is saved as a relative path such as
@@ -532,6 +601,9 @@ after a plugin update. Reopen the file if highlighting has not attached yet.
 | Ctrl+Tab changes terminal tabs | Restart Neovim inside WezTerm; try Space b n/p and verify the companion config is loaded. |
 | Graphics rendering fails | Try `config.front_end = "OpenGL"` in your local WezTerm config. |
 | AI sessions fail | Check the CLI in PATH, use a whole count from 1 to 8, and enlarge the terminal for many splits. |
+| Dashboard logo is missing | Check the companion WezTerm config, `dashboard-logo.png`, and `wezterm_dashboard_logo.lua` in `stdpath("config")`. Small windows use a text header. |
+| AI focus or zoom command has no session | Open a workspace first, then choose a session number that exists. Use `:UC` to restore the grid. |
+| LazyGit does not open | Check `lazygit --version` in the terminal used to launch Neovim. |
 | AI underscore alias fails in a script | Use `Codex8`, `Claude8`, `CodexEnd`, or `ClaudeEnd`; underscore forms are interactive abbreviations. |
 | Bicep LSP is absent | Verify `bicep-ls` in PATH and restart; installing Bicep CLI alone is insufficient. |
 | Terraform formatting fails | Check `terraform version`; Mason installs the language server separately. |
