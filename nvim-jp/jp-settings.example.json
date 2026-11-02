@@ -1,0 +1,11 @@
+{
+  "vault": "",
+  "japanese_root": "",
+  "anki": {
+    "enabled": false,
+    "deck": "",
+    "model": "",
+    "front_field": "",
+    "back_field": ""
+  }
+}

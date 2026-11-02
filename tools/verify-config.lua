@@ -87,6 +87,7 @@ end
 
 -- Syntax checks include the deployed Neovim files and the hidden terminal config.
 local files = real.fn.glob("nvim/**/*.lua", false, true)
+real.list_extend(files, real.fn.glob("nvim-jp/**/*.lua", false, true))
 table.insert(files, "WezTerminal-Config/.wezterm.lua")
 for _, file in ipairs(files) do
   local chunk, err = loadfile(file)
@@ -116,13 +117,31 @@ with_vim(fake, function()
   eq(paths.powershell_quote("Q:/O'Example/a b"), "'Q:/O''Example/a b'", "PowerShell apostrophe escaping")
 end)
 
--- Exercise the actual picker without creating folders or changing a real selection.
+-- Exercise the manager with virtual Windows folders and local state records.
 fake = fake_vim()
 with_vim(fake, function()
-  local writes, choice, listed, notices = {}, "a picture.png", {}, 0
+  local root = profile.config .. "/backgrounds"
+  local image = root .. "/a picture.png"
+  local nested = root .. "/nested/O'Example.webp"
+  local state = {
+    [image] = {}, [root .. "/z.JPG"] = {}, [nested] = {},
+  }
+  local writes, menus, choices, events, commands, notices = {}, {}, {}, {}, {}, {}
+  local saved = package.loaded.snacks
+  package.loaded.snacks = {} -- Exercise the built-in selector fallback first.
+  fake.fn.fnamemodify = function(path) return path:match("([^/]+)$") end
+  fake.fs.dirname = real.fs.dirname
+  fake.fn.filereadable = function(path) return state[path] and 1 or 0 end
+  fake.fn.readfile = function(path) return real.deepcopy(state[path] or {}) end
+  fake.fn.writefile = function(lines, path)
+    state[path] = real.deepcopy(lines)
+    writes[#writes + 1] = path
+    return 0
+  end
+  fake.notify = function(message) notices[#notices + 1] = message end
   fake.uv.fs_scandir = function(dir)
     local entries = dir:match("/nested$") and { { "O'Example.webp", "file" } }
-      or { { "notes.md", "file" }, { "nested", "directory" }, { "z.jpg", "file" }, { "a picture.png", "file" } }
+      or { { "notes.md", "file" }, { "z.JPG", "file" }, { "nested", "directory" }, { "a picture.png", "file" } }
     return { entries = entries, index = 0 }
   end
   fake.uv.fs_scandir_next = function(handle)
@@ -130,46 +149,99 @@ with_vim(fake, function()
     if handle.entries[handle.index] then return unpack(handle.entries[handle.index]) end
   end
   fake.ui = { select = function(items, opts, callback)
-    listed = items
-    local selected
+    menus[#menus + 1] = items
+    for _, item in ipairs(items) do check(type(opts.format_item(item)) == "string", "Menu formats each entry") end
+    local choice = table.remove(choices, 1)
     for _, item in ipairs(items) do
-      eq(opts.format_item(item), item.display, "Wallpaper menu uses the image's relative label")
-      if item.display == choice then selected = item end
+      if item.name == choice then callback(item); return end
     end
-    callback(selected)
+    callback(nil)
   end }
-  fake.fn.writefile = function(lines, file) writes[#writes + 1] = { lines = lines, file = file } end
-  fake.notify = function() notices = notices + 1 end
+  fake.api.nvim_create_user_command = function(name, callback) commands[name] = callback end
+  fake.api.nvim_create_autocmd = function(name, opts) events[name] = opts.callback end
+  fake.api.nvim_list_uis = function() return {} end
   local background = dofile("nvim/lua/config/background.lua")
+  local function select(...)
+    choices = { ... }
+    background.pick()
+  end
+  select("Browse wallpapers", "a picture.png")
+  eq(menus[2][2].kind, "directory", "Folder browser sorts directories before images")
+  eq(menus[2][3].name, "a picture.png", "Folder browser sorts image names")
+  eq(#menus[2], 4, "Folder browser excludes non-images")
+  eq(state[root .. "/selected-background.txt"][1], "a picture.png", "Selection is portable")
+  eq(state[root .. "/background-mode.txt"][1], "manual", "Manual choice persists startup mode")
+  select("Browse wallpapers", "nested", "O'Example.webp")
+  eq(state[root .. "/selected-background.txt"][1], "nested/O'Example.webp", "Subfolder selection is relative")
+  local before = #writes
+  select()
+  eq(#writes, before, "Menu cancellation preserves image and mode")
+  select("Browse wallpapers")
+  eq(#writes, before, "Browser cancellation preserves image and mode")
+
+  background.toggle_current_favorite()
+  eq(state[root .. "/favorite-backgrounds.txt"][1], "nested/O'Example.webp", "Favorites are portable")
+  background.set_mode("random_favorite")
+  eq(state[root .. "/background-mode.txt"][1], "random_favorite", "Favorite-only mode persists")
+  eq(state[root .. "/selected-background.txt"][1], "nested/O'Example.webp", "Favorite-only shuffle chooses a favorite")
+  background.toggle_current_favorite()
+  before = #writes
+  background.set_mode("random_favorite")
+  eq(#writes, before, "Empty favorites do not replace the current mode or selection")
+  background.set_mode("invalid")
+  eq(#writes, before, "Invalid modes do not write state")
+  state[root .. "/favorite-backgrounds.txt"] = { image, image, "nested/O'Example.webp", "missing.png", root .. "-outside/bad.jpg" }
+  choices = {}
+  background.favorites()
+  eq(#menus[#menus], 3, "Favorites deduplicate and omit missing or outside images")
+  background.toggle_current_favorite()
+  eq(state[root .. "/favorite-backgrounds.txt"][1], "a picture.png", "Rewritten legacy favorite paths become relative")
+
+  state[root .. "/selected-background.txt"] = { "a picture.png" }
+  background.random()
+  check(state[root .. "/selected-background.txt"][1] ~= "a picture.png", "Random shuffle avoids current image")
+  background.set_mode("manual")
+  background.setup()
+  background.setup()
+  before = #writes
+  events.VimEnter()
+  eq(#writes, before, "Headless startup skips rotation")
+  fake.api.nvim_list_uis = function() return { {} } end
+  events.VimEnter()
+  eq(#writes, before, "Interactive manual startup preserves the image")
+  background.set_mode("random")
+  before = #writes
+  events.VimEnter()
+  eq(#writes, before + 1, "Interactive random startup chooses a wallpaper")
+  commands.BackgroundMode({ args = "manual" })
+  commands.BackgroundRandom()
+  eq(state[root .. "/background-mode.txt"][1], "manual", "One-off shuffle preserves startup mode")
+
+  local picker
+  package.loaded.snacks = { picker = { pick = function(opts) picker = opts end } }
+  fake.o = { lines = 40 }
+  fake.api.nvim_set_hl = function() end
   background.pick()
-  eq(#listed, 3, "Picker finds subfolder images and excludes non-images")
-  eq(listed[1].display, "a picture.png", "Picker sorts filenames")
-  eq(writes[1].lines[1], "a picture.png", "Selection contains only filename")
-  eq(#writes[1].lines, 1, "Selection has exactly one line")
-  eq(writes[1].file, profile.config .. "/backgrounds/selected-background.txt", "Selection uses current profile")
-  choice = nil
+  check(picker and picker.layout.preview == false, "Snacks popup is configured")
+  before = #writes
+  picker.confirm({ close = function() end }, nil)
+  eq(#writes, before, "Cancelling Snacks preserves state")
+  local fallback_count = #menus
+  package.loaded.snacks.picker.pick = function() error("Picker unavailable") end
   background.pick()
-  eq(#writes, 1, "Cancellation preserves selection")
-  choice = "nested/O'Example.webp"
+  eq(#menus, fallback_count + 1, "Failed Snacks popup uses the fallback selector")
+  fake.ui.select = function() error("Selector unavailable") end
   background.pick()
-  eq(writes[2].lines[1], choice, "Subfolder selection stays relative")
+  eq(#writes, before, "Failed selectors preserve state")
+  fake.fn.writefile = function() return -1 end
+  background.set_mode("random")
+  eq(#writes, before, "Failed mode write leaves selection unchanged")
+
   fake.env.NVIM_BACKGROUND_DIR = "~/Pictures/Terminal Backgrounds"
-  choice = "z.jpg"
-  background.pick()
-  eq(writes[3].file, home .. "/Pictures/Terminal Backgrounds/selected-background.txt", "Picker shares directory override")
-  choice = "nested/O'Example.webp"
-  background.pick()
-  eq(writes[4].lines[1], choice, "Selection records keep subfolder paths portable")
-  choice = nil
-  background.pick()
-  eq(#writes, 4, "Selection menu cancellation preserves the previous choice")
-  fake.ui.select = function() error("Selection menu unavailable") end
-  background.pick()
-  eq(#writes, 4, "Selection menu failure preserves the previous choice")
-  fake.uv.fs_scandir = function() return nil end
-  background.pick()
-  eq(#writes, 4, "Empty folder leaves selection unchanged")
-  eq(notices, 6, "Selection failure and empty folder report notices")
+  fake.fn.writefile = function(_, path) writes[#writes + 1] = path; return 0 end
+  background.set_mode("manual")
+  eq(writes[#writes], home .. "/Pictures/Terminal Backgrounds/background-mode.txt", "Manager honors the shared folder override")
+  package.loaded.snacks = saved
 end)
 
 -- Load the standalone WezTerm config in a sandbox with virtual files and panes.
@@ -837,6 +909,8 @@ end
 local documents = real.fn.glob("README*.md", false, true)
 real.list_extend(documents, real.fn.glob("MANUAL*.md", false, true))
 real.list_extend(documents, real.fn.glob("nvim/**/*.md", false, true))
+real.list_extend(documents, { "NeovimProfiles/README.md", "nvim-jp/JP-HELP.md" })
+real.list_extend(documents, real.fn.glob("nvim-jp/docs/*.md", false, true))
 local function has_anchor(content, anchor)
   -- Keep accented and Japanese letters when checking automatic heading anchors.
   for heading in content:gmatch("#+ ([^\n]+)") do
@@ -854,6 +928,7 @@ for _, file in ipairs(documents) do
   check(content:find("Windows", 1, true), file .. " identifies Windows")
   check(not content:find("<a%s+id="), file .. " uses automatic Markdown heading anchors")
   for target in content:gmatch("%]%(([^%)]+)%)") do
+    target = target:gsub("^<", ""):gsub(">$", "")
     if not target:match("^https?://") then
       local path = target:gsub("#.*$", "")
       local dir = real.fs.dirname(file) or "."

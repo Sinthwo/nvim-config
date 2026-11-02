@@ -18,6 +18,7 @@
 - [CSV- und TSV-Tabellen](#csv--und-tsv-tabellen)
 - [Bild- und PDF-Vorschauen](#bild--und-pdf-vorschauen)
 - [Markdown und Obsidian](#markdown-und-obsidian)
+- [Japanisches Schreibprofil](#japanisches-schreibprofil)
 - [WezTerm und Hintergrundbilder](#wezterm-und-hintergrundbilder)
 - [Anpassungen und Datenschutz](#anpassungen-und-datenschutz)
 - [Pluginverwaltung](#pluginverwaltung)
@@ -37,7 +38,7 @@ fzf --version
 rg --version
 wezterm --version
 ```
-Die festgelegte Tree-sitter-Version [benötigt](https://github.com/nvim-treesitter/nvim-treesitter/blob/e289100ff98969e118c702199d88b764ce9e7fdf/README.md) Neovim 0.12 oder neuer, Tree-sitter CLI 0.26.1 oder neuer, `curl`, `tar` und einen C-Compiler. Mason installiert die CLI automatisch; installiere den Compiler separat. Starte WezTerm bei Verwendung von MSVC aus Developer PowerShell, damit Neovim den Compiler und dessen Umgebung findet.
+Die festgelegte Tree-sitter-Version [benötigt](https://github.com/nvim-treesitter/nvim-treesitter/blob/a2f694478be07f89c2d03cc17858a8745a400c4b/README.md) Neovim 0.12 oder neuer, Tree-sitter CLI 0.26.1 oder neuer, `curl`, `tar` und einen C-Compiler. Mason installiert die CLI automatisch; installiere den Compiler separat. Starte WezTerm bei Verwendung von MSVC aus Developer PowerShell, damit Neovim den Compiler und dessen Umgebung findet.
 
 Die Sprachserverinstallation beginnt beim Öffnen einer Quelldatei. Formatierer und debugpy werden kurz nach dem Start installiert. Lass die erste Sitzung offen, bis `:Lazy` und `:Mason` den Abschluss anzeigen, und starte Neovim neu. Nach Abschluss der Mason-Installationen versucht Neovim die Parserinstallation erneut.
 
@@ -326,6 +327,33 @@ Starte WezTerm nach dauerhaften Umgebungsänderungen neu. Diese Einstellungen ge
 
 Führe einmal `:Obsidian` aus, um die Integration zu laden, und öffne eine Notiz im eingerichteten Vault. Notiz- und Tagvervollständigung verwendet den eingebauten Sprachserver des Plugins mit Blink. Markdown-Darstellung funktioniert auch außerhalb des Vaults.
 
+Space m p schaltet die Browser-Vorschau für Markdown und Mermaid um.
+Die Befehle heißen `:MarkdownPreview`, `:MarkdownPreviewStop` und `:MarkdownPreviewToggle`.
+Der Build von `markdown-preview.nvim` lädt die Vorschauanwendung herunter.
+Warte auf dessen Abschluss; prüfe bei Fehlern `:Lazy`, `:messages` und den Browser
+und führe den Plugin-Build erneut aus. Space m r steuert weiterhin die Markdown-Darstellung im Editor.
+
+## Japanisches Schreibprofil
+
+Das optionale Profil `nvim-jp/` bietet einen eigenen Arbeitsbereich zum
+Japanischschreiben und Lernen. Die [Profilanleitung](NeovimProfiles/README.md)
+erklärt die Installation und den PowerShell-Starter. Interaktives `nvim` ohne
+Argumente zeigt eine Auswahl; `nvim-code` und `nvim-jp` wählen direkt.
+Dateiargumente, Headless-Aufrufe, umgeleitete Ein-/Ausgabe und CI starten Coding ohne Menü.
+Skripte können mit `nvim-code` oder `nvim.exe` ausdrücklich ohne Menü starten.
+
+Mit `:JPSetup` bestätigst du einen vorhandenen Obsidian-Vault. Danach öffnen
+`:JPToday`, `:JPWriting` und `:JPVocabAdd` Tagebuch, Schreibnotiz und Vokabeleingabe.
+Enthalten sind Vokabelsuche, selbst bewertete Quizfragen, Kana-Tabellen, 80 Kanji
+der ersten Schulklasse, Übungen, Fortschritt und optionale bestätigte Anki-Karten.
+`:JPHelp` zeigt die Space j-Kürzel; Space j R / `:JPMarkdownToggle` schaltet die Markdown-Darstellung um.
+
+`NVIM_APPNAME=nvim-jp` trennt Plugins, Parser, Rückgängigverlauf und Lernprotokolle.
+Vault und Anki werden lokal in der von Git ignorierten `jp-settings.json`
+gespeichert. Persönliche Einstellungen und Plugin-Caches aus dem Archiv werden
+nicht übernommen. Nach der Vault-Einrichtung das Profil neu starten.
+Beide Profile verwenden Neovim 0.12+. Siehe [Japanisch-Hilfe](nvim-jp/JP-HELP.md).
+
 ## WezTerm und Hintergrundbilder
 
 Die Quellen der enthaltenen Hintergrundbilder stehen in den [Bildnachweisen](nvim/backgrounds/CREDITS.de.md). Bilder aus [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) wurden entfernt, weil die Hintergrundsammlung ersetzt wurde.
@@ -340,9 +368,28 @@ Installiere die ergänzende Konfiguration unter `$HOME\.wezterm.lua`. WezTerm ve
 | Alt+Enter | WezTerm-Vollbild umschalten |
 | Ctrl+Shift+L | WezTerm-Debuganzeige öffnen |
 
-Die Auswahl durchsucht den Bildordner und Unterordner nach PNG, JPG/JPEG, GIF, BMP und WebP. Sie nutzt das Snacks-Auswahlmenü, falls verfügbar, sonst Neovims eingebaute Auswahl. SVG-Dateien werden nicht gelistet.
+Space u b öffnet den Wallpaper Manager: Browse wallpapers durchsucht Ordner,
+Favorites verwaltet Favoriten, Shuffle now wählt ein anderes Bild, Settings
+bestimmt das Startverhalten. Kategorien: `Anime/`, `Games/`, `Real World/`, `Other/`.
+Animebilder liegen unter `Anime/<Titel>/Images/`, Animationen unter `GIFs/`.
+PNG, JPG/JPEG, GIF, BMP und WebP werden unterstützt, SVG nicht.
+Die Oberfläche nutzt Snacks und ersatzweise `vim.ui.select`.
 
-Der Standardordner ist Neovims Konfigurationsverzeichnis plus `backgrounds`, normalerweise `$env:LOCALAPPDATA\nvim\backgrounds`. Die Auswahl wird als relativer Pfad wie `Magi/01-Magi-Star.jpg` in `selected-background.txt` gespeichert. Abbrechen erhält die Auswahl. WezTerm prüft sie etwa einmal pro Sekunde. Alte absolute Auswahlpfade funktionieren lokal weiterhin; die nächste Bildauswahl speichert einen relativen Pfad.
+Standard ist `random`: jeder interaktive Start wählt ein zufälliges Bild, möglichst
+ein anderes als das aktuelle. `random_favorite` nutzt nur Favoriten und benötigt
+mindestens einen. `manual` behält das aktuelle Bild; eine direkte Bildauswahl
+aktiviert ebenfalls diesen Modus. Headless-Starts wechseln kein Bild.
+`:BackgroundMode random`, `:BackgroundMode random_favorite` und `:BackgroundMode manual`
+setzen den Modus; Zufallsmodi wählen dabei sofort ein Bild.
+`:BackgroundRandom` mischt einmal, `:BackgroundFavorite` markiert das aktive Bild,
+`:BackgroundFavorites` öffnet Favoriten. Diese drei Befehle ändern den Startmodus nicht.
+
+`background-mode.txt`, `favorite-backgrounds.txt` und `selected-background.txt`
+bleiben lokal und werden von Git ignoriert. Favoriten und Auswahl verwenden
+relative Bildpfade. Alte absolute Einträge werden gelesen und beim nächsten
+Schreiben relativ gespeichert. Abbrechen verändert weder Bild noch Modus.
+
+Der Standardordner ist Neovims Konfigurationsverzeichnis plus `backgrounds`, normalerweise `$env:LOCALAPPDATA\nvim\backgrounds`. Die Auswahl wird als relativer Pfad wie `Anime/Magi/Images/01-Magi-Friends-under-Starry-Sky.jpg` in `selected-background.txt` gespeichert. Abbrechen erhält die Auswahl. WezTerm prüft sie etwa einmal pro Sekunde. Alte absolute Auswahlpfade funktionieren lokal weiterhin; die nächste Bildauswahl speichert einen relativen Pfad.
 
 Für einen eigenen Ordner setze vor dem Start beider Anwendungen dieselbe Umgebungsvariable:
 
@@ -433,8 +480,12 @@ Führe diese Befehle im Repositoryordner in PowerShell aus. Sie installieren kei
 
 ```powershell
 nvim --headless -u NONE -i NONE -n -l tools/verify-config.lua
+nvim --headless -u NONE -i NONE -n -l tools/verify-japanese.lua
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/verify-profiles.ps1
 wezterm --config-file '.\WezTerminal-Config\.wezterm.lua' show-keys
 ```
 Der erste Befehl prüft Lua-Syntax, Dokumentationslinks und Tastenkürzel. Er testet außerdem Pfade mit Windows-Beispielprofilen, Hintergrundauswahl, Debuggerladen, Obsidian-Einstellungen, erneute Parserinstallationsversuche, Java-Caches, Cloud-Werkzeuge, KI-Sitzungen und Vorschaubefehle.
 
-Die Prüfungen simulieren Pluginverhalten. Teste interaktive Funktionen auch in deiner normalen Neovim-Sitzung. Der zweite Befehl lädt die WezTerm-Konfiguration und gibt ihre Tastenbelegungen aus.
+Die Prüfungen simulieren Pluginverhalten. Teste interaktive Funktionen auch in deiner normalen Neovim-Sitzung. Der letzte Befehl lädt die WezTerm-Konfiguration und gibt ihre Tastenbelegungen aus.
+
+Die zusätzlichen Befehle prüfen japanische Notizen in einem isolierten Test-Vault sowie PowerShell-Argumente, Profiltrennung, Wiederherstellung der Umgebung und CI-Aufrufe. Der Starter wird dabei nicht in deiner aktuellen Shell aktiviert.

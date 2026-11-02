@@ -15,9 +15,28 @@ Dans Neovim, utilisez ces commandes ou raccourcis :
 | `:BackgroundPick` | Space u b | Choisir un fond d’écran |
 | `:BackgroundFolder` | Space u B | Ouvrir le dossier des images dans l’Explorateur Windows |
 
-Le sélecteur parcourt ce dossier et ses sous-dossiers. Il utilise le menu de sélection Snacks lorsqu’il est disponible, sinon le sélecteur intégré de Neovim. Les fichiers SVG ne sont pas affichés.
+Space u b ouvre Wallpaper Manager : Browse wallpapers parcourt les dossiers,
+Favorites gère les favoris, Shuffle now choisit une autre image et Settings
+définit le comportement au démarrage. Catégories : `Anime/`, `Games/`, `Real World/`,
+`Other/`. Les images sont dans `Anime/<titre>/Images/` et les animations dans `GIFs/`.
+PNG, JPG/JPEG, GIF, BMP et WebP sont pris en charge ; SVG est exclu.
+Le menu utilise Snacks, avec `vim.ui.select` en secours.
 
-Votre choix est enregistré dans `selected-background.txt` comme **chemin d’image relatif**, par exemple `Magi/01-Magi-Star.jpg`. Git ignore ce fichier généré. Annuler le sélecteur conserve le choix précédent.
+Le mode initial est `random` : chaque démarrage interactif choisit une image,
+différente de l’actuelle si possible. `random_favorite` ne choisit que les favoris
+et en nécessite au moins un. `manual` conserve l’image ; choisir une image
+manuellement active aussi ce mode. Les sessions headless ne changent pas l’image.
+`:BackgroundMode random`, `:BackgroundMode random_favorite` et `:BackgroundMode manual`
+changent le mode ; les modes aléatoires appliquent immédiatement une image.
+`:BackgroundRandom` mélange une fois, `:BackgroundFavorite` marque l’image active,
+`:BackgroundFavorites` parcourt les favoris. Ces trois commandes gardent le mode de démarrage.
+
+`background-mode.txt`, `favorite-backgrounds.txt` et `selected-background.txt`
+restent locaux et ignorés par Git. Favoris et sélection utilisent des chemins
+relatifs ; les anciens chemins absolus sont lus puis deviennent relatifs lors
+de leur réécriture. Annuler un menu ne change ni l’image ni le mode.
+
+Votre choix est enregistré dans `selected-background.txt` comme **chemin d’image relatif**, par exemple `Anime/Magi/Images/01-Magi-Friends-under-Starry-Sky.jpg`. Git ignore ce fichier généré. Annuler le sélecteur conserve le choix précédent.
 
 ## Utiliser un autre dossier d’images
 

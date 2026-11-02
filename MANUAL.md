@@ -20,6 +20,7 @@ examples use PowerShell and resolve paths for the current user.
 - [CSV and TSV tables](#csv-and-tsv-tables)
 - [Image and PDF previews](#image-and-pdf-previews)
 - [Markdown and Obsidian](#markdown-and-obsidian)
+- [Japanese writing profile](#japanese-writing-profile)
 - [WezTerm and wallpapers](#wezterm-and-wallpapers)
 - [Customization and privacy](#customization-and-privacy)
 - [Plugin management](#plugin-management)
@@ -45,7 +46,7 @@ wezterm --version
 ```
 
 The pinned Tree-sitter version
-[requires](https://github.com/nvim-treesitter/nvim-treesitter/blob/e289100ff98969e118c702199d88b764ce9e7fdf/README.md)
+[requires](https://github.com/nvim-treesitter/nvim-treesitter/blob/a2f694478be07f89c2d03cc17858a8745a400c4b/README.md)
 Neovim 0.12 or newer, Tree-sitter CLI 0.26.1 or newer, `curl`, `tar`, and a
 C compiler. Mason installs the CLI automatically. Install a compiler separately.
 If you use MSVC, start WezTerm from Developer PowerShell so Neovim can find
@@ -463,6 +464,34 @@ Run `:Obsidian` once to load its integration, then open a note in the configured
 vault. Note and tag completion uses the plugin's built-in language server with
 Blink. Markdown rendering also works for files outside the vault.
 
+Space m p toggles a browser preview for Markdown and Mermaid diagrams.
+Use `:MarkdownPreview`, `:MarkdownPreviewStop`, or `:MarkdownPreviewToggle`.
+The `markdown-preview.nvim` build downloads its preview application during
+plugin installation; allow that build to finish. If the command fails, inspect
+`:Lazy` and `:messages`, rebuild the plugin, and check that a browser is available.
+Space m r continues to toggle the separate in-editor Markdown renderer.
+
+## Japanese writing profile
+
+The optional `nvim-jp/` profile is a separate Japanese writing and study
+workspace. Install it and the PowerShell launcher using the
+[profile guide](NeovimProfiles/README.md). Interactive `nvim` with no arguments
+shows a workspace menu; `nvim-code` and `nvim-jp` choose directly. File arguments,
+headless commands, redirected input/output, and CI skip the menu and use coding.
+Scripts that need the default profile without prompting can call `nvim-code` or `nvim.exe`.
+
+In the Japanese profile, run `:JPSetup` to confirm an existing Obsidian vault,
+then `:JPToday`, `:JPWriting`, or `:JPVocabAdd`. It includes vocabulary search and
+quizzes, Kana charts, 80 first-grade Kanji, exercises, writing progress, and
+optional reviewed Anki cards. `:JPHelp` lists the Space j shortcuts.
+`:JPMarkdownToggle` / Space j R toggles in-editor Markdown decoration.
+
+Plugins, parser installations, undo history, and study logs are isolated by
+`NVIM_APPNAME=nvim-jp`. Personal vault/Anki settings live in Git-ignored
+`jp-settings.json`; no settings or plugin cache from the archive are shared.
+Restart the profile after configuring the vault. Both profiles use Neovim 0.12+.
+See [Japanese help](nvim-jp/JP-HELP.md).
+
 ## WezTerm and wallpapers
 
 Sources for the included wallpapers are listed in
@@ -483,13 +512,31 @@ image is missing. The terminal window stays opaque.
 | Alt+Enter | Toggle WezTerm fullscreen |
 | Ctrl+Shift+L | Open the WezTerm debug overlay |
 
-The picker searches the image folder and its subfolders for PNG,
-JPG/JPEG, GIF, BMP, and WebP files. It uses the Snacks selection menu when
-available, or Neovim's built-in selector otherwise. SVG files are not listed.
+Space u b opens the Wallpaper Manager. Browse one folder at a time, use
+Favorites to add or remove stars, Shuffle now to choose another image, and
+Settings to choose startup behavior. The categories are `Anime/`, `Games/`,
+`Real World/`, and `Other/`. Anime images live in `Anime/<title>/Images/`, with
+`GIFs/` reserved for animations. PNG, JPG/JPEG, GIF, BMP, and WebP are supported.
+The manager uses the Snacks picker, with `vim.ui.select` as a fallback; SVG is excluded.
+
+The default mode is `random`: each interactive startup selects another image,
+avoiding the current image when alternatives exist. `random_favorite` chooses
+only favorites and requires at least one. `manual` keeps the selection; choosing
+an image manually also selects this mode. Startup rotation is skipped in headless
+sessions. `:BackgroundMode random`, `:BackgroundMode random_favorite`, and
+`:BackgroundMode manual` change the mode and immediately apply random modes.
+`:BackgroundRandom` shuffles once, `:BackgroundFavorite` stars/unstars the active
+image, and `:BackgroundFavorites` browses favorites. These three commands keep
+the current startup mode.
+
+`background-mode.txt`, `favorite-backgrounds.txt`, and `selected-background.txt`
+are local, Git-ignored files. Favorites and selections use relative image paths.
+Older absolute records are accepted locally and become relative when rewritten.
+Cancelling a menu leaves the current image and mode unchanged.
 
 The default folder is Neovim's config directory plus `backgrounds`, normally
 `$env:LOCALAPPDATA\nvim\backgrounds`. A selection is saved as a relative path such as
-`Magi/01-Magi-Star.jpg` in `selected-background.txt`. Cancelling leaves the selection
+`Anime/Magi/Images/01-Magi-Friends-under-Starry-Sky.jpg` in `selected-background.txt`. Cancelling leaves the selection
 unchanged. WezTerm checks the selection about once a second. Older selections
 with absolute paths still work locally. Choosing another image saves a relative path.
 
@@ -621,6 +668,8 @@ or change your active Neovim configuration:
 
 ```powershell
 nvim --headless -u NONE -i NONE -n -l tools/verify-config.lua
+nvim --headless -u NONE -i NONE -n -l tools/verify-japanese.lua
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/verify-profiles.ps1
 wezterm --config-file '.\WezTerminal-Config\.wezterm.lua' show-keys
 ```
 
@@ -630,5 +679,7 @@ debugger loading, Obsidian settings, parser installation retries, Java caches,
 cloud tools, AI sessions, and preview commands.
 
 These checks simulate plugin behavior. Test interactive features in your normal
-Neovim session as well. The second command loads the WezTerm configuration and
+Neovim session as well. The last command loads the WezTerm configuration and
 prints its keybindings.
+
+The additional commands verify Japanese note creation and preservation in an isolated test vault, plus PowerShell argument forwarding, profile isolation, environment restoration, and CI launches. They do not activate the launcher in your current shell.

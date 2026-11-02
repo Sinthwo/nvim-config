@@ -15,9 +15,24 @@ Neovim で次のコマンドまたはショートカットを使用します。
 | `:BackgroundPick` | Space u b | 壁紙を選択 |
 | `:BackgroundFolder` | Space u B | Windows エクスプローラーで画像フォルダーを開く |
 
-選択画面はこのフォルダーとサブフォルダーを検索します。利用できる場合は Snacks の選択メニュー、それ以外は Neovim 内蔵の選択画面を使います。SVG は一覧に表示されません。
+Space u b で Wallpaper Manager を開きます。Browse wallpapers はフォルダー参照、Favorites はお気に入り、
+Shuffle now は別の画像の選択、Settings は起動時の動作です。分類は `Anime/`、`Games/`、`Real World/`、`Other/`。
+アニメ画像は `Anime/<作品名>/Images/`、アニメーションは `GIFs/` に置きます。
+PNG、JPG/JPEG、GIF、BMP、WebP に対応し、SVG は対象外です。Snacks が使えない場合は `vim.ui.select` を使います。
 
-選択は `Magi/01-Magi-Star.jpg` のような **画像の相対パス** として `selected-background.txt` に保存されます。この生成ファイルは Git が無視します。キャンセルすると以前の選択を保持します。
+初期モードは `random` で、対話的な起動ごとに画像を選びます。候補が複数あれば現在の画像を避けます。
+`random_favorite` はお気に入りのみを使い、登録が最低 1 件必要です。`manual` は現在の画像を維持します。
+画像を手動選択した場合も manual になります。headless では起動時の画像変更を行いません。
+`:BackgroundMode random`、`:BackgroundMode random_favorite`、`:BackgroundMode manual` でモードを設定します。
+ランダムモードの設定時には画像をすぐ選びます。`:BackgroundRandom` は一度だけランダム選択し、
+`:BackgroundFavorite` は現在の画像のお気に入り登録を切り替え、`:BackgroundFavorites` は一覧を開きます。
+この 3 コマンドは起動モードを変更しません。
+
+`background-mode.txt`、`favorite-backgrounds.txt`、`selected-background.txt` はローカル専用で Git が無視します。
+お気に入りと画像選択は相対パスを使います。以前の絶対パスも読み込み、書き直すと相対パスになります。
+メニューをキャンセルしても画像とモードは変わりません。
+
+選択は `Anime/Magi/Images/01-Magi-Friends-under-Starry-Sky.jpg` のような **画像の相対パス** として `selected-background.txt` に保存されます。この生成ファイルは Git が無視します。キャンセルすると以前の選択を保持します。
 
 ## 別の画像フォルダーを使う
 

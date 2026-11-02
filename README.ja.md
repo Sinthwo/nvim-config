@@ -22,7 +22,7 @@ Azure/Bicep、Terraform、YAML、Bash のサポート、CSV/TSV の表編集、C
 - `PATH` から実行できる [Git for Windows](https://git-scm.com/downloads/win)、[fzf](https://github.com/junegunn/fzf)、[ripgrep](https://github.com/BurntSushi/ripgrep)。
 - ターミナルの壁紙と Ctrl+Tab 連携には [WezTerm](https://wezterm.org/installation.html) を使用します。これらのターミナル機能がなくても Neovim は動作します。
 - 推奨シェルは PowerShell 7 です。Windows PowerShell も Editor Services と CPU 状態表示に対応しています。
-- 構文解析には Tree-sitter CLI **0.26.1 以降**、`curl`、`tar`、`PATH` から実行できる C コンパイラが必要です。例えば Developer PowerShell で利用する MSVC、または Clang を使用できます。これらは[固定された Tree-sitter のバージョンの要件](https://github.com/nvim-treesitter/nvim-treesitter/blob/e289100ff98969e118c702199d88b764ce9e7fdf/README.md)に対応しています。
+- 構文解析には Tree-sitter CLI **0.26.1 以降**、`curl`、`tar`、`PATH` から実行できる C コンパイラが必要です。例えば Developer PowerShell で利用する MSVC、または Clang を使用できます。これらは[固定された Tree-sitter のバージョンの要件](https://github.com/nvim-treesitter/nvim-treesitter/blob/a2f694478be07f89c2d03cc17858a8745a400c4b/README.md)に対応しています。
 - マニュアルに記載された言語ツールに応じて、Python、Node.js/npm、JDK が必要です。アイコンを表示するための Nerd Font は任意です。
 
 ## Windows へのインストール
@@ -75,6 +75,18 @@ Copy-Item -LiteralPath '.\WezTerminal-Config\.wezterm.lua' -Destination $wezterm
 | Space z t | Azure 用のプロジェクトターミナルを開く |
 
 `:Codex 8` または `:Claude 8` を使うと、専用の Neovim タブに独立した CLI セッションを 8 個開けます。画像や PDF を開くと、別の WezTerm プレビュータブが作成されます。これらの機能を使う前に、必要な外部ツールをインストールしてください。[マニュアル](MANUAL.ja.md#ai-セッションのワークスペース)と[クラウド設定ガイド](nvim/SETUP-CLOUD-TOOLS.ja.md)をご覧ください。
+
+## 新しい設定の機能
+
+Space u b で壁紙管理を開き、フォルダー参照、お気に入り、ランダム選択、起動モードを使えます。
+初期状態では起動時にランダム選択します。Settings の Manual で画像を固定できます。
+Space m p は Markdown/Mermaid のブラウザープレビューです。
+
+任意の `nvim-jp/` は日本語作文、単語、仮名・漢字練習、Obsidian ノートを追加します。
+PowerShell ランチャーは対話的な `nvim` の引数がない場合に Coding/Japanese を選択します。
+`nvim-code` と `nvim-jp` は直接起動します。[プロファイルのインストール](NeovimProfiles/README.md)と
+[マニュアル](MANUAL.ja.md#日本語学習プロファイル)を参照してください。
+個人設定、お気に入り、起動モード、インポート用アーカイブは Git が無視します。
 
 ## ファイルと共有
 

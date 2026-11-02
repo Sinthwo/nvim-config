@@ -1,21 +1,8 @@
 # Windows 設定の壁紙の出典
 
-**言語：** [English](CREDITS.md) | [Français](CREDITS.fr.md) | [Deutsch](CREDITS.de.md) | 日本語
+**Languages:** [English](CREDITS.md) | [Français](CREDITS.fr.md) | [Deutsch](CREDITS.de.md) | [日本語](CREDITS.ja.md)
 
-以下は、現在の壁紙の出典ページやコレクションへのリンクです。作者と発行元のクレジットは、それぞれの出典で確認してください。
-
-| 画像フォルダー / ファイル | 出典 |
-| --- | --- |
-| Agents of the Four Seasons Dance of Spring / `Change_01-agents-of-spring-Change-to-spring.webp` | [Anime Atelier: Agents of the Four Seasons](https://www.anime-atelier.com/agents-of-the-four-seasons-dance-of-spring-anime/) |
-| Bleach / `01-Bleach-Bankai.png` | [Alpha Coders wallpaper 1409651](https://wall.alphacoders.com/big.php?i=1409651) |
-| Ranking of Kings / `01-Ranking-of-Kings-MC.jpg` | [WallpaperSafari: Ousama Ranking](https://wallpapersafari.com/ousama-ranking-wallpapers/) |
-| Just Because! / `01-Just-Because-Trainstation.jpeg` | [Fonwall: train station, Just Because!](https://fonwall.ru/en/wallpaper/train-station-just-because-izumi-eita-natsume-mio/2560x1440/) |
-| Love Unseen Beneath the Clear Night Sky / `change_01-Unseen-FL.webp` | [PR TIMES / SB Creative press release](https://prtimes.jp/main/html/rd/p/000000040.000009017.html) |
-| Attack on Titan / `02-AOT-Eren-Yaeger.jpg` | [WallpaperSafari: Eren Freedom](https://wallpapersafari.com/eren-freedom-4k-wallpapers/) |
-| Attack on Titan / `01-AOT-Founding-Titan.jpg` | [Mob.org: The Rumbling](https://wallpaper.mob.org/pc/gallery/tag%3Dthe%20rumbling%20%28attack%20on%20titan%29/) |
-| Magi / `01-Magi-Star.jpg` | [Kabekin: Aladin, Magi](https://kabekin.com/wallpaper/anime/aladin_magi_2023_1229/y986/1920/1080) |
-| Your lie in April / `01-YLIA-Finalscene.png` | [Alpha Coders picture 159820](https://pics.alphacoders.com/pictures/view/159820) |
-| My Teen Romantic Comedy SNAFU / `change_01-Oregairu-MC.webp` | [Live Wallpaper For You: Yukino, OreGairu](https://livewallpaperforyou.com/ice-queen-yukino-4k-live-wallpaper/) |
+[画像カタログ](README.md#images-and-sources)に現在のファイルとアーカイブに記録されていた出典リンクがあります。各作品のフォルダーにも出典表があります。出典が不明な画像は明記しています。ギャラリーのリンクは個々の作者を示すものではありません。
 
 ## ダッシュボードのロゴ
 

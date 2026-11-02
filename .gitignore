@@ -1,5 +1,8 @@
 # Machine-local selections and runtime data
 selected-background.txt
+favorite-backgrounds.txt
+background-mode.txt
+jp-settings.json
 *.log
 *.session.json
 Session.vim
@@ -19,6 +22,8 @@ Session.vim.lock
 # Local import archive
 /new-Config-nvim.zip
 /New_NVIM-Config.zip
+/neovim.zip
+/nvim-jp-data/
 
 # Local cloud state and credentials
 .env

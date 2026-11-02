@@ -22,7 +22,7 @@ Le tableau de bord de démarrage comporte un logo de requin et des raccourcis po
 - [Git pour Windows](https://git-scm.com/downloads/win), [fzf](https://github.com/junegunn/fzf) et [ripgrep](https://github.com/BurntSushi/ripgrep), disponibles dans `PATH`.
 - [WezTerm](https://wezterm.org/installation.html) pour le fond d’écran du terminal et l’intégration de Ctrl+Tab ; Neovim fonctionne également sans ces fonctionnalités du terminal.
 - PowerShell 7 est le shell recommandé. Windows PowerShell est également pris en charge pour les services de l’éditeur et l’indicateur d’utilisation du processeur.
-- Pour les analyseurs syntaxiques : Tree-sitter CLI **0.26.1 ou version ultérieure**, `curl`, `tar` et un compilateur C dans `PATH`, par exemple MSVC dans une session Developer PowerShell ou Clang. Ces prérequis correspondent à ceux de la [version verrouillée de Tree-sitter](https://github.com/nvim-treesitter/nvim-treesitter/blob/e289100ff98969e118c702199d88b764ce9e7fdf/README.md).
+- Pour les analyseurs syntaxiques : Tree-sitter CLI **0.26.1 ou version ultérieure**, `curl`, `tar` et un compilateur C dans `PATH`, par exemple MSVC dans une session Developer PowerShell ou Clang. Ces prérequis correspondent à ceux de la [version verrouillée de Tree-sitter](https://github.com/nvim-treesitter/nvim-treesitter/blob/a2f694478be07f89c2d03cc17858a8745a400c4b/README.md).
 - Python, Node.js/npm et un JDK selon les outils de langage décrits dans le manuel. Une Nerd Font est facultative pour afficher les icônes.
 
 ## Installation sous Windows
@@ -75,6 +75,19 @@ La touche leader est **Espace**. Appuyez successivement sur les touches indiqué
 | Space z t | Ouvrir un terminal du projet pour Azure |
 
 Utilisez `:Codex 8` ou `:Claude 8` pour ouvrir huit sessions CLI indépendantes dans un onglet Neovim dédié. L’ouverture d’une image ou d’un PDF crée un onglet d’aperçu WezTerm distinct. Installez les outils externes requis avant d’utiliser ces fonctionnalités ; consultez le [manuel](MANUAL.fr.md#espaces-de-travail-des-sessions-ia) et le [guide de configuration cloud](nvim/SETUP-CLOUD-TOOLS.fr.md).
+
+## Nouvelles fonctionnalités
+
+Space u b ouvre le gestionnaire de fonds d’écran : dossiers, favoris, mélange
+et modes de démarrage. Le mode aléatoire est initial ; Manual dans Settings
+conserve l’image. Space m p active l’aperçu Markdown/Mermaid dans le navigateur.
+
+Le profil facultatif `nvim-jp/` ajoute écriture japonaise, vocabulaire, Kana/Kanji
+et notes Obsidian. Le lanceur PowerShell propose Coding/Japanese lorsque `nvim`
+interactif n’a aucun argument ; `nvim-code` et `nvim-jp` choisissent directement.
+Voir l’[installation des profils](NeovimProfiles/README.md) et le
+[manuel](MANUAL.fr.md#profil-décriture-japonaise). Réglages personnels, favoris,
+mode de démarrage et archive d’importation sont ignorés par Git.
 
 ## Fichiers et partage
 

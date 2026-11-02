@@ -35,7 +35,7 @@ language setup, wallpapers, customization, and troubleshooting.
   editor services and the CPU status indicator.
 - For syntax parsers: Tree-sitter CLI **0.26.1 or newer**, `curl`, `tar`, and a
   C compiler in `PATH`, such as MSVC in a Developer PowerShell session or Clang.
-  These match the [pinned Tree-sitter requirements](https://github.com/nvim-treesitter/nvim-treesitter/blob/e289100ff98969e118c702199d88b764ce9e7fdf/README.md).
+  These match the [pinned Tree-sitter requirements](https://github.com/nvim-treesitter/nvim-treesitter/blob/a2f694478be07f89c2d03cc17858a8745a400c4b/README.md).
 - Python, Node.js/npm, and a JDK as needed for the language tools described
   in the manual. A Nerd Font is optional for displaying icons.
 
@@ -102,6 +102,19 @@ dedicated Neovim tab. Opening an image or PDF creates a separate WezTerm preview
 tab. Install the required external tools before using these features; see the
 [manual](MANUAL.md#ai-session-workspaces) and
 [cloud setup guide](nvim/SETUP-CLOUD-TOOLS.md).
+
+## New configuration features
+
+Space u b opens a wallpaper manager with folder browsing, favorites, shuffle,
+and startup modes. Random startup rotation is the default; choose Manual in
+Settings to keep an image. Space m p toggles browser Markdown/Mermaid preview.
+
+The optional `nvim-jp/` profile adds Japanese writing, vocabulary, Kana/Kanji
+practice, and Obsidian notes. The PowerShell launcher offers Coding/Japanese
+when interactive `nvim` has no arguments; use `nvim-code` or `nvim-jp` directly.
+See the [profile installation guide](NeovimProfiles/README.md) and
+[manual](MANUAL.md#japanese-writing-profile). Personal profile settings, favorites,
+startup mode, and the import archive are ignored by Git.
 
 ## Files and sharing
 

@@ -18,6 +18,7 @@
 - [CSV・TSV の表](#csvtsv-の表)
 - [画像・PDF のプレビュー](#画像pdf-のプレビュー)
 - [Markdown と Obsidian](#markdown-と-obsidian)
+- [日本語学習プロファイル](#日本語学習プロファイル)
 - [WezTerm と壁紙](#wezterm-と壁紙)
 - [カスタマイズとプライバシー](#カスタマイズとプライバシー)
 - [プラグイン管理](#プラグイン管理)
@@ -37,7 +38,7 @@ fzf --version
 rg --version
 wezterm --version
 ```
-固定された Tree-sitter のバージョンは、Neovim 0.12 以降、Tree-sitter CLI 0.26.1 以降、`curl`、`tar`、C コンパイラを[必要とします](https://github.com/nvim-treesitter/nvim-treesitter/blob/e289100ff98969e118c702199d88b764ce9e7fdf/README.md)。Mason が CLI を自動インストールします。コンパイラは別途インストールしてください。MSVC を使用する場合は Developer PowerShell から WezTerm を起動し、Neovim がコンパイラと環境設定を見つけられるようにします。
+固定された Tree-sitter のバージョンは、Neovim 0.12 以降、Tree-sitter CLI 0.26.1 以降、`curl`、`tar`、C コンパイラを[必要とします](https://github.com/nvim-treesitter/nvim-treesitter/blob/a2f694478be07f89c2d03cc17858a8745a400c4b/README.md)。Mason が CLI を自動インストールします。コンパイラは別途インストールしてください。MSVC を使用する場合は Developer PowerShell から WezTerm を起動し、Neovim がコンパイラと環境設定を見つけられるようにします。
 
 言語サーバーのインストールは、ソースファイルを開くと始まります。整形ツールと debugpy は起動直後からインストールされます。`:Lazy` と `:Mason` に完了が表示されるまで初回のセッションを開いたままにし、その後 Neovim を再起動してください。Mason のツールインストールが終わると、Neovim はパーサーのインストールを再試行します。
 
@@ -326,6 +327,29 @@ nvim
 
 一度 `:Obsidian` を実行して連携機能を読み込み、設定した保管庫のノートを開いてください。ノートとタグの補完は、プラグイン内蔵の言語サーバーと Blink を使用します。Markdown 表示は保管庫の外でも動作します。
 
+Space m p で Markdown と Mermaid のブラウザープレビューを切り替えます。
+`:MarkdownPreview`、`:MarkdownPreviewStop`、`:MarkdownPreviewToggle` も使えます。
+`markdown-preview.nvim` のビルドでプレビュー用アプリをダウンロードするため、完了まで待ってください。
+失敗時は `:Lazy` と `:messages`、ブラウザーを確認し、プラグインを再ビルドしてください。
+Space m r は従来どおりエディター内の Markdown 表示を切り替えます。
+
+## 日本語学習プロファイル
+
+任意の `nvim-jp/` は、日本語の作文と学習用の独立した設定です。
+[プロファイルガイド](NeovimProfiles/README.md)にインストールと PowerShell ランチャーの手順があります。
+対話的な `nvim` を引数なしで実行すると選択メニューが出ます。`nvim-code` と `nvim-jp` は直接起動します。
+ファイル引数、headless、入出力のリダイレクト、CI ではメニューを省略し Coding を使います。
+スクリプトでは `nvim-code` または `nvim.exe` を使うとメニューを確実に省略できます。
+
+`:JPSetup` で既存の Obsidian 保管庫を確認した後、`:JPToday`、`:JPWriting`、`:JPVocabAdd` を使います。
+単語検索、自己評価式クイズ、仮名表、小学一年生の漢字 80 字、練習、作文の進捗、確認後に送る任意の Anki カードを備えます。
+`:JPHelp` に Space j のキー一覧があります。Space j R / `:JPMarkdownToggle` でエディター内の Markdown 表示を切り替えます。
+
+`NVIM_APPNAME=nvim-jp` によりプラグイン、パーサー、undo 履歴、学習ログを分離します。
+保管庫と Anki の個人設定は Git が無視する `jp-settings.json` に保存します。
+アーカイブの個人設定とプラグインキャッシュは共有しません。保管庫の設定後にプロファイルを再起動してください。
+両プロファイルで Neovim 0.12 以降を使用します。[日本語学習ヘルプ](nvim-jp/JP-HELP.md)も参照してください。
+
 ## WezTerm と壁紙
 
 付属の壁紙の出典は[画像クレジット](nvim/backgrounds/CREDITS.ja.md)に記載されています。壁紙コレクションの入れ替えにより、[ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) の画像は削除されました。
@@ -340,9 +364,24 @@ nvim
 | Alt+Enter | WezTerm の全画面を切り替え |
 | Ctrl+Shift+L | WezTerm のデバッグ表示を開く |
 
-選択画面は画像フォルダーとサブフォルダーから PNG、JPG/JPEG、GIF、BMP、WebP を検索します。利用できれば Snacks の選択メニュー、それ以外は Neovim 内蔵の選択画面を使います。SVG は一覧に表示されません。
+Space u b で Wallpaper Manager を開きます。Browse wallpapers はフォルダー参照、Favorites はお気に入り、
+Shuffle now は別の画像の選択、Settings は起動時の動作です。分類は `Anime/`、`Games/`、`Real World/`、`Other/`。
+アニメ画像は `Anime/<作品名>/Images/`、アニメーションは `GIFs/` に置きます。
+PNG、JPG/JPEG、GIF、BMP、WebP に対応し、SVG は対象外です。Snacks が使えない場合は `vim.ui.select` を使います。
 
-既定のフォルダーは Neovim の設定ディレクトリ内の `backgrounds` で、通常は `$env:LOCALAPPDATA\nvim\backgrounds` です。選択は `Magi/01-Magi-Star.jpg` のような相対パスとして `selected-background.txt` に保存されます。キャンセルすると選択を保持します。WezTerm は約 1 秒ごとに選択を確認します。以前の絶対パスもローカルでは使えますが、別の画像を選ぶと相対パスで保存します。
+初期モードは `random` で、対話的な起動ごとに画像を選びます。候補が複数あれば現在の画像を避けます。
+`random_favorite` はお気に入りのみを使い、登録が最低 1 件必要です。`manual` は現在の画像を維持します。
+画像を手動選択した場合も manual になります。headless では起動時の画像変更を行いません。
+`:BackgroundMode random`、`:BackgroundMode random_favorite`、`:BackgroundMode manual` でモードを設定します。
+ランダムモードの設定時には画像をすぐ選びます。`:BackgroundRandom` は一度だけランダム選択し、
+`:BackgroundFavorite` は現在の画像のお気に入り登録を切り替え、`:BackgroundFavorites` は一覧を開きます。
+この 3 コマンドは起動モードを変更しません。
+
+`background-mode.txt`、`favorite-backgrounds.txt`、`selected-background.txt` はローカル専用で Git が無視します。
+お気に入りと画像選択は相対パスを使います。以前の絶対パスも読み込み、書き直すと相対パスになります。
+メニューをキャンセルしても画像とモードは変わりません。
+
+既定のフォルダーは Neovim の設定ディレクトリ内の `backgrounds` で、通常は `$env:LOCALAPPDATA\nvim\backgrounds` です。選択は `Anime/Magi/Images/01-Magi-Friends-under-Starry-Sky.jpg` のような相対パスとして `selected-background.txt` に保存されます。キャンセルすると選択を保持します。WezTerm は約 1 秒ごとに選択を確認します。以前の絶対パスもローカルでは使えますが、別の画像を選ぶと相対パスで保存します。
 
 別のフォルダーを使う場合、WezTerm と Neovim の起動前に同じ環境変数を設定してください。
 
@@ -433,8 +472,12 @@ git config user.email 'YOUR_GITHUB_NOREPLY_EMAIL'
 
 ```powershell
 nvim --headless -u NONE -i NONE -n -l tools/verify-config.lua
+nvim --headless -u NONE -i NONE -n -l tools/verify-japanese.lua
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/verify-profiles.ps1
 wezterm --config-file '.\WezTerminal-Config\.wezterm.lua' show-keys
 ```
 最初のコマンドは Lua の構文、ドキュメントのリンク、ショートカットを確認します。また、Windows のサンプルプロファイルでのパス処理、壁紙選択、デバッガー読み込み、Obsidian 設定、パーサーインストールの再試行、Java キャッシュ、クラウドツール、AI セッション、プレビューコマンドも検証します。
 
-これらはプラグインの動作を模擬する確認です。対話的な機能は通常の Neovim セッションでも試してください。2 つ目のコマンドは WezTerm 設定を読み込み、キーバインドを表示します。
+これらはプラグインの動作を模擬する確認です。対話的な機能は通常の Neovim セッションでも試してください。最後のコマンドは WezTerm 設定を読み込み、キーバインドを表示します。
+
+追加のコマンドは、独立したテスト保管庫で日本語ノートの作成と既存内容の保持を確認し、PowerShell の引数、プロファイル分離、環境変数の復元、CI 起動も検証します。現在のシェルにランチャーを登録しません。

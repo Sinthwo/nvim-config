@@ -20,7 +20,7 @@ Das Start-Dashboard enthält ein Hai-Logo und Tastenkürzel für Dateien, Suche,
 - [Git für Windows](https://git-scm.com/downloads/win), [fzf](https://github.com/junegunn/fzf) und [ripgrep](https://github.com/BurntSushi/ripgrep), verfügbar in `PATH`.
 - [WezTerm](https://wezterm.org/installation.html) für Terminalhintergründe und die Ctrl+Tab-Integration; Neovim funktioniert auch ohne diese Terminalfunktionen.
 - PowerShell 7 ist die bevorzugte Shell. Windows PowerShell wird ebenfalls für Editor Services und die CPU-Statusanzeige unterstützt.
-- Für Syntaxparser: Tree-sitter CLI **0.26.1 oder neuer**, `curl`, `tar` und ein C-Compiler in `PATH`, etwa MSVC in einer Developer-PowerShell-Sitzung oder Clang. Dies entspricht den [Anforderungen der festgelegten Tree-sitter-Version](https://github.com/nvim-treesitter/nvim-treesitter/blob/e289100ff98969e118c702199d88b764ce9e7fdf/README.md).
+- Für Syntaxparser: Tree-sitter CLI **0.26.1 oder neuer**, `curl`, `tar` und ein C-Compiler in `PATH`, etwa MSVC in einer Developer-PowerShell-Sitzung oder Clang. Dies entspricht den [Anforderungen der festgelegten Tree-sitter-Version](https://github.com/nvim-treesitter/nvim-treesitter/blob/a2f694478be07f89c2d03cc17858a8745a400c4b/README.md).
 - Python, Node.js/npm und ein JDK nach Bedarf für die im Handbuch beschriebenen Sprachwerkzeuge. Eine Nerd Font ist optional, um Symbole darzustellen.
 
 ## Installation unter Windows
@@ -73,6 +73,19 @@ Die Leader-Taste ist **Leertaste**. Drücke die aufgeführten Tasten nacheinande
 | Space z t | Azure-Projektterminal öffnen |
 
 Mit `:Codex 8` oder `:Claude 8` öffnest du acht unabhängige CLI-Sitzungen in einem eigenen Neovim-Tab. Beim Öffnen eines Bildes oder PDFs entsteht ein separater WezTerm-Vorschautab. Installiere die erforderlichen externen Werkzeuge vor der Verwendung dieser Funktionen; siehe [Handbuch](MANUAL.de.md#arbeitsbereiche-für-ki-sitzungen) und [Cloud-Einrichtungsanleitung](nvim/SETUP-CLOUD-TOOLS.de.md).
+
+## Neue Konfigurationsfunktionen
+
+Space u b öffnet den Wallpaper Manager mit Ordnern, Favoriten, Zufallsauswahl
+und Startmodi. Standardmäßig wechselt das Bild beim Start; Manual unter Settings
+behält es bei. Space m p schaltet die Markdown-/Mermaid-Vorschau im Browser um.
+
+Das optionale Profil `nvim-jp/` ergänzt Japanischschreiben, Vokabeln, Kana/Kanji
+und Obsidian. Der PowerShell-Starter bietet bei interaktivem `nvim` ohne Argumente
+Coding/Japanese an; `nvim-code` und `nvim-jp` wählen direkt.
+Siehe [Profilinstallation](NeovimProfiles/README.md) und
+[Handbuch](MANUAL.de.md#japanisches-schreibprofil). Persönliche Profileinstellungen,
+Favoriten, Startmodus und Importarchiv werden von Git ignoriert.
 
 ## Dateien und Weitergabe
 

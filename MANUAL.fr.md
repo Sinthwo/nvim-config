@@ -18,6 +18,7 @@
 - [Tableaux CSV et TSV](#tableaux-csv-et-tsv)
 - [Aperçus d’images et de PDF](#aperçus-dimages-et-de-pdf)
 - [Markdown et Obsidian](#markdown-et-obsidian)
+- [Profil d’écriture japonaise](#profil-décriture-japonaise)
 - [WezTerm et fonds d’écran](#wezterm-et-fonds-décran)
 - [Personnalisation et confidentialité](#personnalisation-et-confidentialité)
 - [Gestion des plugins](#gestion-des-plugins)
@@ -37,7 +38,7 @@ fzf --version
 rg --version
 wezterm --version
 ```
-La version verrouillée de Tree-sitter [nécessite](https://github.com/nvim-treesitter/nvim-treesitter/blob/e289100ff98969e118c702199d88b764ce9e7fdf/README.md) Neovim 0.12 ou version ultérieure, Tree-sitter CLI 0.26.1 ou version ultérieure, `curl`, `tar` et un compilateur C. Mason installe automatiquement la CLI. Installez le compilateur séparément. Si vous utilisez MSVC, lancez WezTerm depuis Developer PowerShell afin que Neovim trouve le compilateur et son environnement.
+La version verrouillée de Tree-sitter [nécessite](https://github.com/nvim-treesitter/nvim-treesitter/blob/a2f694478be07f89c2d03cc17858a8745a400c4b/README.md) Neovim 0.12 ou version ultérieure, Tree-sitter CLI 0.26.1 ou version ultérieure, `curl`, `tar` et un compilateur C. Mason installe automatiquement la CLI. Installez le compilateur séparément. Si vous utilisez MSVC, lancez WezTerm depuis Developer PowerShell afin que Neovim trouve le compilateur et son environnement.
 
 L’installation du serveur de langage démarre à l’ouverture d’un fichier source. Les outils de formatage et debugpy commencent à s’installer peu après le démarrage. Gardez la première session ouverte jusqu’à ce que `:Lazy` et `:Mason` indiquent la fin des installations, puis redémarrez Neovim. Neovim retente l’installation des analyseurs après l’installation des outils Mason.
 
@@ -326,6 +327,33 @@ Redémarrez WezTerm après une modification des variables persistantes. Ces para
 
 Exécutez `:Obsidian` une fois pour charger l’intégration, puis ouvrez une note du coffre configuré. La complétion des notes et des étiquettes utilise le serveur de langage intégré du plugin avec Blink. Le rendu Markdown fonctionne aussi hors du coffre.
 
+Space m p active ou désactive l’aperçu Markdown/Mermaid dans le navigateur.
+Utilisez `:MarkdownPreview`, `:MarkdownPreviewStop` ou `:MarkdownPreviewToggle`.
+La compilation de `markdown-preview.nvim` télécharge son application d’aperçu ;
+attendez sa fin. En cas d’échec, consultez `:Lazy` et `:messages`, relancez la
+compilation du plugin et vérifiez le navigateur. Space m r garde son rôle de bascule du rendu dans l’éditeur.
+
+## Profil d’écriture japonaise
+
+Le profil facultatif `nvim-jp/` propose un espace séparé pour écrire et étudier
+le japonais. Le [guide des profils](NeovimProfiles/README.md) explique son installation
+et le lanceur PowerShell. `nvim` interactif sans argument affiche un menu ;
+`nvim-code` et `nvim-jp` choisissent directement. Les fichiers, commandes headless,
+entrées/sorties redirigées et CI utilisent Coding sans menu.
+Dans les scripts, utilisez `nvim-code` ou `nvim.exe` pour éviter tout menu.
+
+Exécutez `:JPSetup` pour confirmer un coffre Obsidian existant, puis `:JPToday`,
+`:JPWriting` ou `:JPVocabAdd`. Le profil comprend vocabulaire, quiz autoévalués,
+tableaux Kana, 80 Kanji de première année, exercices, progression et cartes Anki
+facultatives confirmées avant envoi. `:JPHelp` décrit les raccourcis Space j.
+Space j R / `:JPMarkdownToggle` active ou désactive le rendu Markdown dans l’éditeur.
+
+`NVIM_APPNAME=nvim-jp` sépare plugins, analyseurs, historique d’annulation et journaux
+d’étude. Les réglages personnels du coffre et d’Anki restent dans `jp-settings.json`,
+ignoré par Git. Aucun réglage personnel ni cache de plugins de l’archive n’est partagé.
+Redémarrez ce profil après configuration du coffre. Les deux profils utilisent
+Neovim 0.12+. Voir l’[aide japonaise](nvim-jp/JP-HELP.md).
+
 ## WezTerm et fonds d’écran
 
 Les sources des fonds d’écran inclus figurent dans les [crédits des images](nvim/backgrounds/CREDITS.fr.md). Les images de [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) ont été retirées, car la collection de fonds d’écran a été remplacée.
@@ -340,9 +368,28 @@ Installez la configuration complémentaire à `$HOME\.wezterm.lua`. WezTerm util
 | Alt+Enter | Activer ou désactiver le plein écran WezTerm |
 | Ctrl+Shift+L | Ouvrir le panneau de débogage WezTerm |
 
-Le sélecteur cherche les fichiers PNG, JPG/JPEG, GIF, BMP et WebP dans le dossier des images et ses sous-dossiers. Il utilise le menu de sélection Snacks s’il est disponible, sinon le sélecteur intégré de Neovim. Les fichiers SVG ne sont pas affichés.
+Space u b ouvre Wallpaper Manager : Browse wallpapers parcourt les dossiers,
+Favorites gère les favoris, Shuffle now choisit une autre image et Settings
+définit le comportement au démarrage. Catégories : `Anime/`, `Games/`, `Real World/`,
+`Other/`. Les images sont dans `Anime/<titre>/Images/` et les animations dans `GIFs/`.
+PNG, JPG/JPEG, GIF, BMP et WebP sont pris en charge ; SVG est exclu.
+Le menu utilise Snacks, avec `vim.ui.select` en secours.
 
-Le dossier par défaut est le répertoire de configuration Neovim suivi de `backgrounds`, normalement `$env:LOCALAPPDATA\nvim\backgrounds`. Une sélection est enregistrée sous forme de chemin relatif, par exemple `Magi/01-Magi-Star.jpg`, dans `selected-background.txt`. Annuler conserve la sélection. WezTerm la vérifie environ une fois par seconde. Les anciennes sélections avec des chemins absolus fonctionnent encore localement. Choisir une autre image enregistre un chemin relatif.
+Le mode initial est `random` : chaque démarrage interactif choisit une image,
+différente de l’actuelle si possible. `random_favorite` ne choisit que les favoris
+et en nécessite au moins un. `manual` conserve l’image ; choisir une image
+manuellement active aussi ce mode. Les sessions headless ne changent pas l’image.
+`:BackgroundMode random`, `:BackgroundMode random_favorite` et `:BackgroundMode manual`
+changent le mode ; les modes aléatoires appliquent immédiatement une image.
+`:BackgroundRandom` mélange une fois, `:BackgroundFavorite` marque l’image active,
+`:BackgroundFavorites` parcourt les favoris. Ces trois commandes gardent le mode de démarrage.
+
+`background-mode.txt`, `favorite-backgrounds.txt` et `selected-background.txt`
+restent locaux et ignorés par Git. Favoris et sélection utilisent des chemins
+relatifs ; les anciens chemins absolus sont lus puis deviennent relatifs lors
+de leur réécriture. Annuler un menu ne change ni l’image ni le mode.
+
+Le dossier par défaut est le répertoire de configuration Neovim suivi de `backgrounds`, normalement `$env:LOCALAPPDATA\nvim\backgrounds`. Une sélection est enregistrée sous forme de chemin relatif, par exemple `Anime/Magi/Images/01-Magi-Friends-under-Starry-Sky.jpg`, dans `selected-background.txt`. Annuler conserve la sélection. WezTerm la vérifie environ une fois par seconde. Les anciennes sélections avec des chemins absolus fonctionnent encore localement. Choisir une autre image enregistre un chemin relatif.
 
 Pour utiliser un dossier personnalisé, définissez la même variable d’environnement avant de lancer WezTerm et Neovim :
 
@@ -433,8 +480,12 @@ Depuis le dossier du dépôt dans PowerShell, exécutez les commandes suivantes.
 
 ```powershell
 nvim --headless -u NONE -i NONE -n -l tools/verify-config.lua
+nvim --headless -u NONE -i NONE -n -l tools/verify-japanese.lua
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/verify-profiles.ps1
 wezterm --config-file '.\WezTerminal-Config\.wezterm.lua' show-keys
 ```
 La première commande vérifie la syntaxe Lua, les liens de documentation et les raccourcis. Elle teste aussi la gestion des chemins avec des profils Windows d’exemple, la sélection des fonds d’écran, le chargement du débogueur, les paramètres Obsidian, les nouvelles tentatives d’installation des analyseurs, les caches Java, les outils cloud, les sessions IA et les commandes d’aperçu.
 
-Ces vérifications simulent le comportement des plugins. Testez aussi les fonctionnalités interactives dans votre session Neovim habituelle. La seconde commande charge la configuration WezTerm et affiche ses raccourcis clavier.
+Ces vérifications simulent le comportement des plugins. Testez aussi les fonctionnalités interactives dans votre session Neovim habituelle. La dernière commande charge la configuration WezTerm et affiche ses raccourcis clavier.
+
+Les commandes supplémentaires vérifient les notes japonaises dans un coffre de test isolé, ainsi que les arguments PowerShell, la séparation des profils, la restauration de l’environnement et les lancements CI. Elles n’activent pas le lanceur dans votre shell actuel.
