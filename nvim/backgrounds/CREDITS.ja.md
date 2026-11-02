@@ -7,7 +7,3 @@
 ## ダッシュボードのロゴ
 
 ダッシュボードのサメ画像 `nvim/dashboard-logo.png` の出典：[r/marvelrivals の Reddit 投稿](https://www.reddit.com/r/marvelrivals/comments/1hc1b32/dear_jeff_haters_this_is_what_your_hatred_will/)。
-
-## 以前のコレクション
-
-現在は上記の壁紙を使用しているため、[ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) の画像は削除されました。リンクは、以前のリリースで使っていたコレクションのクレジットとして記載しています。

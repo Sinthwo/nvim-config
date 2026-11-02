@@ -4,8 +4,6 @@
 
 Placez vos fonds d’écran dans ce dossier ou ses sous-dossiers. Le sélecteur prend en charge PNG, JPG/JPEG, GIF, BMP et WebP. Les sources des images incluses figurent dans les [crédits](CREDITS.fr.md).
 
-Les images de [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) ont été retirées, car la collection de fonds d’écran a été remplacée. Le fichier de crédits conserve un lien vers cette ancienne collection.
-
 ## Choisir un fond d’écran
 
 Dans Neovim, utilisez ces commandes ou raccourcis :

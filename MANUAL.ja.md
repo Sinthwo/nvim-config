@@ -352,7 +352,7 @@ Space m r は従来どおりエディター内の Markdown 表示を切り替え
 
 ## WezTerm と壁紙
 
-付属の壁紙の出典は[画像クレジット](nvim/backgrounds/CREDITS.ja.md)に記載されています。壁紙コレクションの入れ替えにより、[ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) の画像は削除されました。
+付属の壁紙の出典は[画像クレジット](nvim/backgrounds/CREDITS.ja.md)に記載されています。
 
 補助設定を `$HOME\.wezterm.lua` に配置してください。WezTerm は Tokyo Night の配色を使い、Neovim の使用中は暗くした壁紙を表示します。Neovim 終了時、または選択画像が見つからない場合は通常のターミナル表示に戻ります。ターミナルウィンドウは不透明です。
 

@@ -4,8 +4,6 @@
 
 Lege deine Hintergrundbilder in diesem Ordner oder dessen Unterordnern ab. Die Auswahl unterstützt PNG, JPG/JPEG, GIF, BMP und WebP. Quellen der enthaltenen Bilder stehen in den [Bildnachweisen](CREDITS.de.md).
 
-Bilder aus [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) wurden entfernt, weil die Hintergrundsammlung ersetzt wurde. Die Nachweisdatei behält einen Link zu dieser früheren Sammlung.
-
 ## Hintergrundbild auswählen
 
 Verwende in Neovim diese Befehle oder Kürzel:

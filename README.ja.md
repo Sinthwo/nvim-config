@@ -97,6 +97,6 @@ PowerShell ランチャーは対話的な `nvim` の引数がない場合に Cod
 
 壁紙の選択には、画像フォルダーからの相対パスを使用します。Git は選択ファイル、ログ、一時ファイル、ローカル環境ファイル、Terraform の状態ファイルとプランファイルを無視します。個人用のパスは、`OBSIDIAN_VAULT` や `NVIM_BACKGROUND_DIR` などのローカル環境変数で設定してください。
 
-壁紙コレクションの入れ替えに伴い、[ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) の画像は削除されました。現在の画像の出典は[壁紙のクレジット](nvim/backgrounds/CREDITS.ja.md)に記載されています。
+現在の画像の出典は[壁紙のクレジット](nvim/backgrounds/CREDITS.ja.md)に記載されています。
 
 新しい変更を共有する前に、[検証コマンド](MANUAL.ja.md#設定の検証)を実行し、追加した個人用のカスタマイズを確認してください。

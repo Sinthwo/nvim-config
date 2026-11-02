@@ -8,9 +8,3 @@ The [image catalog](README.md#images-and-sources) lists the current files and th
 
 Source for the shark dashboard image, `nvim/dashboard-logo.png`:
 [r/marvelrivals Reddit post](https://www.reddit.com/r/marvelrivals/comments/1hc1b32/dear_jeff_haters_this_is_what_your_hatred_will/).
-
-## Previous collection
-
-The images from [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime)
-were removed because this configuration now uses the wallpapers listed above.
-The link credits the collection used in earlier releases.

@@ -356,7 +356,7 @@ Beide Profile verwenden Neovim 0.12+. Siehe [Japanisch-Hilfe](nvim-jp/JP-HELP.md
 
 ## WezTerm und Hintergrundbilder
 
-Die Quellen der enthaltenen Hintergrundbilder stehen in den [Bildnachweisen](nvim/backgrounds/CREDITS.de.md). Bilder aus [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) wurden entfernt, weil die Hintergrundsammlung ersetzt wurde.
+Die Quellen der enthaltenen Hintergrundbilder stehen in den [Bildnachweisen](nvim/backgrounds/CREDITS.de.md).
 
 Installiere die ergänzende Konfiguration unter `$HOME\.wezterm.lua`. WezTerm verwendet Tokyo-Night-Farben und zeigt bei aktivem Neovim ein abgedunkeltes Hintergrundbild. Beim Beenden Neovims oder fehlendem Bild wird das normale Terminalaussehen wiederhergestellt. Das Terminalfenster bleibt undurchsichtig.
 

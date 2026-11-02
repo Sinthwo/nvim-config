@@ -96,6 +96,6 @@ Favoriten, Startmodus und Importarchiv werden von Git ignoriert.
 
 Hintergrundauswahlen verwenden Pfade relativ zum Bildordner. Git ignoriert die Auswahldatei, Protokolle, temporäre Dateien, lokale Umgebungsdateien sowie Terraform-Zustands- und Plandateien. Persönliche Pfade setzt du über lokale Umgebungsvariablen wie `OBSIDIAN_VAULT` und `NVIM_BACKGROUND_DIR`.
 
-Die Bilder aus [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) wurden entfernt, weil die Hintergrundsammlung ersetzt wurde. Quellen der aktuellen Bilder sind in den [Hintergrundbildnachweisen](nvim/backgrounds/CREDITS.de.md) aufgeführt.
+Quellen der aktuellen Bilder sind in den [Hintergrundbildnachweisen](nvim/backgrounds/CREDITS.de.md) aufgeführt.
 
 Führe vor dem Weitergeben neuer Änderungen die [Validierungsbefehle](MANUAL.de.md#konfiguration-prüfen) aus und überprüfe deine persönlichen Anpassungen.

@@ -356,7 +356,7 @@ Neovim 0.12+. Voir l’[aide japonaise](nvim-jp/JP-HELP.md).
 
 ## WezTerm et fonds d’écran
 
-Les sources des fonds d’écran inclus figurent dans les [crédits des images](nvim/backgrounds/CREDITS.fr.md). Les images de [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) ont été retirées, car la collection de fonds d’écran a été remplacée.
+Les sources des fonds d’écran inclus figurent dans les [crédits des images](nvim/backgrounds/CREDITS.fr.md).
 
 Installez la configuration complémentaire à `$HOME\.wezterm.lua`. WezTerm utilise les couleurs Tokyo Night et affiche un fond d’écran assombri pendant que Neovim est actif. Il rétablit l’apparence normale du terminal lorsque Neovim se ferme ou que l’image sélectionnée est absente. La fenêtre du terminal reste opaque.
 

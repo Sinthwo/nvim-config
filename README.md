@@ -128,9 +128,8 @@ selection file, logs, temporary files, local environment files, and Terraform
 state and plan files. Set personal paths through local environment variables
 such as `OBSIDIAN_VAULT` and `NVIM_BACKGROUND_DIR`.
 
-The images from [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime)
-were removed because the wallpaper collection was replaced. Sources for the
-current images are listed in [wallpaper credits](nvim/backgrounds/CREDITS.md).
+Sources for the current images are listed in
+[wallpaper credits](nvim/backgrounds/CREDITS.md).
 
 Before sharing new changes, run the [validation commands](MANUAL.md#validate-the-configuration)
 and review any personal customization you added.

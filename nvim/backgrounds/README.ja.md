@@ -4,8 +4,6 @@
 
 このフォルダーまたはサブフォルダーに壁紙を配置してください。選択機能は PNG、JPG/JPEG、GIF、BMP、WebP に対応しています。付属画像の出典は[クレジット](CREDITS.ja.md)に記載されています。
 
-壁紙コレクションの入れ替えにより、[ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) の画像は削除されました。クレジットには以前のコレクションへのリンクが残っています。
-
 ## 壁紙を選ぶ
 
 Neovim で次のコマンドまたはショートカットを使用します。

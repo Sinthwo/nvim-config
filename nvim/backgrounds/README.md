@@ -6,10 +6,6 @@ Put your wallpapers in this folder or its subfolders. The picker supports PNG,
 JPG/JPEG, GIF, BMP, and WebP files. Sources for the included images are listed
 in [CREDITS.md](CREDITS.md).
 
-The images from [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime)
-were removed because the wallpaper collection was replaced. The credits file
-keeps a link to that earlier collection.
-
 ## Choose a wallpaper
 
 Inside Neovim, use these commands or shortcuts:

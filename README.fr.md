@@ -98,6 +98,6 @@ mode de démarrage et archive d’importation sont ignorés par Git.
 
 Les fonds d’écran sélectionnés utilisent des chemins relatifs au dossier des images. Git ignore le fichier de sélection, les journaux, les fichiers temporaires, les fichiers d’environnement locaux ainsi que les fichiers d’état et de plan Terraform. Définissez les chemins personnels à l’aide de variables d’environnement locales telles que `OBSIDIAN_VAULT` et `NVIM_BACKGROUND_DIR`.
 
-Les images de [ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) ont été retirées, car la collection de fonds d’écran a été remplacée. Les sources des images actuelles figurent dans les [crédits des fonds d’écran](nvim/backgrounds/CREDITS.fr.md).
+Les sources des images actuelles figurent dans les [crédits des fonds d’écran](nvim/backgrounds/CREDITS.fr.md).
 
 Avant de partager de nouvelles modifications, exécutez les [commandes de validation](MANUAL.fr.md#validation-de-la-configuration) et vérifiez les personnalisations personnelles que vous avez ajoutées.

@@ -495,9 +495,7 @@ See [Japanese help](nvim-jp/JP-HELP.md).
 ## WezTerm and wallpapers
 
 Sources for the included wallpapers are listed in
-[image credits](nvim/backgrounds/CREDITS.md). The images from
-[ThePrimeagen/anime](https://github.com/ThePrimeagen/anime) were removed because
-the wallpaper collection was replaced.
+[image credits](nvim/backgrounds/CREDITS.md).
 
 Install the companion configuration at `$HOME\.wezterm.lua`. WezTerm uses
 Tokyo Night colors and displays a darkened wallpaper while Neovim is active.
