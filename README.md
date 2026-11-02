@@ -24,6 +24,15 @@ the configuration without adding your username or a fixed drive letter.
 Read the [Windows user manual](MANUAL.md) for the complete shortcut reference,
 language setup, wallpapers, customization, and troubleshooting.
 
+## Screenshots
+
+| Startup dashboard | Editor and file explorer |
+| --- | --- |
+| [![Neovim startup dashboard with a shark logo and shortcuts](docs/screenshots/dashboard.png)](docs/screenshots/dashboard.png) | [![Neovim editing a Lua file beside the file explorer](docs/screenshots/editor-explorer.png)](docs/screenshots/editor-explorer.png) |
+
+Browse all 31 screenshots in the [feature gallery](docs/screenshots/README.md),
+including the wallpaper manager and Japanese writing profile.
+
 ## Requirements
 
 - [Neovim](https://github.com/neovim/neovim/releases) **0.12 or newer**.

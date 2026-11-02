@@ -4,6 +4,10 @@
 
 Placez vos fonds d’écran dans ce dossier ou ses sous-dossiers. Le sélecteur prend en charge PNG, JPG/JPEG, GIF, BMP et WebP. Les sources des images incluses figurent dans les [crédits](CREDITS.fr.md).
 
+[![Gestionnaire de fonds d’écran avec navigation et favoris](../../docs/screenshots/wallpapers.png)](../../docs/screenshots/wallpapers.png)
+
+La [galerie de captures d’écran](../../docs/screenshots/README.fr.md) présente d’autres vues de la configuration.
+
 ## Choisir un fond d’écran
 
 Dans Neovim, utilisez ces commandes ou raccourcis :

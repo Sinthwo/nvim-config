@@ -909,6 +909,7 @@ end
 local documents = real.fn.glob("README*.md", false, true)
 real.list_extend(documents, real.fn.glob("MANUAL*.md", false, true))
 real.list_extend(documents, real.fn.glob("nvim/**/*.md", false, true))
+real.list_extend(documents, real.fn.glob("docs/**/*.md", false, true))
 real.list_extend(documents, { "NeovimProfiles/README.md", "nvim-jp/JP-HELP.md" })
 real.list_extend(documents, real.fn.glob("nvim-jp/docs/*.md", false, true))
 local function has_anchor(content, anchor)

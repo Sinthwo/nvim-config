@@ -6,6 +6,14 @@ with their pinned plugins. A separate process selects each profile; close
 Neovim with `:qa` before switching. The coding profile keeps the companion
 WezTerm wallpaper and dashboard integration.
 
+## Japanese profile preview
+
+| Study dashboard | Writing page |
+| --- | --- |
+| [![Japanese study dashboard with shortcuts](../docs/screenshots/japanese_dashboard.png)](../docs/screenshots/japanese_dashboard.png) | [![Japanese writing page with a vocabulary table and checklist](../docs/screenshots/japanese_writing.png)](../docs/screenshots/japanese_writing.png) |
+
+The [screenshot gallery](../docs/screenshots/README.md#japanese-writing-profile) also shows the kana and kanji references.
+
 ## Install the Japanese profile
 
 Install the coding configuration using the [main README](../README.md).

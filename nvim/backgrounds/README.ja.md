@@ -4,6 +4,10 @@
 
 このフォルダーまたはサブフォルダーに壁紙を配置してください。選択機能は PNG、JPG/JPEG、GIF、BMP、WebP に対応しています。付属画像の出典は[クレジット](CREDITS.ja.md)に記載されています。
 
+[![画像の選択とお気に入りを表示する壁紙マネージャー](../../docs/screenshots/wallpapers.png)](../../docs/screenshots/wallpapers.png)
+
+ほかの画面は[スクリーンショットギャラリー](../../docs/screenshots/README.ja.md)で確認できます。
+
 ## 壁紙を選ぶ
 
 Neovim で次のコマンドまたはショートカットを使用します。

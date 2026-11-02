@@ -16,6 +16,14 @@ Consultez le [manuel utilisateur Windows](MANUAL.fr.md) pour la liste complète 
 
 Le tableau de bord de démarrage comporte un logo de requin et des raccourcis pour les fichiers, la recherche, les plugins et les terminaux. D’autres commandes sélectionnent ou agrandissent les sessions IA existantes et ouvrent des panneaux terminaux ou des vues Git. Consultez le [manuel](MANUAL.fr.md#tableau-de-bord-et-notifications).
 
+## Captures d’écran
+
+| Tableau de bord | Éditeur et explorateur de fichiers |
+| --- | --- |
+| [![Tableau de bord de Neovim avec un requin et des raccourcis](docs/screenshots/dashboard.png)](docs/screenshots/dashboard.png) | [![Fichier Lua ouvert dans Neovim à côté de l’explorateur](docs/screenshots/editor-explorer.png)](docs/screenshots/editor-explorer.png) |
+
+La [galerie des fonctionnalités](docs/screenshots/README.fr.md) présente les 31 captures, notamment le gestionnaire de fonds d’écran et le profil d’écriture japonaise.
+
 ## Prérequis
 
 - [Neovim](https://github.com/neovim/neovim/releases) **0.12 ou version ultérieure**.

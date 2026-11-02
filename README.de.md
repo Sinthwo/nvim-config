@@ -14,6 +14,14 @@ Im [Windows-Benutzerhandbuch](MANUAL.de.md) findest du die vollständige Übersi
 
 Das Start-Dashboard enthält ein Hai-Logo und Tastenkürzel für Dateien, Suche, Plugins und Terminals. Weitere Befehle fokussieren oder vergrößern laufende KI-Sitzungen und öffnen Terminalpanels sowie Git-Ansichten. Einzelheiten stehen im [Handbuch](MANUAL.de.md#dashboard-und-benachrichtigungen).
 
+## Screenshots
+
+| Start-Dashboard | Editor und Dateiexplorer |
+| --- | --- |
+| [![Neovim-Start-Dashboard mit Hai und Tastenkürzeln](docs/screenshots/dashboard.png)](docs/screenshots/dashboard.png) | [![Lua-Datei in Neovim neben dem Dateiexplorer](docs/screenshots/editor-explorer.png)](docs/screenshots/editor-explorer.png) |
+
+Die [Funktionsgalerie](docs/screenshots/README.de.md) zeigt alle 31 Screenshots, darunter den Hintergrundbildmanager und das japanische Schreibprofil.
+
 ## Voraussetzungen
 
 - [Neovim](https://github.com/neovim/neovim/releases) **0.12 oder neuer**.

@@ -16,6 +16,14 @@ Azure/Bicep、Terraform、YAML、Bash のサポート、CSV/TSV の表編集、C
 
 起動時のダッシュボードにはサメのロゴと、ファイル、検索、プラグイン、ターミナル用のショートカットがあります。追加コマンドで起動済みの AI セッションを選択・拡大したり、ターミナルパネルや Git 情報を開いたりできます。詳しくは[マニュアル](MANUAL.ja.md#ダッシュボードと通知)をご覧ください。
 
+## スクリーンショット
+
+| 起動時のダッシュボード | エディターとファイルエクスプローラー |
+| --- | --- |
+| [![サメのロゴとショートカットがある Neovim のダッシュボード](docs/screenshots/dashboard.png)](docs/screenshots/dashboard.png) | [![ファイルエクスプローラーの横で Lua ファイルを編集する Neovim](docs/screenshots/editor-explorer.png)](docs/screenshots/editor-explorer.png) |
+
+壁紙マネージャーや日本語執筆プロファイルを含む 31 枚の画像は、[機能ギャラリー](docs/screenshots/README.ja.md)で確認できます。
+
 ## 必要なもの
 
 - [Neovim](https://github.com/neovim/neovim/releases) **0.12 以降**。

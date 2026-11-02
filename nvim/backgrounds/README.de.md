@@ -4,6 +4,10 @@
 
 Lege deine Hintergrundbilder in diesem Ordner oder dessen Unterordnern ab. Die Auswahl unterstützt PNG, JPG/JPEG, GIF, BMP und WebP. Quellen der enthaltenen Bilder stehen in den [Bildnachweisen](CREDITS.de.md).
 
+[![Hintergrundbildmanager mit Bildauswahl und Favoriten](../../docs/screenshots/wallpapers.png)](../../docs/screenshots/wallpapers.png)
+
+Weitere Ansichten der Konfiguration findest du in der [Screenshot-Galerie](../../docs/screenshots/README.de.md).
+
 ## Hintergrundbild auswählen
 
 Verwende in Neovim diese Befehle oder Kürzel:

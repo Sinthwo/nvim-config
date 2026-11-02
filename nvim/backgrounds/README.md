@@ -6,6 +6,10 @@ Put your wallpapers in this folder or its subfolders. The picker supports PNG,
 JPG/JPEG, GIF, BMP, and WebP files. Sources for the included images are listed
 in [CREDITS.md](CREDITS.md).
 
+[![Wallpaper manager showing image browsing and favorites](../../docs/screenshots/wallpapers.png)](../../docs/screenshots/wallpapers.png)
+
+See the [screenshot gallery](../../docs/screenshots/README.md) for more views of the configuration.
+
 ## Choose a wallpaper
 
 Inside Neovim, use these commands or shortcuts:
