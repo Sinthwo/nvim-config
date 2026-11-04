@@ -2,13 +2,14 @@
 type: journal
 date: {{DATE}}
 status: pending
-completed_on: 
+completed_on:
 tags: [japanese, writing]
 ---
 
 # Japanese journal — {{DATE}}
 
 ## Today (Japanese)
+
 <!-- JP:WRITING:BEGIN -->
 
 <!-- JP:WRITING:END -->

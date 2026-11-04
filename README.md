@@ -2,27 +2,14 @@
 
 **Languages:** English | [Français](README.fr.md) | [Deutsch](README.de.md) | [日本語](README.ja.md)
 
-**This configuration is for Windows.** It brings together Neovim, PowerShell,
-and WezTerm for editing code, working with Git, and debugging Python.
-It includes a file explorer, completion, language servers, Markdown rendering,
-and optional Obsidian integration.
+A Windows setup for Neovim, PowerShell, and WezTerm, with a file explorer,
+completion, language servers, Git tools, and Python debugging.
 
-Additional features include Azure/Bicep, Terraform, YAML, and Bash support,
-CSV/TSV table editing, dedicated Codex and Claude sessions, image/PDF previews,
-and terminal wallpapers.
+Optional tools add cloud development, AI terminal sessions, Markdown and
+Obsidian workflows, Japanese writing, image previews, and wallpapers.
+See the [Windows user manual](MANUAL.md) for the full reference.
 
-The startup dashboard includes a shark logo and shortcuts for files, search,
-plugins, and terminals. Additional commands focus or enlarge existing AI
-sessions, open terminal panels, and browse Git information. See the
-[manual](MANUAL.md#dashboard-and-notifications) for the complete reference.
-
-Source repository: [Sinthwo/nvim-config](https://github.com/Sinthwo/nvim-config).
-
-Paths are resolved automatically for the current Windows user, so you can use
-the configuration without adding your username or a fixed drive letter.
-
-Read the [Windows user manual](MANUAL.md) for the complete shortcut reference,
-language setup, wallpapers, customization, and troubleshooting.
+**Quick links:** [Install on Windows](#install-on-windows) · [Useful shortcuts](#useful-shortcuts) · [Optional features](#optional-features) · [Files and sharing](#files-and-sharing)
 
 ## Screenshots
 
@@ -39,7 +26,7 @@ including the wallpaper manager and Japanese writing profile.
 - [Git for Windows](https://git-scm.com/downloads/win), [fzf](https://github.com/junegunn/fzf),
   and [ripgrep](https://github.com/BurntSushi/ripgrep) available in `PATH`.
 - [WezTerm](https://wezterm.org/installation.html) for the terminal wallpaper
-  and Ctrl+Tab integration; Neovim also works without those terminal features.
+  and `Ctrl+Tab` integration; Neovim also works without those terminal features.
 - PowerShell 7 is the preferred shell. Windows PowerShell is also supported for
   editor services and the CPU status indicator.
 - For syntax parsers: Tree-sitter CLI **0.26.1 or newer**, `curl`, `tar`, and a
@@ -93,18 +80,18 @@ The leader key is **Space**. Press the listed keys in sequence; for example,
 
 | Keys | Action |
 | --- | --- |
-| Ctrl+S | Save the current file |
-| Ctrl+B | Toggle the file explorer |
-| Ctrl+P / Space f f | Find a file |
-| Space f g | Search text in the project |
-| Ctrl+Tab / Ctrl+Shift+Tab | Next / previous file in WezTerm |
-| Space b c | Close the current file |
-| Space c f | Format the current file |
-| Space g g | Open Git status |
-| Space u b | Choose a terminal background |
-| Space t t | Toggle a project terminal |
-| Space c v | Toggle CSV/TSV table view |
-| Space z t | Open an Azure project terminal |
+| `Ctrl+S` | Save the current file |
+| `Ctrl+B` | Toggle the file explorer |
+| `Ctrl+P` / `Space f f` | Find a file |
+| `Space f g` | Search text in the project |
+| `Ctrl+Tab` / `Ctrl+Shift+Tab` | Next / previous file in WezTerm |
+| `Space b c` | Close the current file |
+| `Space c f` | Format the current file |
+| `Space g g` | Open Git status |
+| `Space u b` | Choose a terminal background |
+| `Space t t` | Toggle a project terminal |
+| `Space c v` | Toggle CSV/TSV table view |
+| `Space z t` | Open an Azure project terminal |
 
 Use `:Codex 8` or `:Claude 8` to open eight independent CLI sessions in a
 dedicated Neovim tab. Opening an image or PDF creates a separate WezTerm preview
@@ -112,11 +99,11 @@ tab. Install the required external tools before using these features; see the
 [manual](MANUAL.md#ai-session-workspaces) and
 [cloud setup guide](nvim/SETUP-CLOUD-TOOLS.md).
 
-## New configuration features
+## Optional features
 
-Space u b opens a wallpaper manager with folder browsing, favorites, shuffle,
+`Space u b` opens a wallpaper manager with folder browsing, favorites, shuffle,
 and startup modes. Random startup rotation is the default; choose Manual in
-Settings to keep an image. Space m p toggles browser Markdown/Mermaid preview.
+Settings to keep an image. `Space m p` toggles browser Markdown/Mermaid preview.
 
 The optional `nvim-jp/` profile adds Japanese writing, vocabulary, Kana/Kanji
 practice, and Obsidian notes. The PowerShell launcher offers Coding/Japanese
@@ -125,12 +112,21 @@ See the [profile installation guide](NeovimProfiles/README.md) and
 [manual](MANUAL.md#japanese-writing-profile). Personal profile settings, favorites,
 startup mode, and the import archive are ignored by Git.
 
+The startup dashboard provides shortcuts for files, search, plugins, and
+terminals. See [dashboard and notifications](MANUAL.md#dashboard-and-notifications)
+for its commands, and [AI session workspaces](MANUAL.md#ai-session-workspaces)
+for focusing and enlarging running sessions.
+
 ## Files and sharing
 
 - `nvim/` is the Neovim configuration to install.
 - `WezTerminal-Config/.wezterm.lua` is the companion Windows terminal config.
 - [MANUAL.md](MANUAL.md) explains all configured features and local settings.
 - `nvim/lazy-lock.json` records plugin revisions; keep it when sharing the config.
+
+Source repository: [Sinthwo/nvim-config](https://github.com/Sinthwo/nvim-config).
+Paths resolve for the current Windows user; no fixed username or drive letter
+is needed.
 
 Wallpaper selections use paths relative to the image folder. Git ignores the
 selection file, logs, temporary files, local environment files, and Terraform

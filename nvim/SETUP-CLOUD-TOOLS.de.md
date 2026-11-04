@@ -13,6 +13,7 @@ Zusätzliche Mason-Pakete lassen sich auch manuell installieren:
 ```vim
 :MasonInstall bash-language-server yaml-language-server terraform-ls azure-pipelines-language-server shfmt
 ```
+
 Tree-sitter installiert zusätzlich zu den vorhandenen Sprachparsern `bicep`, `csv`, `hcl`, `terraform` und `tsv`. Nach der Werkzeuginstallation durch Mason versucht Neovim die Parserinstallation erneut. Ein funktionierender C-Compiler und Tree-sitter CLI sind erforderlich.
 
 ## Bicep-Sprachserver
@@ -24,16 +25,17 @@ dotnet --info
 dotnet tool install --global Azure.Bicep.LangServer
 Get-Command bicep-ls
 ```
+
 Die Befehle folgen den [offiziellen Bicep-Sprachserveranweisungen](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install#bicep-language-server-net-tool). Neovim findet den installierten Befehl `bicep-ls` über `PATH`. Starte Neovim nach der Installation neu. Eine bestehende Installation aktualisierst du mit `dotnet tool update --global Azure.Bicep.LangServer`.
 
-Öffne eine `.bicep`- oder `.bicepparam`-Datei und verwende normale LSP-Kürzel: `K`, `gd`, `gr`, F2, Space c a und Space c d. Bicep CLI zu installieren oder nur `az bicep` auszuführen installiert diesen Sprachserver nicht.
+Öffne eine `.bicep`- oder `.bicepparam`-Datei und verwende normale LSP-Kürzel: `K`, `gd`, `gr`, `F2`, `Space c a` und `Space c d`. Bicep CLI zu installieren oder nur `az bicep` auszuführen installiert diesen Sprachserver nicht.
 
 ## Terraform, YAML, Azure Pipelines und Bash
 
-- **Terraform:** Mason installiert terraform-ls. Installiere Terraform CLI separat nach [HashiCorps Anleitung](https://developer.hashicorp.com/terraform/install). Prüfe `terraform version`. `.tf`- und `.tfvars`-Dateien erhalten Vervollständigung und Diagnosen; Space c f formatiert mit `terraform fmt`.
-- **YAML:** Mason installiert yaml-language-server; Space c f verwendet Prettier.
+- **Terraform:** Mason installiert terraform-ls. Installiere Terraform CLI separat nach [HashiCorps Anleitung](https://developer.hashicorp.com/terraform/install). Prüfe `terraform version`. `.tf`- und `.tfvars`-Dateien erhalten Vervollständigung und Diagnosen; `Space c f` formatiert mit `terraform fmt`.
+- **YAML:** Mason installiert yaml-language-server; `Space c f` verwendet Prettier.
 - **Azure Pipelines:** Mason installiert Microsofts [Azure-Pipelines-Sprachserver](https://github.com/microsoft/azure-pipelines-language-server). Er wird bei Arbeitsbereichen mit `azure-pipelines.yml` oder `azure-pipelines.yaml` aktiviert und nutzt das Microsoft-Pipelineschema. Node.js/npm sind erforderlich.
-- **Bash:** Mason installiert bash-language-server und shfmt. Space c f formatiert Shell-Dateien. Installiere zum Ausführen von Skripten separat eine Bash-Umgebung.
+- **Bash:** Mason installiert bash-language-server und shfmt. `Space c f` formatiert Shell-Dateien. Installiere zum Ausführen von Skripten separat eine Bash-Umgebung.
 
 Die vollständige Sprachtabelle und Tastenbelegungen stehen im [Handbuch](../MANUAL.de.md#sprachunterstützung-und-formatierung).
 
@@ -44,15 +46,16 @@ Installiere Azure CLI mit Windows Package Manager:
 ```powershell
 winget install --exact --id Microsoft.AzureCLI
 ```
+
 Starte WezTerm neu und prüfe `az version`. Der Befehl folgt [Microsofts Windows-Installationsanleitung](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-windows).
 
 | Befehl | Tasten | Ausführung |
 | --- | --- | --- |
-| `:AzureTerminal` | Space z t | Terminal an der Projektwurzel |
-| `:AzureLogin` | Space z l | `az login` |
-| `:AzureAccount` | Space z a | `az account show -o table` |
-| `:AzureGroups` | Space z g | `az group list -o table` |
-| `:AzureResources` | Space z r | `az resource list -o table` |
+| `:AzureTerminal` | `Space z t` | Terminal an der Projektwurzel |
+| `:AzureLogin` | `Space z l` | `az login` |
+| `:AzureAccount` | `Space z a` | `az account show -o table` |
+| `:AzureGroups` | `Space z g` | `az group list -o table` |
+| `:AzureResources` | `Space z r` | `az resource list -o table` |
 
 Die Befehle öffnen ein Snacks-Terminal an der Projektwurzel. Melde dich mit `:AzureLogin` an und prüfe deine Azure-Umgebung mit den Konto-, Gruppen- und Ressourcenbefehlen.
 
@@ -64,13 +67,15 @@ Nutze PowerShell 7. Installiere das Modul für dein aktuelles Konto nach [Micros
 Install-Module -Name Az -Scope CurrentUser -Repository PSGallery
 Get-Module -ListAvailable -Name Az
 ```
-`:AzurePowerShell` oder Space z p öffnet PowerShell 7 und importiert Az. Fehlt das Modul, wird der Installationsbefehl angezeigt. Melde dich an und prüfe deinen Kontext:
+
+`:AzurePowerShell` oder `Space z p` öffnet PowerShell 7 und importiert Az. Fehlt das Modul, wird der Installationsbefehl angezeigt. Melde dich an und prüfe deinen Kontext:
 
 ```powershell
 Connect-AzAccount
 Get-AzContext
 Get-AzResourceGroup
 ```
+
 Die Konfiguration findet PowerShell über `PATH` und `ProgramFiles`. Die PowerShell-Sprachunterstützung verwendet die von Mason installierten Editor Services.
 
 ## Codex- und Claude-Arbeitsbereiche
@@ -83,7 +88,7 @@ Interaktive Aliase wie `:Codex_8`, `:Claude_8`, `:Codex_End` und `:Claude_End` w
 
 ## CSV und TSV
 
-csvview.nvim aktiviert beim Öffnen einer CSV/TSV-Datei eine ausgerichtete Tabellenansicht. Space c v schaltet sie um; `:CsvViewInfo` zeigt Trennzeichen und Kopfzeile. Tab und Shift+Tab behalten ihre Funktion. Siehe [Handbuch](../MANUAL.de.md#csv--und-tsv-tabellen) und [Plugindokumentation](https://github.com/hat0uma/csvview.nvim).
+csvview.nvim aktiviert beim Öffnen einer CSV/TSV-Datei eine ausgerichtete Tabellenansicht. `Space c v` schaltet sie um; `:CsvViewInfo` zeigt Trennzeichen und Kopfzeile. Tab und `Shift+Tab` behalten ihre Funktion. Siehe [Handbuch](../MANUAL.de.md#csv--und-tsv-tabellen) und [Plugindokumentation](https://github.com/hat0uma/csvview.nvim).
 
 ## Bilder und PDF-Dateien
 

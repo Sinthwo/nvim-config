@@ -7,7 +7,7 @@ The Romaji column uses common learner Hepburn spelling. In particles, は sounds
 ## 46 basic Kana
 
 | Hiragana | Katakana | Romaji |
-|---|---|---|
+| --- | --- | --- |
 | あ | ア | a |
 | い | イ | i |
 | う | ウ | u |
@@ -58,7 +58,7 @@ The Romaji column uses common learner Hepburn spelling. In particles, は sounds
 ## 25 voiced and semi-voiced Kana
 
 | Hiragana | Katakana | Romaji |
-|---|---|---|
+| --- | --- | --- |
 | が | ガ | ga |
 | ぎ | ギ | gi |
 | ぐ | グ | gu |
@@ -88,7 +88,7 @@ The Romaji column uses common learner Hepburn spelling. In particles, は sounds
 ## 33 common small-ya/yu/yo combinations (yōon)
 
 | Hiragana | Katakana | Romaji |
-|---|---|---|
+| --- | --- | --- |
 | きゃ | キャ | kya |
 | きゅ | キュ | kyu |
 | きょ | キョ | kyo |
@@ -126,7 +126,7 @@ The Romaji column uses common learner Hepburn spelling. In particles, は sounds
 ## Other essential symbols and spelling
 
 | Item | Meaning |
-|---|---|
+| --- | --- |
 | っ / ッ | Small tsu doubles the next consonant: がっこう → gakkou |
 | ー | Katakana long-vowel mark: スーパー → suupaa (keyboard Romaji) |
 | ぁぃぅぇぉ / ァィゥェォ | Small vowels for combinations and foreign sounds |

@@ -42,7 +42,7 @@ after installation. To update an existing installation, use
 `dotnet tool update --global Azure.Bicep.LangServer`.
 
 Open a `.bicep` or `.bicepparam` file and use the normal LSP shortcuts: `K`, `gd`,
-`gr`, F2, Space c a, and Space c d. Installing Bicep CLI or running `az bicep`
+`gr`, `F2`, `Space c a`, and `Space c d`. Installing Bicep CLI or running `az bicep`
 alone does not install this language server.
 
 ## Terraform, YAML, Azure Pipelines, and Bash
@@ -50,13 +50,13 @@ alone does not install this language server.
 - **Terraform:** Mason installs terraform-ls. Install the Terraform CLI separately
   following [HashiCorp's installation guide](https://developer.hashicorp.com/terraform/install).
   Check `terraform version`. `.tf` and `.tfvars` files have completion and
-  diagnostics; Space c f formats them with `terraform fmt`.
-- **YAML:** Mason installs yaml-language-server; Space c f uses Prettier.
+  diagnostics; `Space c f` formats them with `terraform fmt`.
+- **YAML:** Mason installs yaml-language-server; `Space c f` uses Prettier.
 - **Azure Pipelines:** Mason installs Microsoft's
   [Azure Pipelines language server](https://github.com/microsoft/azure-pipelines-language-server).
   It is enabled for workspaces with `azure-pipelines.yml` or `azure-pipelines.yaml`,
   using the Microsoft pipeline schema. Node.js/npm are required.
-- **Bash:** Mason installs bash-language-server and shfmt. Space c f formats shell
+- **Bash:** Mason installs bash-language-server and shfmt. `Space c f` formats shell
   files. Install a Bash runtime separately when you want to execute scripts.
 
 The full language table and keybindings are in the
@@ -75,11 +75,11 @@ Restart WezTerm, then check `az version`. This command follows
 
 | Command | Keys | Runs |
 | --- | --- | --- |
-| `:AzureTerminal` | Space z t | A terminal at the project root |
-| `:AzureLogin` | Space z l | `az login` |
-| `:AzureAccount` | Space z a | `az account show -o table` |
-| `:AzureGroups` | Space z g | `az group list -o table` |
-| `:AzureResources` | Space z r | `az resource list -o table` |
+| `:AzureTerminal` | `Space z t` | A terminal at the project root |
+| `:AzureLogin` | `Space z l` | `az login` |
+| `:AzureAccount` | `Space z a` | `az account show -o table` |
+| `:AzureGroups` | `Space z g` | `az group list -o table` |
+| `:AzureResources` | `Space z r` | `az resource list -o table` |
 
 These commands open a Snacks terminal at the project root. Sign in with
 `:AzureLogin`, then use the account, group, and resource commands to inspect
@@ -96,7 +96,7 @@ Install-Module -Name Az -Scope CurrentUser -Repository PSGallery
 Get-Module -ListAvailable -Name Az
 ```
 
-`:AzurePowerShell` or Space z p opens PowerShell 7 and imports Az. If the module
+`:AzurePowerShell` or `Space z p` opens PowerShell 7 and imports Az. If the module
 is missing, it shows the installation command. Sign in and check your context:
 
 ```powershell
@@ -127,8 +127,8 @@ See the [manual](../MANUAL.md#ai-session-workspaces) for layout and navigation.
 ## CSV and TSV
 
 csvview.nvim enables an aligned table display when you open a CSV/TSV file.
-Space c v toggles it; `:CsvViewInfo` reports the delimiter and header.
-Tab and Shift+Tab keep their usual behavior. See the
+`Space c v` toggles it; `:CsvViewInfo` reports the delimiter and header.
+Tab and `Shift+Tab` keep their usual behavior. See the
 [manual](../MANUAL.md#csv-and-tsv-tables) and
 [plugin documentation](https://github.com/hat0uma/csvview.nvim).
 

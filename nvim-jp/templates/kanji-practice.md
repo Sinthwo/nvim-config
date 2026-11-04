@@ -2,15 +2,19 @@
 type: kanji
 date: {{DATE}}
 status: pending
-completed_on: 
+completed_on:
 ---
+
 # {{KANJI}}
 
 Character: {{KANJI}}
-Verified reading: 
-Verified meaning: 
+
+Verified reading:
+
+Verified meaning:
 
 ## Recognition and typed production
+
 <!-- JP:ANSWER:BEGIN -->
 
 <!-- JP:ANSWER:END -->

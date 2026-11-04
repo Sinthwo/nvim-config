@@ -2,9 +2,10 @@
 type: correction
 date: {{DATE}}
 ---
+
 # Manual correction review — {{DATE}}
 
-Original note/link: 
+Original note/link:
 
 ## Original draft (copy only with consent)
 
@@ -17,6 +18,7 @@ Original note/link:
 ## Explanation
 
 ## New sentence applying the correction
+
 <!-- JP:WRITING:BEGIN -->
 
 <!-- JP:WRITING:END -->

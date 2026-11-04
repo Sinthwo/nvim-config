@@ -38,6 +38,7 @@ fzf --version
 rg --version
 wezterm --version
 ```
+
 Die festgelegte Tree-sitter-Version [benötigt](https://github.com/nvim-treesitter/nvim-treesitter/blob/a2f694478be07f89c2d03cc17858a8745a400c4b/README.md) Neovim 0.12 oder neuer, Tree-sitter CLI 0.26.1 oder neuer, `curl`, `tar` und einen C-Compiler. Mason installiert die CLI automatisch; installiere den Compiler separat. Starte WezTerm bei Verwendung von MSVC aus Developer PowerShell, damit Neovim den Compiler und dessen Umgebung findet.
 
 Die Sprachserverinstallation beginnt beim Öffnen einer Quelldatei. Formatierer und debugpy werden kurz nach dem Start installiert. Lass die erste Sitzung offen, bis `:Lazy` und `:Mason` den Abschluss anzeigen, und starte Neovim neu. Nach Abschluss der Mason-Installationen versucht Neovim die Parserinstallation erneut.
@@ -50,18 +51,19 @@ Prüfe die Einrichtung mit diesen Befehlen:
 :ConformInfo
 :messages
 ```
+
 ## Dashboard und Benachrichtigungen
 
-Das Snacks-Dashboard erscheint beim Start ohne Datei. Mit `:Dashboard` oder Space u D öffnest du es erneut. In WezTerm zeigt die Begleitkonfiguration das Hai-Logo über dem Menü. Kleine Fenster und Terminals ohne Logo-Integration verwenden eine Textüberschrift. Die Bildquelle steht in den [Bildnachweisen](nvim/backgrounds/CREDITS.de.md#dashboard-logo).
+Das Snacks-Dashboard erscheint beim Start ohne Datei. Mit `:Dashboard` oder `Space u D` öffnest du es erneut. In WezTerm zeigt die Begleitkonfiguration das Hai-Logo über dem Menü. Kleine Fenster und Terminals ohne Logo-Integration verwenden eine Textüberschrift. Die Bildquelle steht in den [Bildnachweisen](nvim/backgrounds/CREDITS.de.md#dashboard-logo).
 
 | Dashboard-Taste | Aktion |
 | --- | --- |
-| f / g / r | Datei suchen / Text suchen / zuletzt verwendete Datei öffnen |
-| e / n | Explorer öffnen / Datei erstellen |
-| l / c | Plugins verwalten / Konfigurationsdatei suchen |
-| t / q | Terminalpanel öffnen / Neovim beenden |
+| `f` / `g` / `r` | Datei suchen / Text suchen / zuletzt verwendete Datei öffnen |
+| `e` / `n` | Explorer öffnen / Datei erstellen |
+| `l` / `c` | Plugins verwalten / Konfigurationsdatei suchen |
+| `t` / `q` | Terminalpanel öffnen / Neovim beenden |
 
-Space u n oder `:Notifications` öffnet den Benachrichtigungsverlauf. Space u d, Space u N und `:NotifyDismiss` blenden sichtbare Benachrichtigungen aus.
+`Space u n` oder `:Notifications` öffnet den Benachrichtigungsverlauf. `Space u d`, `Space u N` und `:NotifyDismiss` blenden sichtbare Benachrichtigungen aus.
 
 ## Bearbeiten und Tastenkürzel
 
@@ -71,42 +73,42 @@ Die Leader-Taste ist **Leertaste**, der lokale Leader ist **Backslash**. Bei `Sp
 
 | Tasten oder Befehl | Aktion |
 | --- | --- |
-| Ctrl+S | Im Normal- oder Einfügemodus speichern |
+| `Ctrl+S` | Im Normal- oder Einfügemodus speichern |
 | `:w` / `:q` / `:wq` | Speichern / Fenster schließen / speichern und schließen |
-| Esc | Suchhervorhebung im Normalmodus löschen |
+| `Esc` | Suchhervorhebung im Normalmodus löschen |
 | `/text`, dann `n` / `N` | Suchen, nächster / vorheriger Treffer |
-| `u` / Ctrl+R | Rückgängig / wiederholen |
-| Ctrl+H / J / K / L | Linke / untere / obere / rechte Teilansicht fokussieren |
-| Space s v / Space s h | Vertikale / horizontale Teilansicht erstellen |
-| Space s c | Aktuelle Teilansicht schließen |
-| Ctrl+Tab / Ctrl+Shift+Tab | Nächster / vorheriger Buffer, über WezTerm weitergeleitet |
-| Space b n / Space b p | Nächster / vorheriger Buffer mit Leader-Tasten |
-| Space b P | Buffer anhand seiner angezeigten Kennzeichnung auswählen |
-| Space b c | Aktuellen Buffer schließen |
-| Space b o | Andere Buffer schließen; ungespeicherte bleiben erhalten |
-| Space b l / Space b r | Buffer links / rechts schließen |
-| Space u u | Baum des Änderungsverlaufs umschalten |
-| Space u z | Zen-Modus umschalten |
-| Space u n | Benachrichtigungsverlauf anzeigen |
+| `u` / `Ctrl+R` | Rückgängig / wiederholen |
+| `Ctrl+H` / `Ctrl+J` / `Ctrl+K` / `Ctrl+L` | Linke / untere / obere / rechte Teilansicht fokussieren |
+| `Space s v` / `Space s h` | Vertikale / horizontale Teilansicht erstellen |
+| `Space s c` | Aktuelle Teilansicht schließen |
+| `Ctrl+Tab` / `Ctrl+Shift+Tab` | Nächster / vorheriger Buffer, über WezTerm weitergeleitet |
+| `Space b n` / `Space b p` | Nächster / vorheriger Buffer mit Leader-Tasten |
+| `Space b P` | Buffer anhand seiner angezeigten Kennzeichnung auswählen |
+| `Space b c` | Aktuellen Buffer schließen |
+| `Space b o` | Andere Buffer schließen; ungespeicherte bleiben erhalten |
+| `Space b l` / `Space b r` | Buffer links / rechts schließen |
+| `Space u u` | Baum des Änderungsverlaufs umschalten |
+| `Space u z` | Zen-Modus umschalten |
+| `Space u n` | Benachrichtigungsverlauf anzeigen |
 
 Die oberen Tabs zeigen **Buffer**, meist offene Dateien. WezTerm hat eigene Terminaltabs. Speichere geänderte Dateien vor dem Schließen, um Rückfragen oder ein verweigertes Schließen zu vermeiden.
 
-Die Vervollständigung verwendet Blinks [Super-Tab-Voreinstellung](https://cmp.saghen.dev/configuration/keymap). Tab übernimmt einen Vorschlag oder geht im Snippet weiter; Shift+Tab geht darin zurück. Ctrl+Space öffnet die Vervollständigung, Ctrl+N/P wählt Vorschläge aus und Ctrl+E schließt das Menü. Dokumentation öffnet sich nach kurzer Verzögerung automatisch. Automatische Klammerpaare und das Bearbeiten umschließender Zeichen sind ebenfalls aktiviert.
+Die Vervollständigung verwendet Blinks [Super-Tab-Voreinstellung](https://cmp.saghen.dev/configuration/keymap). Tab übernimmt einen Vorschlag oder geht im Snippet weiter; `Shift+Tab` geht darin zurück. `Ctrl+Space` öffnet die Vervollständigung, `Ctrl+N/P` wählt Vorschläge aus und `Ctrl+E` schließt das Menü. Dokumentation öffnet sich nach kurzer Verzögerung automatisch. Automatische Klammerpaare und das Bearbeiten umschließender Zeichen sind ebenfalls aktiviert.
 
 ## Dateisuche und Explorer
 
 | Tasten | Aktion |
 | --- | --- |
-| Ctrl+P / Space f f | Datei suchen |
-| Ctrl+Shift+F / Space f g | Projekttext durchsuchen |
-| Space f b | Offenen Buffer auswählen |
-| Space f r | Kürzlich geöffnete Datei auswählen |
-| Space f s / Space f S | Dokument- / Arbeitsbereichssymbole des Sprachservers |
-| Space f t | TODO-Kommentare suchen |
+| `Ctrl+P` / `Space f f` | Datei suchen |
+| `Ctrl+Shift+F` / `Space f g` | Projekttext durchsuchen |
+| `Space f b` | Offenen Buffer auswählen |
+| `Space f r` | Kürzlich geöffnete Datei auswählen |
+| `Space f s` / `Space f S` | Dokument- / Arbeitsbereichssymbole des Sprachservers |
+| `Space f t` | TODO-Kommentare suchen |
 | `]t` / `[t` | Nächster / vorheriger TODO-Kommentar |
-| Ctrl+B | Dateiexplorer öffnen oder schließen |
+| `Ctrl+B` | Dateiexplorer öffnen oder schließen |
 
-Im Explorer öffnet Enter einen Eintrag, `v` oder Ctrl+V eine vertikale und `s` oder Ctrl+S eine horizontale Teilansicht. Ctrl+B schließt den Explorer. Ctrl+S hat somit zwei Funktionen: im Explorer eine Teilansicht öffnen und im Editor eine Datei speichern. Beim Öffnen bleibt der Explorer verfügbar; Terminal-, Dashboard- und Diagnosefenster werden nicht ersetzt. Umbenennen und Verschieben benachrichtigen den Sprachserver über Snacks, damit Dateiverweise aktualisiert werden können.
+Im Explorer öffnet Enter einen Eintrag, `v` oder `Ctrl+V` eine vertikale und `s` oder `Ctrl+S` eine horizontale Teilansicht. `Ctrl+B` schließt den Explorer. `Ctrl+S` hat somit zwei Funktionen: im Explorer eine Teilansicht öffnen und im Editor eine Datei speichern. Beim Öffnen bleibt der Explorer verfügbar; Terminal-, Dashboard- und Diagnosefenster werden nicht ersetzt. Umbenennen und Verschieben benachrichtigen den Sprachserver über Snacks, damit Dateiverweise aktualisiert werden können.
 
 Der Explorer folgt der aktiven Datei und zeigt versteckte sowie von Git ignorierte Dateien. Die Dateiauswahl durchsucht das aktuelle Arbeitsverzeichnis. Starte Neovim im Projektordner oder wechsle mit `:cd`. Textsuche unter Windows benötigt ripgrep; siehe [Windows-Hinweise zu fzf-lua](https://github.com/ibhagwan/fzf-lua/blob/main/README-Win.md).
 
@@ -136,6 +138,7 @@ Die Java-Serveranforderungen stehen unter [nvim-jdtls](https://github.com/mfusse
 :MasonInstall basedpyright ruff powershell-editor-services jdtls lua-language-server debugpy stylua prettier tree-sitter-cli
 :MasonInstall bash-language-server yaml-language-server terraform-ls azure-pipelines-language-server shfmt
 ```
+
 Starte Neovim nach der Sprachserverinstallation neu. PowerShell Editor Services benötigt ein PowerShell-Programm und das Dienstskript von Mason. Bei fehlendem jdtls erscheint eine Java-Benachrichtigung.
 
 | Tasten | Sprachserveraktion |
@@ -143,19 +146,19 @@ Starte Neovim nach der Sprachserverinstallation neu. PowerShell Editor Services 
 | `gd` / `gD` | Definition / Deklaration |
 | `gi` / `gr` | Implementierung / Referenzen |
 | `K` | Dokumentation beim Überfahren |
-| F2 | Symbol umbenennen |
-| Space c a | Codeaktionen im normalen oder visuellen Modus |
-| Space c d | Diagnosen für die aktuelle Zeile |
+| `F2` | Symbol umbenennen |
+| `Space c a` | Codeaktionen im normalen oder visuellen Modus |
+| `Space c d` | Diagnosen für die aktuelle Zeile |
 | `]d` / `[d` | Nächste / vorherige Diagnose |
-| Space x x | Projektdiagnosen umschalten |
-| Space x X | Diagnosen des aktuellen Buffers umschalten |
-| Space x s | Symbolansicht umschalten |
+| `Space x x` | Projektdiagnosen umschalten |
+| `Space x X` | Diagnosen des aktuellen Buffers umschalten |
+| `Space x s` | Symbolansicht umschalten |
 
 Diese Kürzel sind verfügbar, wenn ein Sprachserver an die Datei angebunden ist. Prüfe Server mit `:checkhealth vim.lsp` und Startfehler mit `:messages`.
 
-Formatierung erfolgt **manuell** mit Space c f. Python nutzt Ruff, Lua StyLua, JSON/YAML Prettier, Bash shfmt und Terraform `terraform fmt`. Andere Sprachen verwenden bei Verfügbarkeit den Formatierer des angebundenen Sprachservers. Beim Speichern wird nicht automatisch formatiert. `:ConformInfo` zeigt den verfügbaren Formatierer der aktuellen Datei.
+Formatierung erfolgt **manuell** mit `Space c f`. Python nutzt Ruff, Lua StyLua, JSON/YAML Prettier, Bash shfmt und Terraform `terraform fmt`. Andere Sprachen verwenden bei Verfügbarkeit den Formatierer des angebundenen Sprachservers. Beim Speichern wird nicht automatisch formatiert. `:ConformInfo` zeigt den verfügbaren Formatierer der aktuellen Datei.
 
-Für Java organisiert Space j o Imports, Space j v extrahiert eine Variable und Space j c eine Konstante. Jedes Java-Projekt hat einen eigenen Arbeitsbereichscache, auch bei gleichnamigen Projektordnern. Bei einem neuen Cache muss jdtls das Projekt gegebenenfalls zunächst indizieren.
+Für Java organisiert `Space j o` Imports, `Space j v` extrahiert eine Variable und `Space j c` eine Konstante. Jedes Java-Projekt hat einen eigenen Arbeitsbereichscache, auch bei gleichnamigen Projektordnern. Bei einem neuen Cache muss jdtls das Projekt gegebenenfalls zunächst indizieren.
 
 ## Python-Debugging
 
@@ -163,12 +166,12 @@ Für Java organisiert Space j o Imports, Space j v extrahiert eine Variable und 
 
 | Tasten | Aktion |
 | --- | --- |
-| F9 | Haltepunkt umschalten |
-| F5 | Debugging starten / fortsetzen |
-| F10 | Funktion überspringen |
-| F11 / Shift+F11 | In Funktion hinein / aus Funktion heraus |
-| Space d r | Debug-REPL öffnen |
-| Space d t | Sitzung beenden |
+| `F9` | Haltepunkt umschalten |
+| `F5` | Debugging starten / fortsetzen |
+| `F10` | Funktion überspringen |
+| `F11` / `Shift+F11` | In Funktion hinein / aus Funktion heraus |
+| `Space d r` | Debug-REPL öffnen |
+| `Space d t` | Sitzung beenden |
 
 Die Debugoberfläche lädt mit dem Debugger, öffnet sich beim Start oder Anhängen und schließt am Sitzungsende. Wähle bei Nachfrage eine Python-Startkonfiguration. Diese Einrichtung unterstützt Python-Debugging. Java-Debugging benötigt einen zusätzlichen Adapter und weitere Einstellungen.
 
@@ -176,42 +179,42 @@ Die Debugoberfläche lädt mit dem Debugger, öffnet sich beim Start oder Anhän
 
 | Tasten | Aktion |
 | --- | --- |
-| Space g g | Neogit-Status öffnen |
-| Space g c | Commitoberfläche öffnen |
-| Space g p / Space g P | Push / Pull |
-| Space g l | Git-Verlauf anzeigen |
-| Space g d | Diffansicht öffnen |
-| Space g H | Verlauf der aktuellen Datei anzeigen |
+| `Space g g` | Neogit-Status öffnen |
+| `Space g c` | Commitoberfläche öffnen |
+| `Space g p` / `Space g P` | Push / Pull |
+| `Space g l` | Git-Verlauf anzeigen |
+| `Space g d` | Diffansicht öffnen |
+| `Space g H` | Verlauf der aktuellen Datei anzeigen |
 | `]h` / `[h` | Nächster / vorheriger geänderter Abschnitt |
-| Space g h | Abschnittsvorschau |
-| Space g s / Space g r | Aktuellen Abschnitt vormerken / zurücksetzen |
-| Space g b | Autor der aktuellen Zeile anzeigen |
-| Space t t | Terminal an der Projektwurzel umschalten |
-| Esc, Esc | Terminaleingabemodus verlassen |
+| `Space g h` | Abschnittsvorschau |
+| `Space g s` / `Space g r` | Aktuellen Abschnitt vormerken / zurücksetzen |
+| `Space g b` | Autor der aktuellen Zeile anzeigen |
+| `Space t t` | Terminal an der Projektwurzel umschalten |
+| `Esc`, `Esc` | Terminaleingabemodus verlassen |
 
 Das Zurücksetzen eines Abschnitts verwirft dessen Änderungen. Push und Pull nutzen deine vorhandenen Git-Zugangsdaten und Remotekonfiguration. Diese Neovim-Konfiguration setzt keinen Git-Autornamen und keine E-Mail-Adresse.
 
 Das Terminal startet an der Projektwurzel. Diese wird anhand von Git, Python-Projektdateien, Java-Builddateien, PowerShell-Analyseeinstellungen oder Obsidian-Vault-Markierungen erkannt. Ohne erkannte Wurzel wird das aktuelle Arbeitsverzeichnis verwendet.
 
-Space a c startet Codex, Space a C startet Claude Code. Installiere die CLIs, melde dich an und prüfe ihre Verfügbarkeit in `PATH`, bevor du diese Kürzel nutzt.
+`Space a c` startet Codex, `Space a C` startet Claude Code. Installiere die CLIs, melde dich an und prüfe ihre Verfügbarkeit in `PATH`, bevor du diese Kürzel nutzt.
 
-Mit `:TerminalPanel` öffnest du ein unteres Terminalpanel; `:TerminalFloat` / Space t f öffnet ein schwebendes Terminal. `:TerminalNew` / Space t N startet eine weitere Sitzung. Alle verwenden die aktuelle Projektwurzel.
+Mit `:TerminalPanel` öffnest du ein unteres Terminalpanel; `:TerminalFloat` / `Space t f` öffnet ein schwebendes Terminal. `:TerminalNew` / `Space t N` startet eine weitere Sitzung. Alle verwenden die aktuelle Projektwurzel.
 
 | Tasten | Befehl | Aktion |
 | --- | --- | --- |
-| Space g G | `:LazyGitFloat` | LazyGit öffnen; benötigt `lazygit` |
-| Space g B | `:GitBrowse` | Aktuelle Datei beim entfernten Git-Host öffnen |
-| Space g L | `:GitLogPicker` | Commits durchsuchen |
-| Space g F | `:GitBranches` | Branches durchsuchen |
-| Space g S | `:GitStatusPicker` | Geänderte Dateien durchsuchen |
-| Space g R | `:GitRebaseStatus` | Git-Status und aktuellen Commit-Graph anzeigen |
-| Space u . | `:FloatScratch` | Lokale Notizen öffnen |
+| `Space g G` | `:LazyGitFloat` | LazyGit öffnen; benötigt `lazygit` |
+| `Space g B` | `:GitBrowse` | Aktuelle Datei beim entfernten Git-Host öffnen |
+| `Space g L` | `:GitLogPicker` | Commits durchsuchen |
+| `Space g F` | `:GitBranches` | Branches durchsuchen |
+| `Space g S` | `:GitStatusPicker` | Geänderte Dateien durchsuchen |
+| `Space g R` | `:GitRebaseStatus` | Git-Status und aktuellen Commit-Graph anzeigen |
+| `Space u .` | `:FloatScratch` | Lokale Notizen öffnen |
 
 `:GitDiffPicker` zeigt Diff-Blöcke, `:GitLogLine` den Verlauf der aktuellen Zeile und `:GitBlame` deren Urheberinformationen. `GitRebaseStatus` zeigt Informationen; einen Rebase führst du mit Neogit, LazyGit oder Git-Befehlen aus. Notizen werden lokal gespeichert.
 
 ## Arbeitsbereiche für KI-Sitzungen
 
-Installiere die externe [Codex CLI](https://learn.chatgpt.com/docs/codex/cli) und/oder [Claude Code](https://code.claude.com/docs/en/setup) und melde dich nach deren Anleitung an. Prüfe `codex --version` und `claude --version` im Terminal, aus dem du Neovim startest. Space a c und Space a C öffnen jeweils ein einzelnes Terminal. Die folgenden Befehle erstellen eine eigene **Neovim-Tabseite** mit einer oder mehreren Sitzungen:
+Installiere die externe [Codex CLI](https://learn.chatgpt.com/docs/codex/cli) und/oder [Claude Code](https://code.claude.com/docs/en/setup) und melde dich nach deren Anleitung an. Prüfe `codex --version` und `claude --version` im Terminal, aus dem du Neovim startest. `Space a c` und `Space a C` öffnen jeweils ein einzelnes Terminal. Die folgenden Befehle erstellen eine eigene **Neovim-Tabseite** mit einer oder mehreren Sitzungen:
 
 | Befehl | Aktion |
 | --- | --- |
@@ -225,7 +228,7 @@ Die Anzahl muss eine ganze Zahl von 1 bis 8 sein. `:Codex_8`, `:Claude_8`, `:Cod
 
 Dein Code bleibt im ursprünglichen Tab. Im KI-Tab versteckt Bufferline die Dateitabs, damit die Sitzungen im Mittelpunkt stehen. Eine Sitzung füllt den Tab, zwei werden vertikal gestapelt, drei bis acht in zwei Spalten angeordnet. Jede Sitzung startet an der aktuellen Projektwurzel. Vergrößere das Terminal bei vielen Sitzungen.
 
-Mit `gt` und `gT` wechselst du Neovim-Tabs. Im Normalmodus wechselt Ctrl+H/J/K/L zwischen Teilansichten; `i` aktiviert die Terminaleingabe. Zweimal Esc führt zurück zum Normalmodus.
+Mit `gt` und `gT` wechselst du Neovim-Tabs. Im Normalmodus wechselt `Ctrl+H` / `Ctrl+J` / `Ctrl+K` / `Ctrl+L` zwischen Teilansichten; `i` aktiviert die Terminaleingabe. Zweimal Esc führt zurück zum Normalmodus.
 
 `:CodexEnd` schließt alle Codex-Arbeitsbereichstabs; `:ClaudeEnd` alle Claude-Arbeitsbereichstabs. Beide kehren zum ursprünglichen Codetab zurück, sofern er noch offen ist. Das Schließen einer Sitzung beendet ihren Prozess. Anmeldung, Berechtigungen und Kontonutzung verwalten die CLIs.
 
@@ -241,7 +244,7 @@ Mit diesen Befehlen wechselst du zu bereits laufenden Sitzungen oder vergrößer
 
 Die vergrößerte Ansicht zeigt denselben Terminalpuffer. Der Prozess läuft weiter, und die Aufteilung bleibt erhalten. Diese Befehle starten keine neuen Sitzungen. Kleingeschriebene Aliase wie `:ct2`, `:mc2` und `:uc` funktionieren bei interaktiver Eingabe; verwende in Skripten die großgeschriebenen Namen. Mit `i` wechselst du zur Terminaleingabe.
 
-`:CodexVoice` und `:ClaudeVoice` öffnen jeweils eine separate Sitzung mit Hinweisen zu Sprache oder Diktat. `:VoiceHelp` zeigt nur die Hinweise. Unterstützte Codex-CLI-Versionen bieten F8 und `/voice settings`; siehe die [offizielle OpenAI-Dokumentation](https://learn.chatgpt.com/docs/changelog). Für Windows-Diktat im Claude-Terminal wechsle zur Eingabe und drücke Win+H.
+`:CodexVoice` und `:ClaudeVoice` öffnen jeweils eine separate Sitzung mit Hinweisen zu Sprache oder Diktat. `:VoiceHelp` zeigt nur die Hinweise. Unterstützte Codex-CLI-Versionen bieten `F8` und `/voice settings`; siehe die [offizielle OpenAI-Dokumentation](https://learn.chatgpt.com/docs/changelog). Für Windows-Diktat im Claude-Terminal wechsle zur Eingabe und drücke `Win+H`.
 
 Wenn nur der KI-Tab übrig ist, öffne vor `:CodexEnd` oder `:ClaudeEnd` mit `:tabnew` einen weiteren Tab. Nach einem fehlgeschlagenen Schließen kannst du es erneut versuchen.
 
@@ -251,12 +254,12 @@ Folge der [Windows-Cloud-Einrichtungsanleitung](nvim/SETUP-CLOUD-TOOLS.de.md), u
 
 | Tasten | Befehl | Aktion |
 | --- | --- | --- |
-| Space z t | `:AzureTerminal` | Projektterminal öffnen |
-| Space z l | `:AzureLogin` | `az login` ausführen |
-| Space z a | `:AzureAccount` | Aktives Azure-Konto anzeigen |
-| Space z g | `:AzureGroups` | Ressourcengruppen auflisten |
-| Space z r | `:AzureResources` | Ressourcen auflisten |
-| Space z p | `:AzurePowerShell` | PowerShell 7 öffnen und vorhandenes Az importieren |
+| `Space z t` | `:AzureTerminal` | Projektterminal öffnen |
+| `Space z l` | `:AzureLogin` | `az login` ausführen |
+| `Space z a` | `:AzureAccount` | Aktives Azure-Konto anzeigen |
+| `Space z g` | `:AzureGroups` | Ressourcengruppen auflisten |
+| `Space z r` | `:AzureResources` | Ressourcen auflisten |
+| `Space z p` | `:AzurePowerShell` | PowerShell 7 öffnen und vorhandenes Az importieren |
 
 Konto- und Ressourcenbefehle verwenden deine aktuelle Azure-Anmeldung. Fehlt Az, zeigt `:AzurePowerShell` den Installationsbefehl. Melde dich mit `Connect-AzAccount` in diesem Terminal bei Azure PowerShell an.
 
@@ -270,12 +273,13 @@ Die Projekterkennung berücksichtigt auch `bicepconfig.json`, Pipelinedateien, `
 
 Beim Öffnen von `.csv` oder `.tsv` aktiviert csvview.nvim eine ausgerichtete Tabellenansicht mit Rahmen und automatisch erkannter fester Kopfzeile. CSV verwendet Kommas, TSV Tabulatoren. Zeilen mit `#` oder `//` am Anfang gelten als Kommentare.
 
-Space c v / `:CsvViewToggle` schaltet die Anzeige um. Mit `:CsvViewEnable`, `:CsvViewDisable` und `:CsvViewInfo` aktivierst, deaktivierst oder prüfst du sie. Beispiel:
+`Space c v` / `:CsvViewToggle` schaltet die Anzeige um. Mit `:CsvViewEnable`, `:CsvViewDisable` und `:CsvViewInfo` aktivierst, deaktivierst oder prüfst du sie. Beispiel:
 
 ```vim
 :CsvViewEnable delimiter=; header_lnum=1
 ```
-Während der Tabellenansicht kannst du normal weiterarbeiten. Tab und Shift+Tab behalten ihre gewohnte Funktion.
+
+Während der Tabellenansicht kannst du normal weiterarbeiten. Tab und `Shift+Tab` behalten ihre gewohnte Funktion.
 
 ## Bild- und PDF-Vorschauen
 
@@ -291,11 +295,11 @@ Jede Vorschau öffnet einen eigenen **WezTerm-Tab**, benannt nach der Datei. Fr�
 
 Neovim muss in WezTerm laufen, mit `wezterm.exe` in `PATH` und vom Terminal geerbtem `WEZTERM_PANE`. Weitere Formate benötigen [ImageMagick](https://imagemagick.org/script/download.php#windows). Für PDF-Dateien können Ghostscript und eine lokale ImageMagick-Richtlinie nötig sein, die PDF-Konvertierung erlaubt. Konvertierungsfehler erscheinen als Benachrichtigungen.
 
-`:ImagePreviewClose` schließt die letzte Vorschau; `:ImagePreviewCloseAll` alle Vorschauen dieses Neovim-Prozesses. Mit dem WezTerm-Schließknopf oder Ctrl+Shift+W lässt sich eine direkt schließen. Beim Beenden schließt Neovim seine Vorschaufenster und löscht temporäre Dateien. Der Betrachter läuft über die Windows-Eingabeaufforderung (`cmd.exe`).
+`:ImagePreviewClose` schließt die letzte Vorschau; `:ImagePreviewCloseAll` alle Vorschauen dieses Neovim-Prozesses. Mit dem WezTerm-Schließknopf oder `Ctrl+Shift+W` lässt sich eine direkt schließen. Beim Beenden schließt Neovim seine Vorschaufenster und löscht temporäre Dateien. Der Betrachter läuft über die Windows-Eingabeaufforderung (`cmd.exe`).
 
 ## Markdown und Obsidian
 
-Die Markdown-Darstellung lädt beim Öffnen einer Markdown-Datei. Space m r schaltet sie um. Codeblöcke und Überschriften behalten transparente Hintergründe, damit das WezTerm-Hintergrundbild sichtbar bleibt.
+Die Markdown-Darstellung lädt beim Öffnen einer Markdown-Datei. `Space m r` schaltet sie um. Codeblöcke und Überschriften behalten transparente Hintergründe, damit das WezTerm-Hintergrundbild sichtbar bleibt.
 
 Obsidian ist optional und lädt über `:Obsidian` oder seine Kürzel. Der Vault-Pfad wird in dieser Reihenfolge gewählt:
 
@@ -309,29 +313,31 @@ Gib vor dem Neovim-Start in PowerShell einen vorhandenen Vault an:
 $env:OBSIDIAN_VAULT = Join-Path $HOME 'Documents\Obsidian'
 nvim
 ```
+
 Für eine dauerhafte lokale Einstellung verwende Windows-Benutzerumgebungsvariablen oder:
 
 ```powershell
 [Environment]::SetEnvironmentVariable('OBSIDIAN_VAULT', (Join-Path $HOME 'Documents\Obsidian'), 'User')
 ```
+
 Starte WezTerm nach dauerhaften Umgebungsänderungen neu. Diese Einstellungen gehören zur lokalen Maschine und müssen nicht in geteilte Lua-Dateien aufgenommen werden.
 
 | Tasten | Aktion |
 | --- | --- |
-| Space o q | Schnell zwischen Notizen wechseln |
-| Space o s | Vault durchsuchen |
-| Space o n | Notiz erstellen |
-| Space o t | Heutige Tagesnotiz öffnen |
-| Space o b | Rückverweise anzeigen |
-| Space o c | Vault und Plugineinrichtung prüfen |
+| `Space o q` | Schnell zwischen Notizen wechseln |
+| `Space o s` | Vault durchsuchen |
+| `Space o n` | Notiz erstellen |
+| `Space o t` | Heutige Tagesnotiz öffnen |
+| `Space o b` | Rückverweise anzeigen |
+| `Space o c` | Vault und Plugineinrichtung prüfen |
 
 Führe einmal `:Obsidian` aus, um die Integration zu laden, und öffne eine Notiz im eingerichteten Vault. Notiz- und Tagvervollständigung verwendet den eingebauten Sprachserver des Plugins mit Blink. Markdown-Darstellung funktioniert auch außerhalb des Vaults.
 
-Space m p schaltet die Browser-Vorschau für Markdown und Mermaid um.
+`Space m p` schaltet die Browser-Vorschau für Markdown und Mermaid um.
 Die Befehle heißen `:MarkdownPreview`, `:MarkdownPreviewStop` und `:MarkdownPreviewToggle`.
 Der Build von `markdown-preview.nvim` lädt die Vorschauanwendung herunter.
 Warte auf dessen Abschluss; prüfe bei Fehlern `:Lazy`, `:messages` und den Browser
-und führe den Plugin-Build erneut aus. Space m r steuert weiterhin die Markdown-Darstellung im Editor.
+und führe den Plugin-Build erneut aus. `Space m r` steuert weiterhin die Markdown-Darstellung im Editor.
 
 ## Japanisches Schreibprofil
 
@@ -346,7 +352,7 @@ Mit `:JPSetup` bestätigst du einen vorhandenen Obsidian-Vault. Danach öffnen
 `:JPToday`, `:JPWriting` und `:JPVocabAdd` Tagebuch, Schreibnotiz und Vokabeleingabe.
 Enthalten sind Vokabelsuche, selbst bewertete Quizfragen, Kana-Tabellen, 80 Kanji
 der ersten Schulklasse, Übungen, Fortschritt und optionale bestätigte Anki-Karten.
-`:JPHelp` zeigt die Space j-Kürzel; Space j R / `:JPMarkdownToggle` schaltet die Markdown-Darstellung um.
+`:JPHelp` zeigt die `Space j`-Kürzel; `Space j R` / `:JPMarkdownToggle` schaltet die Markdown-Darstellung um.
 
 `NVIM_APPNAME=nvim-jp` trennt Plugins, Parser, Rückgängigverlauf und Lernprotokolle.
 Vault und Anki werden lokal in der von Git ignorierten `jp-settings.json`
@@ -362,34 +368,49 @@ Installiere die ergänzende Konfiguration unter `$HOME\.wezterm.lua`. WezTerm ve
 
 | Tasten oder Befehl | Aktion |
 | --- | --- |
-| Space u b / `:BackgroundPick` | Bild auswählen |
-| Space u B / `:BackgroundFolder` | Bildordner im Windows-Explorer öffnen |
-| Ctrl+Tab / Ctrl+Shift+Tab | Bei aktivem Neovim Buffer wechseln, sonst Terminaltabs |
-| Alt+Enter | WezTerm-Vollbild umschalten |
-| Ctrl+Shift+L | WezTerm-Debuganzeige öffnen |
+| `Space u b` / `:BackgroundPick` | Bild auswählen |
+| `Space u B` / `:BackgroundFolder` | Bildordner im Windows-Explorer öffnen |
+| `Ctrl+Tab` / `Ctrl+Shift+Tab` | Bei aktivem Neovim Buffer wechseln, sonst Terminaltabs |
+| `Alt+Enter` | WezTerm-Vollbild umschalten |
+| `Ctrl+Shift+L` | WezTerm-Debuganzeige öffnen |
 
-Space u b öffnet den Wallpaper Manager: Browse wallpapers durchsucht Ordner,
+`Space u b` öffnet den Wallpaper Manager: Browse wallpapers durchsucht Ordner,
 Favorites verwaltet Favoriten, Shuffle now wählt ein anderes Bild, Settings
 bestimmt das Startverhalten. Kategorien: `Anime/`, `Games/`, `Real World/`, `Other/`.
 Animebilder liegen unter `Anime/<Titel>/Images/`, Animationen unter `GIFs/`.
 PNG, JPG/JPEG, GIF, BMP und WebP werden unterstützt, SVG nicht.
 Die Oberfläche nutzt Snacks und ersatzweise `vim.ui.select`.
 
-Standard ist `random`: jeder interaktive Start wählt ein zufälliges Bild, möglichst
-ein anderes als das aktuelle. `random_favorite` nutzt nur Favoriten und benötigt
-mindestens einen. `manual` behält das aktuelle Bild; eine direkte Bildauswahl
-aktiviert ebenfalls diesen Modus. Headless-Starts wechseln kein Bild.
-`:BackgroundMode random`, `:BackgroundMode random_favorite` und `:BackgroundMode manual`
-setzen den Modus; Zufallsmodi wählen dabei sofort ein Bild.
-`:BackgroundRandom` mischt einmal, `:BackgroundFavorite` markiert das aktive Bild,
-`:BackgroundFavorites` öffnet Favoriten. Diese drei Befehle ändern den Startmodus nicht.
+### Startmodi
+
+| Modus | Verhalten |
+| --- | --- |
+| `random` (Standard) | Bei jedem interaktiven Start ein Bild wählen, möglichst ein anderes als das aktuelle |
+| `random_favorite` | Nur Favoriten verwenden; mindestens ein Favorit ist erforderlich |
+| `manual` | Die Auswahl behalten; eine manuelle Bildauswahl aktiviert diesen Modus ebenfalls |
+
+Mit `:BackgroundMode random`, `:BackgroundMode random_favorite` oder
+`:BackgroundMode manual` setzt du den Modus. Zufallsmodi wählen sofort ein Bild.
+Headless-Starts überspringen den Bildwechsel.
+
+| Befehl | Aktion |
+| --- | --- |
+| `:BackgroundRandom` | Einmal zufällig wählen |
+| `:BackgroundFavorite` | Das aktive Bild als Favoriten markieren oder die Markierung entfernen |
+| `:BackgroundFavorites` | Favoriten durchsuchen |
+
+Diese drei Befehle behalten den Startmodus bei. Abbrechen verändert weder Bild
+noch Modus.
+
+### Lokale Auswahl
 
 `background-mode.txt`, `favorite-backgrounds.txt` und `selected-background.txt`
 bleiben lokal und werden von Git ignoriert. Favoriten und Auswahl verwenden
-relative Bildpfade. Alte absolute Einträge werden gelesen und beim nächsten
-Schreiben relativ gespeichert. Abbrechen verändert weder Bild noch Modus.
+relative Bildpfade wie `Anime/Magi/Images/01-Magi-Friends-under-Starry-Sky.jpg`.
+Alte absolute Pfade funktionieren weiterhin und werden beim Schreiben relativ.
 
-Der Standardordner ist Neovims Konfigurationsverzeichnis plus `backgrounds`, normalerweise `$env:LOCALAPPDATA\nvim\backgrounds`. Die Auswahl wird als relativer Pfad wie `Anime/Magi/Images/01-Magi-Friends-under-Starry-Sky.jpg` in `selected-background.txt` gespeichert. Abbrechen erhält die Auswahl. WezTerm prüft sie etwa einmal pro Sekunde. Alte absolute Auswahlpfade funktionieren lokal weiterhin; die nächste Bildauswahl speichert einen relativen Pfad.
+Der Standardordner ist Neovims Konfigurationsverzeichnis plus `backgrounds`,
+normalerweise `$env:LOCALAPPDATA\nvim\backgrounds`. WezTerm prüft die Auswahl etwa einmal pro Sekunde.
 
 Für einen eigenen Ordner setze vor dem Start beider Anwendungen dieselbe Umgebungsvariable:
 
@@ -398,6 +419,7 @@ $backgroundDir = Join-Path $HOME 'Pictures\Terminal Backgrounds'
 New-Item -ItemType Directory -Path $backgroundDir -Force | Out-Null
 [Environment]::SetEnvironmentVariable('NVIM_BACKGROUND_DIR', $backgroundDir, 'User')
 ```
+
 Lege Bilder dort ab, starte WezTerm neu und wähle eines in Neovim. Verwende einen absoluten Ordner oder einen relativ zum Benutzerordner angegebenen Pfad `~/...`. Beide Anwendungen müssen denselben Wert erhalten. WezTerm berücksichtigt auch `XDG_CONFIG_HOME` und `NVIM_APPNAME`, falls du diese Neovim-Einstellungen verwendest.
 
 ## Anpassungen und Datenschutz
@@ -409,6 +431,7 @@ Neovim ermittelt Konfigurations-, Daten- und Cachepfade über `stdpath()`. Die t
 :lua print(vim.fn.stdpath("data"))
 :lua print(vim.fn.stdpath("cache"))
 ```
+
 Verwende `vim.fn.expand("~/...")`, `vim.fs.joinpath()` und Umgebungsvariablen für neue lokale Pfade. PowerShell wird über `PATH`, `ProgramFiles` und `SystemRoot` gefunden; ein festes Laufwerk oder ein Benutzername ist nicht erforderlich.
 
 Die Haupteinstellungen stehen in `nvim/lua/config/options.lua`, Editorkürzel in `nvim/lua/config/keymaps.lua` und Plugineinstellungen in `nvim/lua/plugins/`. WezTerm-Aussehen, Hintergrundhelligkeit und Terminalkürzel stehen in `WezTerminal-Config/.wezterm.lua`. Wähle in WezTerm eine lokal installierte Nerd Font, um alle Symbole anzuzeigen.
@@ -424,12 +447,14 @@ Git legt den Autornamen und die E-Mail-Adresse von Commits fest. Prüfe die Iden
 ```powershell
 git log --all --format='%h %an <%ae>'
 ```
+
 Für einen öffentlichen Alias und eine GitHub-noreply-Adresse bei zukünftigen Commits setze diese Werte für das Repository. Ersetze beide Platzhalter durch deine eigenen Angaben:
 
 ```powershell
 git config user.name 'YOUR_PUBLIC_ALIAS'
 git config user.email 'YOUR_GITHUB_NOREPLY_EMAIL'
 ```
+
 Kopiere deine tatsächliche noreply-Adresse aus den GitHub-E-Mail-Einstellungen; siehe [GitHubs Anleitung zur Commit-E-Mail-Adresse](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/setting-your-commit-email-address). Diese Einstellungen betreffen zukünftige Commits. Bestehende behalten ursprüngliche Autoren- und Committerangaben, sofern die Historie nicht umgeschrieben wird.
 
 ## Pluginverwaltung
@@ -444,6 +469,7 @@ Bei verfügbarem Compiler lassen sich Parser ausdrücklich installieren:
 :TSInstall bash bicep csv hcl java json lua markdown markdown_inline powershell python query regex terraform toml tsv vim vimdoc yaml
 :TSUpdate
 ```
+
 `TSInstall` fügt angeforderte Parser hinzu; `TSUpdate` aktualisiert installierte Parser nach einem Pluginupdate. Öffne die Datei erneut, falls die Hervorhebung noch nicht aktiv ist.
 
 ## Fehlerbehebung
@@ -462,7 +488,7 @@ Bei verfügbarem Compiler lassen sich Parser ausdrücklich installieren:
 | Debugging scheitert | debugpy in `:Mason`, Anwendungsinterpreter und Debug-REPL-Meldungen prüfen. |
 | Obsidian findet keinen Arbeitsbereich | `OBSIDIAN_VAULT` auf bestehenden Vault setzen und Neovim neu starten. |
 | Hintergrund fehlt | `$HOME\.wezterm.lua`, Bildordner, Auswahldatei und `NVIM_BACKGROUND_DIR` in beiden Prozessen prüfen. |
-| Ctrl+Tab wechselt Terminaltabs | Neovim innerhalb WezTerms neu starten, Space b n/p versuchen und ergänzende Konfiguration prüfen. |
+| `Ctrl+Tab` wechselt Terminaltabs | Neovim innerhalb WezTerms neu starten, `Space b n/p` versuchen und ergänzende Konfiguration prüfen. |
 | Grafikdarstellung scheitert | `config.front_end = "OpenGL"` in der lokalen WezTerm-Konfiguration versuchen. |
 | KI-Sitzungen scheitern | CLI in PATH prüfen, ganze Zahl von 1 bis 8 verwenden und Terminal für viele Teilansichten vergrößern. |
 | KI-Unterstrichalias scheitert im Skript | `Codex8`, `Claude8`, `CodexEnd` oder `ClaudeEnd` nutzen; Unterstrichformen sind interaktive Abkürzungen. |
@@ -472,7 +498,7 @@ Bei verfügbarem Compiler lassen sich Parser ausdrücklich installieren:
 | Bildvorschau scheitert | Neovim in WezTerm starten, `wezterm` in PATH und `:messages` prüfen. |
 | Bild- oder PDF-Konvertierung scheitert | `magick -version` prüfen; PDFs benötigen eventuell Ghostscript und passende Richtlinien. |
 
-Bei fehlenden externen Programmen zeigt Neovim eine Benachrichtigung. Verpasste Meldungen findest du über `:messages` oder Space u n.
+Bei fehlenden externen Programmen zeigt Neovim eine Benachrichtigung. Verpasste Meldungen findest du über `:messages` oder `Space u n`.
 
 ## Konfiguration prüfen
 
@@ -484,6 +510,7 @@ nvim --headless -u NONE -i NONE -n -l tools/verify-japanese.lua
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/verify-profiles.ps1
 wezterm --config-file '.\WezTerminal-Config\.wezterm.lua' show-keys
 ```
+
 Der erste Befehl prüft Lua-Syntax, Dokumentationslinks und Tastenkürzel. Er testet außerdem Pfade mit Windows-Beispielprofilen, Hintergrundauswahl, Debuggerladen, Obsidian-Einstellungen, erneute Parserinstallationsversuche, Java-Caches, Cloud-Werkzeuge, KI-Sitzungen und Vorschaubefehle.
 
 Die Prüfungen simulieren Pluginverhalten. Teste interaktive Funktionen auch in deiner normalen Neovim-Sitzung. Der letzte Befehl lädt die WezTerm-Konfiguration und gibt ihre Tastenbelegungen aus.

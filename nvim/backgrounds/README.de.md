@@ -14,31 +14,43 @@ Verwende in Neovim diese Befehle oder Kürzel:
 
 | Befehl | Tasten | Aktion |
 | --- | --- | --- |
-| `:BackgroundPick` | Space u b | Hintergrundbild auswählen |
-| `:BackgroundFolder` | Space u B | Bildordner im Windows-Explorer öffnen |
+| `:BackgroundPick` | `Space u b` | Hintergrundbild auswählen |
+| `:BackgroundFolder` | `Space u B` | Bildordner im Windows-Explorer öffnen |
 
-Space u b öffnet den Wallpaper Manager: Browse wallpapers durchsucht Ordner,
+`Space u b` öffnet den Wallpaper Manager: Browse wallpapers durchsucht Ordner,
 Favorites verwaltet Favoriten, Shuffle now wählt ein anderes Bild, Settings
 bestimmt das Startverhalten. Kategorien: `Anime/`, `Games/`, `Real World/`, `Other/`.
 Animebilder liegen unter `Anime/<Titel>/Images/`, Animationen unter `GIFs/`.
 PNG, JPG/JPEG, GIF, BMP und WebP werden unterstützt, SVG nicht.
 Die Oberfläche nutzt Snacks und ersatzweise `vim.ui.select`.
 
-Standard ist `random`: jeder interaktive Start wählt ein zufälliges Bild, möglichst
-ein anderes als das aktuelle. `random_favorite` nutzt nur Favoriten und benötigt
-mindestens einen. `manual` behält das aktuelle Bild; eine direkte Bildauswahl
-aktiviert ebenfalls diesen Modus. Headless-Starts wechseln kein Bild.
-`:BackgroundMode random`, `:BackgroundMode random_favorite` und `:BackgroundMode manual`
-setzen den Modus; Zufallsmodi wählen dabei sofort ein Bild.
-`:BackgroundRandom` mischt einmal, `:BackgroundFavorite` markiert das aktive Bild,
-`:BackgroundFavorites` öffnet Favoriten. Diese drei Befehle ändern den Startmodus nicht.
+### Startmodi
+
+| Modus | Verhalten |
+| --- | --- |
+| `random` (Standard) | Bei jedem interaktiven Start ein Bild wählen, möglichst ein anderes als das aktuelle |
+| `random_favorite` | Nur Favoriten verwenden; mindestens ein Favorit ist erforderlich |
+| `manual` | Die Auswahl behalten; eine manuelle Bildauswahl aktiviert diesen Modus ebenfalls |
+
+Mit `:BackgroundMode random`, `:BackgroundMode random_favorite` oder
+`:BackgroundMode manual` setzt du den Modus. Zufallsmodi wählen sofort ein Bild.
+Headless-Starts überspringen den Bildwechsel.
+
+| Befehl | Aktion |
+| --- | --- |
+| `:BackgroundRandom` | Einmal zufällig wählen |
+| `:BackgroundFavorite` | Das aktive Bild als Favoriten markieren oder die Markierung entfernen |
+| `:BackgroundFavorites` | Favoriten durchsuchen |
+
+Diese drei Befehle behalten den Startmodus bei. Abbrechen verändert weder Bild
+noch Modus.
+
+### Lokale Auswahl
 
 `background-mode.txt`, `favorite-backgrounds.txt` und `selected-background.txt`
 bleiben lokal und werden von Git ignoriert. Favoriten und Auswahl verwenden
-relative Bildpfade. Alte absolute Einträge werden gelesen und beim nächsten
-Schreiben relativ gespeichert. Abbrechen verändert weder Bild noch Modus.
-
-Deine Auswahl wird als **relativer Bildpfad**, etwa `Anime/Magi/Images/01-Magi-Friends-under-Starry-Sky.jpg`, in `selected-background.txt` gespeichert. Git ignoriert diese erzeugte Datei. Abbrechen behält die vorherige Auswahl.
+relative Bildpfade wie `Anime/Magi/Images/01-Magi-Friends-under-Starry-Sky.jpg`.
+Alte absolute Pfade funktionieren weiterhin und werden beim Schreiben relativ.
 
 ## Anderen Bildordner verwenden
 
@@ -48,6 +60,6 @@ Der Standardordner ist Neovims `stdpath("config")` plus `backgrounds`, unter Win
 
 Installiere die enthaltene [`WezTerminal-Config/.wezterm.lua`](../../WezTerminal-Config/.wezterm.lua) unter `$HOME\.wezterm.lua`. WezTerm liest die Auswahl und zeigt bei aktivem Neovim ein abgedunkeltes Hintergrundbild. Das Terminalfenster bleibt undurchsichtig; das Bild wird für lesbaren Text gedimmt.
 
-Eine leere Auswahl oder ein fehlendes Bild stellt das normale Terminalaussehen wieder her. Ältere Auswahlen mit absoluten Pfaden funktionieren lokal weiterhin. Die nächste Hintergrundauswahl ersetzt diesen Pfad durch einen relativen.
+Eine leere Auswahl oder ein fehlendes Bild stellt das normale Terminalaussehen wieder her.
 
 Siehe [Windows-Handbuch](../../MANUAL.de.md#wezterm-und-hintergrundbilder) und [aktuelle Bildquellen](CREDITS.de.md).

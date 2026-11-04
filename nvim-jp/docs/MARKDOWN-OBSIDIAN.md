@@ -12,7 +12,7 @@ local vault path and optional Anki settings; the coding profile's
 
 | Command or keys | Action |
 | --- | --- |
-| `:JPMarkdownToggle` / Space j R | Toggle Markdown decoration |
+| `:JPMarkdownToggle` / `Space j R` | Toggle Markdown decoration |
 | `:JPMarkdownStatus` | Inspect renderer, parser, and verified vault |
 | `:JPMarkdownParsers` | Install the four Markdown-related parsers |
 | `:Obsidian quick_switch` | Find an existing vault note |
@@ -23,7 +23,7 @@ local vault path and optional Anki settings; the coding profile's
 The renderer decorates Markdown in Normal and Command modes, and shows raw
 text in Insert mode. Decoration also works outside the vault. It does not
 render Mermaid diagrams or embedded graphics. The browser preview mapped to
-Space m p belongs to the coding profile.
+`Space m p` belongs to the coding profile.
 
 Obsidian navigation requires a verified vault. Frontmatter updates and the
 plugin's daily-note creator are disabled here so the Japanese templates and

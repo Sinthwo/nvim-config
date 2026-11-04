@@ -69,20 +69,20 @@ Use these commands to check the setup:
 ## Dashboard and notifications
 
 The Snacks dashboard opens when Neovim starts without a file. Use `:Dashboard`
-or Space u D to open it again. In WezTerm, the companion configuration displays
+or `Space u D` to open it again. In WezTerm, the companion configuration displays
 the shark logo above the menu. Small windows and terminals without the logo
 integration use a text header. The image source is recorded in
 [image credits](nvim/backgrounds/CREDITS.md#dashboard-logo).
 
 | Dashboard key | Action |
 | --- | --- |
-| f / g / r | Find a file / search text / open a recent file |
-| e / n | Open the explorer / create a file |
-| l / c | Manage plugins / find a configuration file |
-| t / q | Open the terminal panel / quit Neovim |
+| `f` / `g` / `r` | Find a file / search text / open a recent file |
+| `e` / `n` | Open the explorer / create a file |
+| `l` / `c` | Manage plugins / find a configuration file |
+| `t` / `q` | Open the terminal panel / quit Neovim |
 
-Space u n or `:Notifications` opens notification history. Space u d,
-Space u N, and `:NotifyDismiss` dismiss visible notifications.
+`Space u n` or `:Notifications` opens notification history. `Space u d`,
+`Space u N`, and `:NotifyDismiss` dismiss visible notifications.
 
 ## Editing and shortcuts
 
@@ -96,50 +96,50 @@ letters matter. Press Space and wait for Which-Key to show the available shortcu
 
 | Keys or command | Action |
 | --- | --- |
-| Ctrl+S | Save in normal or insert mode |
+| `Ctrl+S` | Save in normal or insert mode |
 | `:w` / `:q` / `:wq` | Save / close window / save and close |
-| Esc | Clear highlighted search results in normal mode |
+| `Esc` | Clear highlighted search results in normal mode |
 | `/text`, then `n` / `N` | Search, next / previous match |
-| `u` / Ctrl+R | Undo / redo |
-| Ctrl+H / J / K / L | Focus the left / lower / upper / right split |
-| Space s v / Space s h | Create a vertical / horizontal split |
-| Space s c | Close the current split |
-| Ctrl+Tab / Ctrl+Shift+Tab | Next / previous buffer, with WezTerm forwarding |
-| Space b n / Space b p | Next / previous buffer using leader keys |
-| Space b P | Pick a buffer by its displayed label |
-| Space b c | Close the current buffer |
-| Space b o | Close other buffers; unsaved buffers are retained |
-| Space b l / Space b r | Close buffers to the left / right |
-| Space u u | Toggle the undo-history tree |
-| Space u z | Toggle Zen mode |
-| Space u n | Show notification history |
+| `u` / `Ctrl+R` | Undo / redo |
+| `Ctrl+H` / `Ctrl+J` / `Ctrl+K` / `Ctrl+L` | Focus the left / lower / upper / right split |
+| `Space s v` / `Space s h` | Create a vertical / horizontal split |
+| `Space s c` | Close the current split |
+| `Ctrl+Tab` / `Ctrl+Shift+Tab` | Next / previous buffer, with WezTerm forwarding |
+| `Space b n` / `Space b p` | Next / previous buffer using leader keys |
+| `Space b P` | Pick a buffer by its displayed label |
+| `Space b c` | Close the current buffer |
+| `Space b o` | Close other buffers; unsaved buffers are retained |
+| `Space b l` / `Space b r` | Close buffers to the left / right |
+| `Space u u` | Toggle the undo-history tree |
+| `Space u z` | Toggle Zen mode |
+| `Space u n` | Show notification history |
 
 The tabs along the top show **buffers**, usually open files. WezTerm has its
 own terminal tabs. Save modified files before closing them to avoid prompts
 or a refused close.
 
 Completion uses Blink's [super-tab preset](https://cmp.saghen.dev/configuration/keymap).
-Tab accepts a suggestion or advances through a snippet; Shift+Tab moves back
-through a snippet. Ctrl+Space opens completion, Ctrl+N/P selects suggestions,
-and Ctrl+E dismisses the menu. Documentation opens automatically after a short
+Tab accepts a suggestion or advances through a snippet; `Shift+Tab` moves back
+through a snippet. `Ctrl+Space` opens completion, `Ctrl+N/P` selects suggestions,
+and `Ctrl+E` dismisses the menu. Documentation opens automatically after a short
 delay. Automatic bracket pairing and surround editing are also enabled.
 
 ## Finding files and using the explorer
 
 | Keys | Action |
 | --- | --- |
-| Ctrl+P / Space f f | Find a file |
-| Ctrl+Shift+F / Space f g | Search project text |
-| Space f b | Pick an open buffer |
-| Space f r | Pick a recently opened file |
-| Space f s / Space f S | Document / workspace symbols from the language server |
-| Space f t | Search TODO comments |
+| `Ctrl+P` / `Space f f` | Find a file |
+| `Ctrl+Shift+F` / `Space f g` | Search project text |
+| `Space f b` | Pick an open buffer |
+| `Space f r` | Pick a recently opened file |
+| `Space f s` / `Space f S` | Document / workspace symbols from the language server |
+| `Space f t` | Search TODO comments |
 | `]t` / `[t` | Next / previous TODO comment |
-| Ctrl+B | Open or close the file explorer |
+| `Ctrl+B` | Open or close the file explorer |
 
-Inside the explorer, Enter opens an item, `v` or Ctrl+V opens a vertical split,
-and `s` or Ctrl+S opens a horizontal split. Ctrl+B closes the explorer.
-Ctrl+S therefore has two uses: it opens a split in the explorer and saves a file
+Inside the explorer, Enter opens an item, `v` or `Ctrl+V` opens a vertical split,
+and `s` or `Ctrl+S` opens a horizontal split. `Ctrl+B` closes the explorer.
+`Ctrl+S` therefore has two uses: it opens a split in the explorer and saves a file
 in the editor. Opening files keeps the explorer available and avoids replacing
 terminal, dashboard, and diagnostic windows. Rename and move actions notify
 the language server through Snacks so it can update file references.
@@ -189,25 +189,25 @@ notification if jdtls is missing.
 | `gd` / `gD` | Definition / declaration |
 | `gi` / `gr` | Implementation / references |
 | `K` | Hover documentation |
-| F2 | Rename a symbol |
-| Space c a | Code actions in normal or visual mode |
-| Space c d | Diagnostics for the current line |
+| `F2` | Rename a symbol |
+| `Space c a` | Code actions in normal or visual mode |
+| `Space c d` | Diagnostics for the current line |
 | `]d` / `[d` | Next / previous diagnostic |
-| Space x x | Toggle project diagnostics |
-| Space x X | Toggle current-buffer diagnostics |
-| Space x s | Toggle the symbol panel |
+| `Space x x` | Toggle project diagnostics |
+| `Space x X` | Toggle current-buffer diagnostics |
+| `Space x s` | Toggle the symbol panel |
 
 These shortcuts are available when a language server is attached to the file.
 Use `:checkhealth vim.lsp` to check servers and `:messages` to view startup errors.
 
-Formatting is **manual**: press Space c f. Python uses Ruff, Lua uses StyLua,
+Formatting is **manual**: press `Space c f`. Python uses Ruff, Lua uses StyLua,
 JSON/YAML use Prettier, Bash uses shfmt, and Terraform uses `terraform fmt`.
 Other languages use the attached language server's formatter when available.
 Files are not formatted automatically on save. Use `:ConformInfo` to check
 which formatter is available for the current file.
 
-Java-specific shortcuts are Space j o to organize imports, Space j v to extract
-a variable, and Space j c to extract a constant. Each Java project has a separate
+Java-specific shortcuts are `Space j o` to organize imports, `Space j v` to extract
+a variable, and `Space j c` to extract a constant. Each Java project has a separate
 workspace cache, even when two project folders have the same name. The first
 time a new cache is used, jdtls may need to index the project.
 
@@ -220,12 +220,12 @@ activate the project's virtual environment before launching Neovim, or set
 
 | Keys | Action |
 | --- | --- |
-| F9 | Toggle a breakpoint |
-| F5 | Start / continue debugging |
-| F10 | Step over |
-| F11 / Shift+F11 | Step into / step out |
-| Space d r | Open the debug REPL |
-| Space d t | Terminate the session |
+| `F9` | Toggle a breakpoint |
+| `F5` | Start / continue debugging |
+| `F10` | Step over |
+| `F11` / `Shift+F11` | Step into / step out |
+| `Space d r` | Open the debug REPL |
+| `Space d t` | Terminate the session |
 
 The debugger UI loads with the debugger, opens on launch or attach, and closes
 when the session ends. Select a Python launch configuration if prompted. This
@@ -236,18 +236,18 @@ and configuration.
 
 | Keys | Action |
 | --- | --- |
-| Space g g | Open Neogit status |
-| Space g c | Open the commit interface |
-| Space g p / Space g P | Push / pull |
-| Space g l | View the Git log |
-| Space g d | Open a diff view |
-| Space g H | View history for the current file |
+| `Space g g` | Open Neogit status |
+| `Space g c` | Open the commit interface |
+| `Space g p` / `Space g P` | Push / pull |
+| `Space g l` | View the Git log |
+| `Space g d` | Open a diff view |
+| `Space g H` | View history for the current file |
 | `]h` / `[h` | Next / previous changed hunk |
-| Space g h | Preview a hunk |
-| Space g s / Space g r | Stage / reset the current hunk |
-| Space g b | Show blame for the current line |
-| Space t t | Toggle a terminal rooted at the current project |
-| Esc, Esc | Leave terminal input mode |
+| `Space g h` | Preview a hunk |
+| `Space g s` / `Space g r` | Stage / reset the current hunk |
+| `Space g b` | Show blame for the current line |
+| `Space t t` | Toggle a terminal rooted at the current project |
+| `Esc`, `Esc` | Leave terminal input mode |
 
 Hunk reset discards that hunk's changes. Push and pull use your existing Git
 credentials and remote configuration. This Neovim configuration does not set
@@ -257,25 +257,25 @@ The terminal opens at the project root, identified using Git, Python project
 files, Java build files, PowerShell analyzer settings, or Obsidian vault markers.
 If no root is found, it uses the current working directory.
 
-Space a c starts Codex, and Space a C starts Claude Code. Install the CLIs,
+`Space a c` starts Codex, and `Space a C` starts Claude Code. Install the CLIs,
 sign in, and make sure their commands are available in `PATH` before using
 these shortcuts.
 
 You can also open a bottom terminal panel with `:TerminalPanel`, or a floating
-terminal with `:TerminalFloat` / Space t f. `:TerminalNew` / Space t N starts
+terminal with `:TerminalFloat` / `Space t f`. `:TerminalNew` / `Space t N` starts
 another terminal session. These terminals open at the current project root.
 
 Additional Git tools use Snacks pickers and floating windows:
 
 | Keys | Command | Action |
 | --- | --- | --- |
-| Space g G | `:LazyGitFloat` | Open LazyGit; requires the `lazygit` executable |
-| Space g B | `:GitBrowse` | Open the current file on the remote Git host |
-| Space g L | `:GitLogPicker` | Browse commits |
-| Space g F | `:GitBranches` | Browse branches |
-| Space g S | `:GitStatusPicker` | Browse changed files |
-| Space g R | `:GitRebaseStatus` | Show Git status and a recent commit graph |
-| Space u . | `:FloatScratch` | Open scratch notes |
+| `Space g G` | `:LazyGitFloat` | Open LazyGit; requires the `lazygit` executable |
+| `Space g B` | `:GitBrowse` | Open the current file on the remote Git host |
+| `Space g L` | `:GitLogPicker` | Browse commits |
+| `Space g F` | `:GitBranches` | Browse branches |
+| `Space g S` | `:GitStatusPicker` | Browse changed files |
+| `Space g R` | `:GitRebaseStatus` | Show Git status and a recent commit graph |
+| `Space u .` | `:FloatScratch` | Open scratch notes |
 
 `:GitDiffPicker` shows diff hunks, `:GitLogLine` shows the current line's history,
 and `:GitBlame` shows line blame. `GitRebaseStatus` displays information;
@@ -287,7 +287,7 @@ stored locally.
 Install the external [Codex CLI](https://learn.chatgpt.com/docs/codex/cli) and/or
 [Claude Code](https://code.claude.com/docs/en/setup), sign in using their own
 instructions. Check `codex --version` and `claude --version` in the terminal
-you use to start Neovim. Space a c and Space a C each open a single terminal.
+you use to start Neovim. `Space a c` and `Space a C` each open a single terminal.
 The commands below create a dedicated **Neovim tab page** with one or more sessions:
 
 | Command | Action |
@@ -307,7 +307,7 @@ tabs so you can focus on the sessions. One session fills the tab, two are stacke
 vertically, and three to eight are arranged in two columns. Each session starts
 at the current project root. Enlarge the terminal when using many sessions.
 
-Use `gt` and `gT` to switch Neovim tabs. In normal mode, Ctrl+H/J/K/L moves
+Use `gt` and `gT` to switch Neovim tabs. In normal mode, `Ctrl+H` / `Ctrl+J` / `Ctrl+K` / `Ctrl+L` moves
 between splits, and `i` enters terminal input mode. Press Esc twice to return
 to normal mode.
 
@@ -335,9 +335,9 @@ terminal input mode after switching sessions.
 `:CodexVoice` and `:ClaudeVoice` each open a separate single-session tab and
 show voice or dictation instructions. `:VoiceHelp` shows those instructions
 without starting a session. In a supported Codex CLI, enter terminal input mode
-and use F8 or `/voice settings`; see the
+and use `F8` or `/voice settings`; see the
 [official OpenAI documentation](https://learn.chatgpt.com/docs/changelog).
-For Windows dictation in the Claude terminal, enter input mode and press Win+H.
+For Windows dictation in the Claude terminal, enter input mode and press `Win+H`.
 
 If an AI workspace is the only remaining Neovim tab, open another tab with
 `:tabnew` before using `:CodexEnd` or `:ClaudeEnd`. A failed close keeps the
@@ -351,12 +351,12 @@ Mason manages the configured Bash, YAML, Terraform, and Azure Pipelines servers.
 
 | Keys | Command | Action |
 | --- | --- | --- |
-| Space z t | `:AzureTerminal` | Open a project terminal |
-| Space z l | `:AzureLogin` | Run `az login` |
-| Space z a | `:AzureAccount` | Show the active Azure account |
-| Space z g | `:AzureGroups` | List resource groups |
-| Space z r | `:AzureResources` | List resources |
-| Space z p | `:AzurePowerShell` | Open PowerShell 7 and import Az when installed |
+| `Space z t` | `:AzureTerminal` | Open a project terminal |
+| `Space z l` | `:AzureLogin` | Run `az login` |
+| `Space z a` | `:AzureAccount` | Show the active Azure account |
+| `Space z g` | `:AzureGroups` | List resource groups |
+| `Space z r` | `:AzureResources` | List resources |
+| `Space z p` | `:AzurePowerShell` | Open PowerShell 7 and import Az when installed |
 
 The account and resource commands use your current Azure sign-in.
 `:AzurePowerShell` shows an installation command if Az is missing. Use
@@ -383,14 +383,14 @@ Opening `.csv` or `.tsv` enables csvview.nvim's aligned table view with borders
 and an automatically detected sticky header. CSV uses commas and TSV uses tabs.
 Lines starting with `#` or `//` are treated as comments.
 
-Space c v / `:CsvViewToggle` toggles the display. `:CsvViewEnable`,
+`Space c v` / `:CsvViewToggle` toggles the display. `:CsvViewEnable`,
 `:CsvViewDisable`, and `:CsvViewInfo` enable, disable, or inspect it. For example:
 
 ```vim
 :CsvViewEnable delimiter=; header_lnum=1
 ```
 
-You can edit the file normally while the table view is active. Tab and Shift+Tab
+You can edit the file normally while the table view is active. Tab and `Shift+Tab`
 keep their usual behavior.
 
 ## Image and PDF previews
@@ -418,13 +418,13 @@ PDF conversion. Conversion failures appear in notifications.
 
 `:ImagePreviewClose` closes the latest preview; `:ImagePreviewCloseAll` closes
 all previews created by this Neovim process. The WezTerm tab close button or
-Ctrl+Shift+W can close one directly. Neovim closes its preview panes and deletes
+`Ctrl+Shift+W` can close one directly. Neovim closes its preview panes and deletes
 temporary files on exit. The viewer runs through Windows Command Prompt
 (`cmd.exe`).
 
 ## Markdown and Obsidian
 
-Markdown rendering loads when a Markdown file opens. Space m r toggles the
+Markdown rendering loads when a Markdown file opens. `Space m r` toggles the
 rendering. Code blocks and headings retain transparent backgrounds so the
 WezTerm wallpaper can remain visible.
 
@@ -453,23 +453,23 @@ machine settings and do not need to be added to the shared Lua files.
 
 | Keys | Action |
 | --- | --- |
-| Space o q | Quick-switch notes |
-| Space o s | Search the vault |
-| Space o n | Create a note |
-| Space o t | Open today's daily note |
-| Space o b | Show backlinks |
-| Space o c | Check the vault and plugin setup |
+| `Space o q` | Quick-switch notes |
+| `Space o s` | Search the vault |
+| `Space o n` | Create a note |
+| `Space o t` | Open today's daily note |
+| `Space o b` | Show backlinks |
+| `Space o c` | Check the vault and plugin setup |
 
 Run `:Obsidian` once to load its integration, then open a note in the configured
 vault. Note and tag completion uses the plugin's built-in language server with
 Blink. Markdown rendering also works for files outside the vault.
 
-Space m p toggles a browser preview for Markdown and Mermaid diagrams.
+`Space m p` toggles a browser preview for Markdown and Mermaid diagrams.
 Use `:MarkdownPreview`, `:MarkdownPreviewStop`, or `:MarkdownPreviewToggle`.
 The `markdown-preview.nvim` build downloads its preview application during
 plugin installation; allow that build to finish. If the command fails, inspect
 `:Lazy` and `:messages`, rebuild the plugin, and check that a browser is available.
-Space m r continues to toggle the separate in-editor Markdown renderer.
+`Space m r` continues to toggle the separate in-editor Markdown renderer.
 
 ## Japanese writing profile
 
@@ -483,8 +483,8 @@ Scripts that need the default profile without prompting can call `nvim-code` or 
 In the Japanese profile, run `:JPSetup` to confirm an existing Obsidian vault,
 then `:JPToday`, `:JPWriting`, or `:JPVocabAdd`. It includes vocabulary search and
 quizzes, Kana charts, 80 first-grade Kanji, exercises, writing progress, and
-optional reviewed Anki cards. `:JPHelp` lists the Space j shortcuts.
-`:JPMarkdownToggle` / Space j R toggles in-editor Markdown decoration.
+optional reviewed Anki cards. `:JPHelp` lists the `Space j` shortcuts.
+`:JPMarkdownToggle` / `Space j R` toggles in-editor Markdown decoration.
 
 Plugins, parser installations, undo history, and study logs are isolated by
 `NVIM_APPNAME=nvim-jp`. Personal vault/Anki settings live in Git-ignored
@@ -504,39 +504,49 @@ image is missing. The terminal window stays opaque.
 
 | Keys or command | Action |
 | --- | --- |
-| Space u b / `:BackgroundPick` | Choose an image |
-| Space u B / `:BackgroundFolder` | Open the image folder in Windows Explorer |
-| Ctrl+Tab / Ctrl+Shift+Tab | Cycle Neovim buffers while active, terminal tabs otherwise |
-| Alt+Enter | Toggle WezTerm fullscreen |
-| Ctrl+Shift+L | Open the WezTerm debug overlay |
+| `Space u b` / `:BackgroundPick` | Choose an image |
+| `Space u B` / `:BackgroundFolder` | Open the image folder in Windows Explorer |
+| `Ctrl+Tab` / `Ctrl+Shift+Tab` | Cycle Neovim buffers while active, terminal tabs otherwise |
+| `Alt+Enter` | Toggle WezTerm fullscreen |
+| `Ctrl+Shift+L` | Open the WezTerm debug overlay |
 
-Space u b opens the Wallpaper Manager. Browse one folder at a time, use
+`Space u b` opens the Wallpaper Manager. Browse one folder at a time, use
 Favorites to add or remove stars, Shuffle now to choose another image, and
 Settings to choose startup behavior. The categories are `Anime/`, `Games/`,
 `Real World/`, and `Other/`. Anime images live in `Anime/<title>/Images/`, with
 `GIFs/` reserved for animations. PNG, JPG/JPEG, GIF, BMP, and WebP are supported.
 The manager uses the Snacks picker, with `vim.ui.select` as a fallback; SVG is excluded.
 
-The default mode is `random`: each interactive startup selects another image,
-avoiding the current image when alternatives exist. `random_favorite` chooses
-only favorites and requires at least one. `manual` keeps the selection; choosing
-an image manually also selects this mode. Startup rotation is skipped in headless
-sessions. `:BackgroundMode random`, `:BackgroundMode random_favorite`, and
-`:BackgroundMode manual` change the mode and immediately apply random modes.
-`:BackgroundRandom` shuffles once, `:BackgroundFavorite` stars/unstars the active
-image, and `:BackgroundFavorites` browses favorites. These three commands keep
-the current startup mode.
+### Startup modes
+
+| Mode | Behavior |
+| --- | --- |
+| `random` (default) | Choose an image at each interactive startup, avoiding the current image when possible |
+| `random_favorite` | Choose from favorites; requires at least one favorite |
+| `manual` | Keep the selected image; choosing an image manually also enables this mode |
+
+Use `:BackgroundMode random`, `:BackgroundMode random_favorite`, or
+`:BackgroundMode manual` to set the mode. Random modes apply a new image
+immediately. Headless sessions skip startup rotation.
+
+| Command | Action |
+| --- | --- |
+| `:BackgroundRandom` | Shuffle once |
+| `:BackgroundFavorite` | Add or remove the active image from favorites |
+| `:BackgroundFavorites` | Browse favorites |
+
+These three commands keep the startup mode. Cancelling a menu keeps the current
+image and mode.
+
+### Local selection
 
 `background-mode.txt`, `favorite-backgrounds.txt`, and `selected-background.txt`
-are local, Git-ignored files. Favorites and selections use relative image paths.
-Older absolute records are accepted locally and become relative when rewritten.
-Cancelling a menu leaves the current image and mode unchanged.
+are local, Git-ignored files. Favorites and selections use relative image paths,
+such as `Anime/Magi/Images/01-Magi-Friends-under-Starry-Sky.jpg`.
+Older absolute paths still work and become relative when rewritten.
 
 The default folder is Neovim's config directory plus `backgrounds`, normally
-`$env:LOCALAPPDATA\nvim\backgrounds`. A selection is saved as a relative path such as
-`Anime/Magi/Images/01-Magi-Friends-under-Starry-Sky.jpg` in `selected-background.txt`. Cancelling leaves the selection
-unchanged. WezTerm checks the selection about once a second. Older selections
-with absolute paths still work locally. Choosing another image saves a relative path.
+`$env:LOCALAPPDATA\nvim\backgrounds`. WezTerm checks the selection about once a second.
 
 To use a custom folder, set the same environment variable before launching
 WezTerm and Neovim:
@@ -643,7 +653,7 @@ after a plugin update. Reopen the file if highlighting has not attached yet.
 | Debugging fails | Check debugpy in `:Mason`, the application interpreter, and messages in the debug REPL. |
 | Obsidian reports no workspace | Set `OBSIDIAN_VAULT` to an existing vault and restart Neovim. |
 | Wallpaper is missing | Check `$HOME\.wezterm.lua`, the background folder, the selection filename, and `NVIM_BACKGROUND_DIR` in both processes. |
-| Ctrl+Tab changes terminal tabs | Restart Neovim inside WezTerm; try Space b n/p and verify the companion config is loaded. |
+| `Ctrl+Tab` changes terminal tabs | Restart Neovim inside WezTerm; try `Space b n/p` and verify the companion config is loaded. |
 | Graphics rendering fails | Try `config.front_end = "OpenGL"` in your local WezTerm config. |
 | AI sessions fail | Check the CLI in PATH, use a whole count from 1 to 8, and enlarge the terminal for many splits. |
 | Dashboard logo is missing | Check the companion WezTerm config, `dashboard-logo.png`, and `wezterm_dashboard_logo.lua` in `stdpath("config")`. Small windows use a text header. |
@@ -657,7 +667,7 @@ after a plugin update. Reopen the file if highlighting has not attached yet.
 | Image or PDF conversion fails | Check `magick -version`; PDF may also need Ghostscript and policy support. |
 
 If an external program is missing, Neovim shows a notification. Use `:messages`
-or Space u n to review notifications you missed.
+or `Space u n` to review notifications you missed.
 
 ## Validate the configuration
 

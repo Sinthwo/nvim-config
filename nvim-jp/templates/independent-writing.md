@@ -2,7 +2,7 @@
 type: writing
 date: {{DATE}}
 status: pending
-completed_on: 
+completed_on:
 tags: [japanese, writing]
 ---
 
@@ -11,6 +11,7 @@ tags: [japanese, writing]
 Topic: {{TOPIC}}
 
 ## Japanese text
+
 <!-- JP:WRITING:BEGIN -->
 
 <!-- JP:WRITING:END -->

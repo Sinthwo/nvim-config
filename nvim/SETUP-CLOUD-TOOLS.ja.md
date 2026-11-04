@@ -13,6 +13,7 @@ README に記載された基本ツールをインストールしてください�
 ```vim
 :MasonInstall bash-language-server yaml-language-server terraform-ls azure-pipelines-language-server shfmt
 ```
+
 Tree-sitter は既存の言語パーサーに加え、`bicep`、`csv`、`hcl`、`terraform`、`tsv` をインストールします。Mason のツールインストール完了後、Neovim はパーサーのインストールを再試行します。動作する C コンパイラと Tree-sitter CLI が必要です。
 
 ## Bicep 言語サーバー
@@ -24,16 +25,17 @@ dotnet --info
 dotnet tool install --global Azure.Bicep.LangServer
 Get-Command bicep-ls
 ```
+
 これらは [Bicep 言語サーバーの公式手順](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install#bicep-language-server-net-tool)に沿ったコマンドです。Neovim は `PATH` から `bicep-ls` を見つけます。インストール後は Neovim を再起動してください。更新には `dotnet tool update --global Azure.Bicep.LangServer` を使います。
 
-`.bicep` または `.bicepparam` を開き、通常の LSP キー `K`、`gd`、`gr`、F2、Space c a、Space c d を使用します。Bicep CLI のインストールや `az bicep` の実行だけでは、この言語サーバーはインストールされません。
+`.bicep` または `.bicepparam` を開き、通常の LSP キー `K`、`gd`、`gr`、`F2`、`Space c a`、`Space c d` を使用します。Bicep CLI のインストールや `az bicep` の実行だけでは、この言語サーバーはインストールされません。
 
 ## Terraform・YAML・Azure Pipelines・Bash
 
-- **Terraform：** Mason が terraform-ls をインストールします。Terraform CLI は [HashiCorp の手順](https://developer.hashicorp.com/terraform/install)に従って別途インストールしてください。`terraform version` で確認します。`.tf` と `.tfvars` には補完と診断があり、Space c f で `terraform fmt` による整形を行います。
-- **YAML：** Mason が yaml-language-server をインストールし、Space c f は Prettier を使います。
+- **Terraform：** Mason が terraform-ls をインストールします。Terraform CLI は [HashiCorp の手順](https://developer.hashicorp.com/terraform/install)に従って別途インストールしてください。`terraform version` で確認します。`.tf` と `.tfvars` には補完と診断があり、`Space c f` で `terraform fmt` による整形を行います。
+- **YAML：** Mason が yaml-language-server をインストールし、`Space c f` は Prettier を使います。
 - **Azure Pipelines：** Mason が Microsoft の [Azure Pipelines 言語サーバー](https://github.com/microsoft/azure-pipelines-language-server)をインストールします。`azure-pipelines.yml` または `azure-pipelines.yaml` があるワークスペースで有効になり、Microsoft のパイプラインスキーマを使います。Node.js/npm が必要です。
-- **Bash：** Mason が bash-language-server と shfmt をインストールします。Space c f でシェルファイルを整形します。スクリプト実行には Bash 環境を別途インストールしてください。
+- **Bash：** Mason が bash-language-server と shfmt をインストールします。`Space c f` でシェルファイルを整形します。スクリプト実行には Bash 環境を別途インストールしてください。
 
 言語一覧とキーバインドは[マニュアル](../MANUAL.ja.md#言語サポートと整形)にあります。
 
@@ -44,15 +46,16 @@ Windows Package Manager で Azure CLI をインストールします。
 ```powershell
 winget install --exact --id Microsoft.AzureCLI
 ```
+
 WezTerm を再起動して `az version` を確認してください。このコマンドは [Microsoft の Windows インストールガイド](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-windows)に従っています。
 
 | コマンド | キー | 実行内容 |
 | --- | --- | --- |
-| `:AzureTerminal` | Space z t | プロジェクトルートのターミナル |
-| `:AzureLogin` | Space z l | `az login` |
-| `:AzureAccount` | Space z a | `az account show -o table` |
-| `:AzureGroups` | Space z g | `az group list -o table` |
-| `:AzureResources` | Space z r | `az resource list -o table` |
+| `:AzureTerminal` | `Space z t` | プロジェクトルートのターミナル |
+| `:AzureLogin` | `Space z l` | `az login` |
+| `:AzureAccount` | `Space z a` | `az account show -o table` |
+| `:AzureGroups` | `Space z g` | `az group list -o table` |
+| `:AzureResources` | `Space z r` | `az resource list -o table` |
 
 各コマンドはプロジェクトルートに Snacks ターミナルを開きます。`:AzureLogin` でサインインし、アカウント、グループ、リソースのコマンドで Azure 環境を確認してください。
 
@@ -64,13 +67,15 @@ PowerShell 7 を使用してください。[Microsoft の Az インストール�
 Install-Module -Name Az -Scope CurrentUser -Repository PSGallery
 Get-Module -ListAvailable -Name Az
 ```
-`:AzurePowerShell` または Space z p は PowerShell 7 を開き、Az を読み込みます。モジュールがない場合はインストールコマンドを表示します。サインインしてコンテキストを確認してください。
+
+`:AzurePowerShell` または `Space z p` は PowerShell 7 を開き、Az を読み込みます。モジュールがない場合はインストールコマンドを表示します。サインインしてコンテキストを確認してください。
 
 ```powershell
 Connect-AzAccount
 Get-AzContext
 Get-AzResourceGroup
 ```
+
 設定は `PATH` と `ProgramFiles` から PowerShell を検出します。PowerShell の言語サポートは、Mason がインストールした Editor Services を使用します。
 
 ## Codex と Claude のワークスペース
@@ -83,7 +88,7 @@ Get-AzResourceGroup
 
 ## CSV と TSV
 
-CSV/TSV を開くと csvview.nvim が整列した表表示を有効にします。Space c v で切り替え、`:CsvViewInfo` で区切り文字とヘッダーを確認します。Tab と Shift+Tab の動作は変わりません。[マニュアル](../MANUAL.ja.md#csvtsv-の表)と[プラグインのドキュメント](https://github.com/hat0uma/csvview.nvim)をご覧ください。
+CSV/TSV を開くと csvview.nvim が整列した表表示を有効にします。`Space c v` で切り替え、`:CsvViewInfo` で区切り文字とヘッダーを確認します。Tab と `Shift+Tab` の動作は変わりません。[マニュアル](../MANUAL.ja.md#csvtsv-の表)と[プラグインのドキュメント](https://github.com/hat0uma/csvview.nvim)をご覧ください。
 
 ## 画像と PDF ファイル
 

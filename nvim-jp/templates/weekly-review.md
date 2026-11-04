@@ -3,6 +3,7 @@ type: weekly_review
 week: {{WEEK}}
 date: {{DATE}}
 ---
+
 # Weekly review — {{WEEK}}
 
 ## What I wrote this week

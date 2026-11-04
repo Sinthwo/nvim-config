@@ -5,7 +5,7 @@ These are the **80 Japanese Grade 1 (小学1年) education Kanji**, a manageable
 No Kanji is imported automatically to your Obsidian vault or Anki. Use `:JPKanjiList` to browse and `:JPKanjiQuiz` to practise.
 
 | Kanji | Example reading (Kana) | Meaning (English) |
-|---|---|---|
+| --- | --- | --- |
 | 一 | いち | one |
 | 右 | みぎ | right |
 | 雨 | あめ | rain |

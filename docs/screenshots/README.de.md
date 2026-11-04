@@ -1,68 +1,75 @@
 # Neovim-Screenshot-Galerie
 
-**Languages:** [English](README.md) | [Français](README.fr.md) | [Deutsch](README.de.md) | [日本語](README.ja.md)
+**Sprachen:** [English](README.md) | [Français](README.fr.md) | [Deutsch](README.de.md) | [日本語](README.ja.md)
 
 Screenshots der Neovim- und WezTerm-Konfiguration für Windows mit Beispieldateien in einer isolierten Vorschau. Die KI-Ansichten zeigen nur das Layout oder die Ersteinrichtung; die Debug-Ansicht zeigt Fenster ohne laufende Sitzung. Cloud-Bereitstellungen und Kontovorgänge werden nicht gezeigt.
 
 [Zurück zur Haupt-README](../../README.de.md)
 
+- [Bearbeiten und Navigieren](#bearbeiten-und-navigieren)
+- [Schreiben und Daten](#schreiben-und-daten)
+- [Git und Verlauf](#git-und-verlauf)
+- [Terminals und Werkzeuge](#terminals-und-werkzeuge)
+- [KI-Arbeitsbereiche](#ki-arbeitsbereiche)
+- [Japanisches Schreibprofil](#japanisches-schreibprofil)
+
 ## Bearbeiten und Navigieren
 
 | Vorschau | Funktion |
 | --- | --- |
-| [![Start-Dashboard](dashboard.png)](dashboard.png) | **Start-Dashboard** |
-| [![Editor und Dateiexplorer](editor-explorer.png)](editor-explorer.png) | **Editor und Dateiexplorer** |
-| [![Dateiauswahl](file-picker.png)](file-picker.png) | **Dateiauswahl** |
-| [![Tastenkürzel entdecken](shortcuts.png)](shortcuts.png) | **Tastenkürzel entdecken** |
-| [![Textsuche im Projekt](search.png)](search.png) | **Textsuche im Projekt** |
-| [![TODO-Suche](todo.png)](todo.png) | **TODO-Suche** |
-| [![Temporäre Notizen](scratch.png)](scratch.png) | **Temporäre Notizen** |
-| [![Benachrichtigungsverlauf](notifications.png)](notifications.png) | **Benachrichtigungsverlauf** |
-| [![Zen-Modus](zen.png)](zen.png) | **Zen-Modus** |
+| [![Start-Dashboard](dashboard.png)](dashboard.png) | **Start-Dashboard** — Hai-Logo und Tastenkürzel für Dateien, Suche, Plugins und Terminals. |
+| [![Editor und Dateiexplorer](editor-explorer.png)](editor-explorer.png) | **Editor und Dateiexplorer** — Lua-Datei neben dem Projektbaum; offene Dateien stehen oben. |
+| [![Dateiauswahl](file-picker.png)](file-picker.png) | **Dateiauswahl** — Dateinamensuche mit Vorschau der ausgewählten Datei. |
+| [![Tastenkürzel entdecken](shortcuts.png)](shortcuts.png) | **Tastenkürzel entdecken** — Which-Key gruppiert die verfügbaren Leader-Tastenkürzel nach Aufgabe. |
+| [![Textsuche im Projekt](search.png)](search.png) | **Textsuche im Projekt** — Texttreffer im Projekt neben einer Vorschau der ausgewählten Zeile. |
+| [![TODO-Suche](todo.png)](todo.png) | **TODO-Suche** — TODO-Treffer mit dem umgebenden Code im Vorschaufenster. |
+| [![Temporäre Notizen](scratch.png)](scratch.png) | **Temporäre Notizen** — Ein schwebender Notizpuffer bleibt neben dem aktuellen Code sichtbar. |
+| [![Benachrichtigungsverlauf](notifications.png)](notifications.png) | **Benachrichtigungsverlauf** — Frühere Editormeldungen gesammelt im Benachrichtigungsverlauf. |
+| [![Zen-Modus](zen.png)](zen.png) | **Zen-Modus** — Zentrierter Markdown-Puffer ohne die umgebenden Editorpanels. |
 
 ## Schreiben und Daten
 
 | Vorschau | Funktion |
 | --- | --- |
-| [![Codevervollständigung](completion.png)](completion.png) | **Codevervollständigung** |
-| [![Sprachdiagnosen](diagnostics.png)](diagnostics.png) | **Sprachdiagnosen** |
-| [![Markdown-Darstellung](markdown.png)](markdown.png) | **Markdown-Darstellung** |
-| [![CSV-Tabellen](csv.png)](csv.png) | **CSV-Tabellen** |
-| [![Obsidian-Notizen](obsidian.png)](obsidian.png) | **Obsidian-Notizen** |
-| [![Bildvorschau](image_preview.png)](image_preview.png) | **Bildvorschau** |
+| [![Codevervollständigung](completion.png)](completion.png) | **Codevervollständigung** — Lua-Vorschläge mit Dokumentation zum ausgewählten Eintrag. |
+| [![Sprachdiagnosen](diagnostics.png)](diagnostics.png) | **Sprachdiagnosen** — Python-Typfehler direkt im Code und im Diagnosefenster. |
+| [![Markdown-Darstellung](markdown.png)](markdown.png) | **Markdown-Darstellung** — Gestaltete Überschriften, Kontrollkästchen, Hinweis, Code und Tabelle. |
+| [![CSV-Tabellen](csv.png)](csv.png) | **CSV-Tabellen** — CSV-Werte in ausgerichteten Spalten, weiterhin als Text bearbeitbar. |
+| [![Obsidian-Notizen](obsidian.png)](obsidian.png) | **Obsidian-Notizen** — Schnellauswahl für Beispielnotizen im Vault mit Notizvorschau. |
+| [![Bildvorschau](image_preview.png)](image_preview.png) | **Bildvorschau** — Ein Bild in einem eigenen WezTerm-Vorschautab. |
 
 ## Git und Verlauf
 
 | Vorschau | Funktion |
 | --- | --- |
-| [![Git-Status](git.png)](git.png) | **Git-Status** |
-| [![Änderungen nebeneinander](diff.png)](diff.png) | **Änderungen nebeneinander** |
-| [![Änderungsverlauf](undo.png)](undo.png) | **Änderungsverlauf** |
+| [![Git-Status](git.png)](git.png) | **Git-Status** — Neogit zeigt die geänderte Datei und ihre noch nicht vorgemerkten Änderungen. |
+| [![Änderungen nebeneinander](diff.png)](diff.png) | **Änderungen nebeneinander** — Liste geänderter Dateien neben einem Codevergleich in zwei Spalten. |
+| [![Änderungsverlauf](undo.png)](undo.png) | **Änderungsverlauf** — Verzweigungen des Rückgängig-Verlaufs neben dem geöffneten Puffer. |
 
 ## Terminals und Werkzeuge
 
 | Vorschau | Funktion |
 | --- | --- |
-| [![Projektterminal](terminal.png)](terminal.png) | **Projektterminal** |
-| [![Schwebendes Terminal](floating_terminal.png)](floating_terminal.png) | **Schwebendes Terminal** |
-| [![Cloud-Sprachen bearbeiten](cloud_languages.png)](cloud_languages.png) | **Cloud-Sprachen bearbeiten** |
-| [![Hintergrundbildmanager](wallpapers.png)](wallpapers.png) | **Hintergrundbildmanager** |
-| [![Pluginverwaltung](plugins.png)](plugins.png) | **Pluginverwaltung** |
-| [![Sprachwerkzeugverwaltung](language_tools.png)](language_tools.png) | **Sprachwerkzeugverwaltung** |
-| [![Debug-Fenster (keine aktive Sitzung)](debug.png)](debug.png) | **Debug-Fenster (keine aktive Sitzung)** |
+| [![Projektterminal](terminal.png)](terminal.png) | **Projektterminal** — Projektterminal unter dem Code mit einer Verzeichnisauflistung. |
+| [![Schwebendes Terminal](floating_terminal.png)](floating_terminal.png) | **Schwebendes Terminal** — Ein Terminal schwebt über dem Editor; der Code bleibt sichtbar. |
+| [![Cloud-Sprachen bearbeiten](cloud_languages.png)](cloud_languages.png) | **Cloud-Sprachen bearbeiten** — Terraform und Azure-Pipelines-YAML nebeneinander geöffnet. |
+| [![Hintergrundbildmanager](wallpapers.png)](wallpapers.png) | **Hintergrundbildmanager** — Wallpaper Manager mit Bildauswahl, Favoriten, Zufallsauswahl und Startoptionen. |
+| [![Pluginverwaltung](plugins.png)](plugins.png) | **Pluginverwaltung** — Lazy listet installierte Plugins und ihren Ladestatus auf. |
+| [![Sprachwerkzeugverwaltung](language_tools.png)](language_tools.png) | **Sprachwerkzeugverwaltung** — Mason listet installierte und verfügbare Sprachwerkzeuge auf. |
+| [![Debug-Fenster (keine aktive Sitzung)](debug.png)](debug.png) | **Debug-Fenster (keine aktive Sitzung)** — Debug-Fenster um Python-Code angeordnet; keine laufende Sitzung. |
 
 ## KI-Arbeitsbereiche
 
 | Vorschau | Funktion |
 | --- | --- |
-| [![Claude-Sitzungen (Ersteinrichtung)](claude_sessions.png)](claude_sessions.png) | **Claude-Sitzungen (Ersteinrichtung)** |
-| [![Codex-Sitzungen (leere Vorschau)](codex_sessions.png)](codex_sessions.png) | **Codex-Sitzungen (leere Vorschau)** |
+| [![Claude-Sitzungen (Ersteinrichtung)](claude_sessions.png)](claude_sessions.png) | **Claude-Sitzungen (Ersteinrichtung)** — Zwei übereinander angeordnete Claude-Terminals bei der Ersteinrichtung; keine laufende Aufgabe. |
+| [![Codex-Sitzungen (leere Vorschau)](codex_sessions.png)](codex_sessions.png) | **Codex-Sitzungen (leere Vorschau)** — Zwei übereinander angeordnete Terminalpuffer zeigen das Layout; die Vorschauen sind leer. |
 
 ## Japanisches Schreibprofil
 
 | Vorschau | Funktion |
 | --- | --- |
-| [![Japanisch-Lerndashboard](japanese_dashboard.png)](japanese_dashboard.png) | **Japanisch-Lerndashboard** |
-| [![Kana-Übersicht](japanese_kana.png)](japanese_kana.png) | **Kana-Übersicht** |
-| [![Kanji-Übersicht](japanese_kanji.png)](japanese_kanji.png) | **Kanji-Übersicht** |
-| [![Japanisch schreiben](japanese_writing.png)](japanese_writing.png) | **Japanisch schreiben** |
+| [![Japanisch-Lerndashboard](japanese_dashboard.png)](japanese_dashboard.png) | **Japanisch-Lerndashboard** — Lern-Tastenkürzel für Tagebuch, Vokabeln, Referenzen und Wiederholung. |
+| [![Kana-Übersicht](japanese_kana.png)](japanese_kana.png) | **Kana-Übersicht** — Hiragana, Katakana und Romaji in einer Referenztabelle. |
+| [![Kanji-Übersicht](japanese_kanji.png)](japanese_kanji.png) | **Kanji-Übersicht** — Kanji der ersten Schulstufe mit Lesebeispielen und englischer Bedeutung. |
+| [![Japanisch schreiben](japanese_writing.png)](japanese_writing.png) | **Japanisch schreiben** — Japanische Schreibprobe mit Vokabeltabelle und Übungscheckliste. |

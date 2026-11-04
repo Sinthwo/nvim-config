@@ -16,34 +16,43 @@ Inside Neovim, use these commands or shortcuts:
 
 | Command | Keys | Action |
 | --- | --- | --- |
-| `:BackgroundPick` | Space u b | Choose a wallpaper |
-| `:BackgroundFolder` | Space u B | Open the image folder in Windows Explorer |
+| `:BackgroundPick` | `Space u b` | Choose a wallpaper |
+| `:BackgroundFolder` | `Space u B` | Open the image folder in Windows Explorer |
 
-Space u b opens the Wallpaper Manager. Browse one folder at a time, use
+`Space u b` opens the Wallpaper Manager. Browse one folder at a time, use
 Favorites to add or remove stars, Shuffle now to choose another image, and
 Settings to choose startup behavior. The categories are `Anime/`, `Games/`,
 `Real World/`, and `Other/`. Anime images live in `Anime/<title>/Images/`, with
 `GIFs/` reserved for animations. PNG, JPG/JPEG, GIF, BMP, and WebP are supported.
 The manager uses the Snacks picker, with `vim.ui.select` as a fallback; SVG is excluded.
 
-The default mode is `random`: each interactive startup selects another image,
-avoiding the current image when alternatives exist. `random_favorite` chooses
-only favorites and requires at least one. `manual` keeps the selection; choosing
-an image manually also selects this mode. Startup rotation is skipped in headless
-sessions. `:BackgroundMode random`, `:BackgroundMode random_favorite`, and
-`:BackgroundMode manual` change the mode and immediately apply random modes.
-`:BackgroundRandom` shuffles once, `:BackgroundFavorite` stars/unstars the active
-image, and `:BackgroundFavorites` browses favorites. These three commands keep
-the current startup mode.
+### Startup modes
+
+| Mode | Behavior |
+| --- | --- |
+| `random` (default) | Choose an image at each interactive startup, avoiding the current image when possible |
+| `random_favorite` | Choose from favorites; requires at least one favorite |
+| `manual` | Keep the selected image; choosing an image manually also enables this mode |
+
+Use `:BackgroundMode random`, `:BackgroundMode random_favorite`, or
+`:BackgroundMode manual` to set the mode. Random modes apply a new image
+immediately. Headless sessions skip startup rotation.
+
+| Command | Action |
+| --- | --- |
+| `:BackgroundRandom` | Shuffle once |
+| `:BackgroundFavorite` | Add or remove the active image from favorites |
+| `:BackgroundFavorites` | Browse favorites |
+
+These three commands keep the startup mode. Cancelling a menu keeps the current
+image and mode.
+
+### Local selection
 
 `background-mode.txt`, `favorite-backgrounds.txt`, and `selected-background.txt`
-are local, Git-ignored files. Favorites and selections use relative image paths.
-Older absolute records are accepted locally and become relative when rewritten.
-Cancelling a menu leaves the current image and mode unchanged.
-
-Your choice is saved in `selected-background.txt` as a **relative image path**,
-such as `Anime/Magi/Images/01-Magi-Friends-under-Starry-Sky.jpg`. Git ignores this generated file. Cancelling
-the picker keeps your previous choice.
+are local, Git-ignored files. Favorites and selections use relative image paths,
+such as `Anime/Magi/Images/01-Magi-Friends-under-Starry-Sky.jpg`.
+Older absolute paths still work and become relative when rewritten.
 
 ## Use a different image folder
 
@@ -61,8 +70,6 @@ wallpaper while Neovim is active. The terminal window stays opaque, and the
 image is dimmed to keep text readable.
 
 An empty selection or a missing image restores the normal terminal appearance.
-Older selections that contain an absolute path still work locally. Choosing
-another wallpaper replaces that path with a relative one.
 
 See the [Windows manual](../../MANUAL.md#wezterm-and-wallpapers) and the
 [current image sources](CREDITS.md).
