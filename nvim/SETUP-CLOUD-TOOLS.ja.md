@@ -98,7 +98,9 @@ CSV/TSV を開くと csvview.nvim が整列した表表示を有効にします�
 
 ## 壁紙とローカル設定
 
-壁紙選択は画像フォルダーとサブフォルダーを検索し、選択を相対パスで保存します。`NVIM_BACKGROUND_DIR` を設定すると、Neovim と WezTerm の両方が使用します。キャンセルは以前の選択を保持し、画像がない場合は通常のターミナル表示に戻ります。独自フォルダーは[マニュアル](../MANUAL.ja.md#wezterm-と壁紙)、画像の出典は[壁紙クレジット](backgrounds/CREDITS.ja.md)をご覧ください。
+[壁紙ガイド](backgrounds/README.ja.md)に、画像参照、お気に入り、起動モード、
+対応形式、`NVIM_BACKGROUND_DIR` の設定手順があります。画像の出典は
+[壁紙クレジット](backgrounds/CREDITS.ja.md)をご覧ください。
 
 非公開のパスは `OBSIDIAN_VAULT` などのローカル環境変数に保存してください。Git は壁紙選択、ログ、`.env`、Terraform の状態・プランファイル、ローカル検証バックアップを無視します。手動作成したアーカイブの内容は Git の除外規則で除外されないため、共有前に確認してください。
 

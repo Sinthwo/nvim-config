@@ -12,6 +12,7 @@ plugin lockfile. Vault paths and Anki settings are configured locally with
 ## Contents
 
 - [First session](#first-session)
+- [A complete practice example](#a-complete-practice-example)
 - [Commands](#commands)
   - [Writing and review](#writing-and-review)
   - [Vocabulary and references](#vocabulary-and-references)
@@ -29,9 +30,51 @@ plugin lockfile. Vault paths and Anki settings are configured locally with
 2. Press `o` or run `:JPSetup`. Choose an existing Obsidian vault containing
    `.obsidian`, confirm the Japanese folder, then restart the profile.
 3. Press `j` to start or reopen today's journal. Type `i` to enter Insert mode.
-4. Use `Win+Space` to select the Japanese IME. In Japanese A/あ mode, type
-   `watashi` to enter わたし, press `Space` to convert it to 私, then `Enter` to confirm.
+4. Use `Win+Space` to select the Japanese IME, then select Hiragana mode (あ)
+   from its taskbar menu. With Romaji input enabled, type `watashi` to enter わたし,
+   press `Space` to convert it to 私, then `Enter` to confirm. See
+   [Microsoft’s IME instructions](https://support.microsoft.com/en-us/windows/hardware/input-devices/advanced-input-methods-for-east-asian-languages).
 5. Return to English input, then `Esc` for Normal mode, `:w` to save, `:q` to quit.
+
+## A complete practice example
+
+Exercises are templates for your own prompts. `:JPExercises` lets you choose
+a stage and type; `:JPNewExercise 1 translation` creates one directly. Enter
+a topic such as “First sentences” when asked, then fill in **Prompt** yourself.
+The four stages organize practice; they do not provide a complete course or
+automatically select matching questions and answers.
+
+For a first exercise, use “I am a student.” as the prompt. Your saved note
+might contain the following sections after you have written an answer and
+compared it with a reference:
+
+```markdown
+## Prompt
+I am a student.
+
+## My answer
+<!-- JP:ANSWER:BEGIN -->
+わたしはがくせいです。
+<!-- JP:ANSWER:END -->
+
+## Mistakes
+No difference from this reference example; grammar has not been independently reviewed.
+
+## Review notes
+The topic particle は is pronounced wa. Next time, write a new sentence about myself.
+
+## Reference
+Stage 1: わたしはがくせいです。 (one acceptable answer)
+```
+
+Write your answer before running `:JPRevealAnswer 1`. The command opens the
+stage's reference sheet in a separate split. It does not match or grade your
+prompt; stages 1–3 have a few examples, and stage 4 offers writing topics.
+If your prompt differs, consult an appropriate reference or reviewer. Close
+the reference split with `:close`, return to your exercise, use `:JPComplete`,
+then `:w`. `:JPProgress` counts Japanese characters inside the saved answer
+markers; it does not measure correctness or proficiency. In your own practice,
+write an original answer instead of copying the demonstration above.
 
 ## Commands
 
@@ -43,7 +86,7 @@ plugin lockfile. Vault paths and Anki settings are configured locally with
 | `:JPSetup` | Confirm existing Obsidian vault and Japanese directory |
 | `:JPToday` | Today's journal; reuses existing entry |
 | `:JPWriting` | New independent writing note |
-| `:JPExercises` / `:JPNewExercise 1 translation` | Exercise / explicit stage+type |
+| `:JPExercises` / `:JPNewExercise 1 translation` | Create an exercise template; supply your own prompt |
 | `:JPRevealAnswer 1` | Separate reference examples; never alters answer |
 | `:JPVocabulary` / `:JPGrammar` / `:JPKanji` | Create a vocabulary, grammar, or Kanji note from a template |
 | `:JPDaily` | Optional 20-minute plan + daily practice counts |

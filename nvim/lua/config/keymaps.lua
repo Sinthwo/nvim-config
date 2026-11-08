@@ -1,6 +1,6 @@
 local map = vim.keymap.set
 
-map("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlights" })
+map("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
 
 map("n", "<C-s>", "<cmd>write<CR>", { desc = "Save file" })
 map("i", "<C-s>", "<Esc><cmd>write<CR>a", { desc = "Save file" })
@@ -32,7 +32,7 @@ map("n", "<leader>bo", function()
   end
 end, { desc = "Close other files" })
 
-map("t", "<Esc><Esc>", [[<C-\><C-n>]], { desc = "Leave terminal input mode" })
+map("t", "<Esc><Esc>", [[<C-\><C-n>]], { desc = "Terminal normal mode" })
 
 vim.api.nvim_create_user_command("BackgroundPick", function()
   require("config.background").pick()
@@ -44,11 +44,11 @@ end, {})
 
 map("n", "<leader>ub", function()
   require("config.background").pick()
-end, { desc = "Choose wallpaper" })
+end, { desc = "Choose background" })
 
 map("n", "<leader>uB", function()
   require("config.background").open_folder()
-end, { desc = "Open wallpaper folder" })
+end, { desc = "Open background folder" })
 
 -- =========================================================
 -- Multi-session AI workspaces
@@ -63,9 +63,10 @@ require("config.ai_sessions").setup()
 require("config.azure").setup()
 
 -- =========================================================
--- WezTerm image and PDF previews
+-- Stable WezTerm image / PDF preview
 -- =========================================================
 
 require("config.image_preview").setup()
 
+-- Snacks dashboard, Git pickers, terminal panels, notifier and float helpers
 require("config.snacks_extras").setup()

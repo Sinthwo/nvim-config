@@ -18,6 +18,9 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup("plugins", {
+  -- No configured plugins require LuaRocks; avoids hererocks errors on Windows.
+  rocks = { enabled = false },
+
   defaults = {
     lazy = true,
   },

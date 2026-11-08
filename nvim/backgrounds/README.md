@@ -61,6 +61,15 @@ The default folder is Neovim's `stdpath("config")` plus `backgrounds`, normally
 same absolute directory, or the same `~/...` home-relative directory, in
 Neovim and WezTerm. Restart both applications after changing the variable.
 
+For a persistent user setting, run this in PowerShell, add images to the folder,
+then fully restart WezTerm and Neovim to inherit it.
+
+```powershell
+$backgroundDir = Join-Path $HOME 'Pictures\Terminal Backgrounds'
+New-Item -ItemType Directory -Path $backgroundDir -Force -ErrorAction Stop | Out-Null
+[Environment]::SetEnvironmentVariable('NVIM_BACKGROUND_DIR', $backgroundDir, 'User')
+```
+
 ## Display the wallpaper in WezTerm
 
 Install the included

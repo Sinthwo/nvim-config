@@ -98,7 +98,9 @@ Starte Neovim in WezTerm mit `wezterm.exe` in `PATH`. Ein unterstütztes Bild od
 
 ## Hintergrundbilder und lokale Einstellungen
 
-Die Hintergrundauswahl durchsucht Bildordner und Unterordner und speichert einen relativen Pfad. Neovim und WezTerm verwenden beide `NVIM_BACKGROUND_DIR`, sofern gesetzt. Abbrechen erhält die Auswahl; bei fehlendem Bild kehrt das normale Terminalaussehen zurück. Eigene Ordner beschreibt das [Handbuch](../MANUAL.de.md#wezterm-und-hintergrundbilder); Bildquellen stehen in den [Hintergrundbildnachweisen](backgrounds/CREDITS.de.md).
+Die [Hintergrundbildanleitung](backgrounds/README.de.md) erklärt Ordner, Favoriten,
+Startmodi, Bildformate und `NVIM_BACKGROUND_DIR`. Bildquellen stehen in den
+[Bildnachweisen](backgrounds/CREDITS.de.md).
 
 Private Pfade gehören in lokale Umgebungsvariablen wie `OBSIDIAN_VAULT`. Git ignoriert Hintergrundauswahlen, Protokolle, `.env`-Dateien, Terraform-Zustands- und Plandateien sowie lokale Validierungssicherungen. Prüfe manuell erstellte Archive vor dem Weitergeben, da Git-Ignorierregeln deren Inhalt nicht filtern.
 

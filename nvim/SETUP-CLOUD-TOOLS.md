@@ -150,12 +150,9 @@ cleans up its preview tabs and temporary files on exit. See the
 
 ## Wallpapers and local settings
 
-The wallpaper picker searches the image folder and its subfolders, then saves
-your choice as a relative path. Both Neovim and WezTerm use `NVIM_BACKGROUND_DIR`
-when it is set. Cancelling keeps your previous choice; a missing image restores
-the normal terminal appearance. See the
-[manual](../MANUAL.md#wezterm-and-wallpapers) for custom folder setup and the
-[wallpaper credits](backgrounds/CREDITS.md) for image sources.
+Use the [wallpaper guide](backgrounds/README.md) for browsing, favorites,
+startup modes, supported image formats, and `NVIM_BACKGROUND_DIR` setup.
+Image sources are listed in [wallpaper credits](backgrounds/CREDITS.md).
 
 Keep private paths in local environment variables such as `OBSIDIAN_VAULT`.
 Git ignores wallpaper selections, logs, `.env` files, Terraform state and plan

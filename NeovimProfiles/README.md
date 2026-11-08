@@ -34,19 +34,20 @@ try {
 }
 $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
 if (Test-Path -LiteralPath $jpDir) {
-    Move-Item -LiteralPath $jpDir -Destination "$jpDir.backup-$stamp"
+    Move-Item -LiteralPath $jpDir -Destination "$jpDir.backup-$stamp" -ErrorAction Stop
+    Write-Host "Japanese profile backup: $jpDir.backup-$stamp"
 }
-New-Item -ItemType Directory -Path (Split-Path -Parent $jpDir) -Force | Out-Null
-Copy-Item -LiteralPath '.\nvim-jp' -Destination $jpDir -Recurse
+New-Item -ItemType Directory -Path (Split-Path -Parent $jpDir) -Force -ErrorAction Stop | Out-Null
+Copy-Item -LiteralPath '.\nvim-jp' -Destination $jpDir -Recurse -ErrorAction Stop
 
 # Keep the launcher beside your PowerShell profile.
 $launcherDir = Join-Path (Split-Path -Parent $PROFILE) 'NeovimProfiles'
-New-Item -ItemType Directory -Path $launcherDir -Force | Out-Null
+New-Item -ItemType Directory -Path $launcherDir -Force -ErrorAction Stop | Out-Null
 $launcherFile = Join-Path $launcherDir 'NvimProfiles.ps1'
 if (Test-Path -LiteralPath $launcherFile) {
-    Copy-Item -LiteralPath $launcherFile -Destination "$launcherFile.backup-$stamp"
+    Copy-Item -LiteralPath $launcherFile -Destination "$launcherFile.backup-$stamp" -ErrorAction Stop
 }
-Copy-Item -LiteralPath '.\NeovimProfiles\NvimProfiles.ps1' -Destination $launcherFile
+Copy-Item -LiteralPath '.\NeovimProfiles\NvimProfiles.ps1' -Destination $launcherFile -ErrorAction Stop
 . $launcherFile
 ```
 
@@ -88,8 +89,9 @@ in the coding profile.
 
 Use `:JPToday` for today's journal, `:JPVocabAdd` for vocabulary, and `:JPHelp`
 for the full command and shortcut reference. Use Windows Japanese IME
-(`Win+Space`) to type Japanese. `:JPMarkdownParsers` installs Markdown, inline
-Markdown, YAML, and HTML parsers; it needs Tree-sitter CLI 0.26.1+, `curl`,
+(`Win+Space`), then select Hiragana mode (あ) in the IME menu to type Japanese.
+`:JPMarkdownParsers` installs Markdown, inline Markdown, YAML, and HTML parsers;
+it needs Tree-sitter CLI 0.26.1+, `curl`,
 `tar`, and a C compiler. The basic writing commands still work if optional
 plugins cannot be downloaded.
 
@@ -98,3 +100,7 @@ Anki, AnkiConnect on `127.0.0.1:8765`, and `curl`; each new card is reviewed and
 confirmed in the profile. Quizzes are self-rated, and automatic Romaji uses
 only the Kana reading you enter. See [Japanese help](../nvim-jp/JP-HELP.md) and
 [Markdown setup](../nvim-jp/docs/MARKDOWN-OBSIDIAN.md).
+
+The installation guide, in-editor help, and study templates are currently in English.
+See the [complete practice example](../nvim-jp/JP-HELP.md#a-complete-practice-example)
+for creating a prompt, writing an answer, and using the stage references.

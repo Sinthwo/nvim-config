@@ -56,6 +56,15 @@ Alte absolute Pfade funktionieren weiterhin und werden beim Schreiben relativ.
 
 Der Standardordner ist Neovims `stdpath("config")` plus `backgrounds`, unter Windows normalerweise `$env:LOCALAPPDATA\nvim\backgrounds`. Setze `NVIM_BACKGROUND_DIR` in Neovim und WezTerm auf denselben absoluten Ordner oder denselben zum Benutzerordner relativen Pfad `~/...`. Starte nach der Änderung beide Anwendungen neu.
 
+Für eine dauerhafte Benutzereinstellung führe dies in PowerShell aus, lege Bilder
+im Ordner ab und starte WezTerm und Neovim vollständig neu, damit sie den Wert übernehmen.
+
+```powershell
+$backgroundDir = Join-Path $HOME 'Pictures\Terminal Backgrounds'
+New-Item -ItemType Directory -Path $backgroundDir -Force -ErrorAction Stop | Out-Null
+[Environment]::SetEnvironmentVariable('NVIM_BACKGROUND_DIR', $backgroundDir, 'User')
+```
+
 ## Hintergrundbild in WezTerm anzeigen
 
 Installiere die enthaltene [`WezTerminal-Config/.wezterm.lua`](../../WezTerminal-Config/.wezterm.lua) unter `$HOME\.wezterm.lua`. WezTerm liest die Auswahl und zeigt bei aktivem Neovim ein abgedunkeltes Hintergrundbild. Das Terminalfenster bleibt undurchsichtig; das Bild wird für lesbaren Text gedimmt.

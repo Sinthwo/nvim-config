@@ -1,6 +1,6 @@
 # Bildquellen für die Windows-Konfiguration
 
-**Languages:** [English](CREDITS.md) | [Français](CREDITS.fr.md) | [Deutsch](CREDITS.de.md) | [日本語](CREDITS.ja.md)
+**Sprachen:** [English](CREDITS.md) | [Français](CREDITS.fr.md) | [Deutsch](CREDITS.de.md) | [日本語](CREDITS.ja.md)
 
 Der [Bildkatalog](README.md#images-and-sources) enthält die aktuellen Dateien und die im Archiv erfassten Quellen. Jeder Animeordner hat eine Quellentabelle. Fehlende Quellen sind gekennzeichnet; Galerielinks belegen keinen einzelnen Künstler.
 

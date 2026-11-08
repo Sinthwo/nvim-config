@@ -56,6 +56,15 @@ Les anciens chemins absolus restent valides et deviennent relatifs lors de leur 
 
 Le dossier par défaut est le `stdpath("config")` de Neovim suivi de `backgrounds`, normalement `$env:LOCALAPPDATA\nvim\backgrounds` sous Windows. Définissez `NVIM_BACKGROUND_DIR` sur le même répertoire absolu, ou le même chemin relatif au dossier utilisateur `~/...`, dans Neovim et WezTerm. Redémarrez les deux applications après la modification.
 
+Pour un réglage utilisateur persistant, exécutez ce bloc dans PowerShell, ajoutez
+les images au dossier, puis redémarrez complètement WezTerm et Neovim pour en hériter.
+
+```powershell
+$backgroundDir = Join-Path $HOME 'Pictures\Terminal Backgrounds'
+New-Item -ItemType Directory -Path $backgroundDir -Force -ErrorAction Stop | Out-Null
+[Environment]::SetEnvironmentVariable('NVIM_BACKGROUND_DIR', $backgroundDir, 'User')
+```
+
 ## Afficher le fond d’écran dans WezTerm
 
 Installez le fichier fourni [`WezTerminal-Config/.wezterm.lua`](../../WezTerminal-Config/.wezterm.lua) à `$HOME\.wezterm.lua`. WezTerm lit votre sélection et affiche un fond d’écran assombri pendant que Neovim est actif. La fenêtre du terminal reste opaque et l’image est assombrie pour garder le texte lisible.

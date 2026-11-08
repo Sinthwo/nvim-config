@@ -98,7 +98,9 @@ Exécutez Neovim dans WezTerm avec `wezterm.exe` dans `PATH`. Ouvrir une image o
 
 ## Fonds d’écran et paramètres locaux
 
-Le sélecteur parcourt le dossier des images et ses sous-dossiers, puis enregistre votre choix sous forme de chemin relatif. Neovim et WezTerm utilisent `NVIM_BACKGROUND_DIR` lorsqu’il est défini. Annuler conserve le choix précédent ; une image absente rétablit l’apparence normale du terminal. Consultez le [manuel](../MANUAL.fr.md#wezterm-et-fonds-décran) pour configurer un dossier personnalisé et les [crédits des fonds d’écran](backgrounds/CREDITS.fr.md) pour les sources.
+Le [guide des fonds d’écran](backgrounds/README.fr.md) décrit la navigation,
+les favoris, les modes, les formats et `NVIM_BACKGROUND_DIR`. Les sources
+figurent dans les [crédits](backgrounds/CREDITS.fr.md).
 
 Conservez les chemins privés dans des variables d’environnement locales telles que `OBSIDIAN_VAULT`. Git ignore les sélections de fonds d’écran, les journaux, les fichiers `.env`, les fichiers d’état et de plan Terraform et les sauvegardes locales de validation. Vérifiez les archives créées manuellement avant de les partager : les règles d’exclusion Git n’en filtrent pas le contenu.
 

@@ -1,6 +1,6 @@
 # Sources des images de la configuration Windows
 
-**Languages:** [English](CREDITS.md) | [Français](CREDITS.fr.md) | [Deutsch](CREDITS.de.md) | [日本語](CREDITS.ja.md)
+**Langues:** [English](CREDITS.md) | [Français](CREDITS.fr.md) | [Deutsch](CREDITS.de.md) | [日本語](CREDITS.ja.md)
 
 Le [catalogue](README.md#images-and-sources) répertorie les fichiers actuels et les liens de sources conservés dans l’archive. Chaque dossier d’anime contient aussi un tableau de sources. Les sources absentes sont signalées ; les liens de galeries ne constituent pas des crédits individuels d’artistes.
 

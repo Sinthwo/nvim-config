@@ -9,7 +9,7 @@ Les outils facultatifs ajoutent le développement cloud, les sessions IA dans le
 terminal, Markdown et Obsidian, l’écriture japonaise, les aperçus d’images et les
 fonds d’écran. Consultez le [manuel Windows](MANUAL.fr.md) pour la référence complète.
 
-**Accès rapide :** [Installation sous Windows](#installation-sous-windows) · [Raccourcis utiles](#raccourcis-utiles) · [Fonctionnalités facultatives](#fonctionnalités-facultatives) · [Fichiers et partage](#fichiers-et-partage)
+**Accès rapide :** [Installation sous Windows](#installation-sous-windows) · [Première session réussie](#première-session-réussie) · [Mise à jour et restauration](MANUAL.fr.md#mise-à-jour-et-restauration) · [Raccourcis utiles](#raccourcis-utiles) · [Fonctionnalités facultatives](#fonctionnalités-facultatives) · [Fichiers et partage](#fichiers-et-partage)
 
 ## Captures d’écran
 
@@ -39,26 +39,59 @@ Set-Location -LiteralPath '.\nvim-config'
 
 Fermez Neovim, puis ouvrez PowerShell dans le dossier du dépôt et exécutez les commandes ci-dessous. Toute configuration existante est déplacée vers une sauvegarde horodatée avant la copie des nouveaux fichiers. Les données des plugins installés sont conservées.
 
+Les commandes s’arrêtent si une opération sur les fichiers échoue. Conservez le chemin de sauvegarde affiché.
+Pour une installation existante, consultez d’abord [Mise à jour et restauration](MANUAL.fr.md#mise-à-jour-et-restauration)
+pour conserver vos réglages locaux.
+
 ```powershell
-# Ask Neovim for its actual config directory, including environment overrides.
-$nvimDir = (& nvim --headless -u NONE -i NONE -n --cmd 'lua io.write(vim.fn.stdpath("config"))' +qa).Trim()
+# Ask the executable directly, bypassing any PowerShell profile launcher.
+$nvimDir = (& nvim.exe --headless -u NONE -i NONE -n --cmd 'lua io.write(vim.fn.stdpath("config"))' +qa).Trim()
 if ($LASTEXITCODE -ne 0 -or -not $nvimDir) { throw 'Could not find the Neovim config directory.' }
 $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
+$nvimBackup = "$nvimDir.backup-$stamp"
 if (Test-Path -LiteralPath $nvimDir) {
-    Move-Item -LiteralPath $nvimDir -Destination "$nvimDir.backup-$stamp"
+    Move-Item -LiteralPath $nvimDir -Destination $nvimBackup -ErrorAction Stop
+    Write-Host "Neovim backup: $nvimBackup"
 }
-New-Item -ItemType Directory -Path (Split-Path -Parent $nvimDir) -Force | Out-Null
-Copy-Item -LiteralPath '.\nvim' -Destination $nvimDir -Recurse
+New-Item -ItemType Directory -Path (Split-Path -Parent $nvimDir) -Force -ErrorAction Stop | Out-Null
+Copy-Item -LiteralPath '.\nvim' -Destination $nvimDir -Recurse -ErrorAction Stop
+```
 
-# Optional: install the companion WezTerm configuration.
+### Facultatif : configuration WezTerm
+
+Exécutez ce bloc séparément uniquement pour remplacer votre configuration WezTerm.
+Le fichier existant est sauvegardé au préalable.
+
+```powershell
+$stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
 $weztermFile = Join-Path $HOME '.wezterm.lua'
 if (Test-Path -LiteralPath $weztermFile) {
-    Move-Item -LiteralPath $weztermFile -Destination "$weztermFile.backup-$stamp"
+    $weztermBackup = "$weztermFile.backup-$stamp"
+    Move-Item -LiteralPath $weztermFile -Destination $weztermBackup -ErrorAction Stop
+    Write-Host "WezTerm backup: $weztermBackup"
 }
-Copy-Item -LiteralPath '.\WezTerminal-Config\.wezterm.lua' -Destination $weztermFile
+Copy-Item -LiteralPath '.\WezTerminal-Config\.wezterm.lua' -Destination $weztermFile -ErrorAction Stop
 ```
 
 Neovim utilise normalement `$env:LOCALAPPDATA\nvim`. WezTerm lit `$HOME\.wezterm.lua`. Redémarrez WezTerm, lancez `nvim` et laissez les téléchargements initiaux des plugins et des outils se terminer. Ouvrez un fichier source pour déclencher l’installation du serveur de langage. Redémarrez Neovim après la première installation, puis exécutez `:checkhealth` et `:Mason`.
+
+## Première session réussie
+
+Ouvrez WezTerm dans un projet Git d’essai et lancez `nvim README.md`. Attendez
+les téléchargements initiaux, redémarrez Neovim et revenez au projet. Utilisez
+le mode normal (`Esc`) pour les raccourcis ; saisissez les séquences Space touche par touche.
+
+| Essai | Résultat attendu |
+| --- | --- |
+| Appuyer sur `Space f f`, saisir une partie du nom, puis `Enter` | Le sélecteur ouvre le fichier choisi. |
+| Avec `Space f g`, chercher un texte présent dans le projet | Les résultats apparaissent avec un aperçu ; `Esc` ferme le sélecteur. |
+| Appuyer sur `i`, modifier le texte, puis `Esc` et `Ctrl+S` | Le fichier est enregistré ; l’indicateur de modification disparaît. |
+| Ouvrir un fichier Lua et appuyer sur `Space c f` | StyLua le formate une fois son installation Mason terminée. |
+| Appuyer sur `Space g g` | Neogit affiche les fichiers modifiés ; `:close` revient à l’éditeur. |
+
+Utilisez un fichier d’essai pour modifier et formater du texte. En cas d’échec,
+consultez `:messages`, `:Mason` et `:ConformInfo`, puis le [dépannage](MANUAL.fr.md#dépannage).
+Le [manuel](MANUAL.fr.md) explique les autres commandes.
 
 ## Raccourcis utiles
 
@@ -83,16 +116,22 @@ Utilisez `:Codex 8` ou `:Claude 8` pour ouvrir huit sessions CLI indépendantes 
 
 ## Fonctionnalités facultatives
 
-`Space u b` ouvre le gestionnaire de fonds d’écran : dossiers, favoris, mélange
-et modes de démarrage. Le mode aléatoire est initial ; Manual dans Settings
-conserve l’image. `Space m p` active l’aperçu Markdown/Mermaid dans le navigateur.
+Examinez les modifications avec `:CodeDiff` ou `:MiniDiffOverlay`, affichez les noms
+des fichiers dans les fenêtres avec `:InclineToggle` et ouvrez un dossier modifiable avec `:Oil`.
+Utilisez `:AICopyPath` ou `:AICopyContext` pour copier des références de code pour les outils IA.
+Le formatage Web et Markdown utilise prettierd ou prettier, selon leur disponibilité.
+Consultez les [notes de mise à jour (anglais)](nvim/UPGRADE_NOTES.md) pour les détails.
+
+`Space u b` ouvre le gestionnaire de fonds d’écran : dossiers, favoris, sélection aléatoire
+et modes de démarrage. Par défaut, une image est choisie aléatoirement au démarrage ;
+Manual dans Settings conserve l’image. `Space m p` active l’aperçu Markdown/Mermaid dans le navigateur.
 
 Le profil facultatif `nvim-jp/` ajoute écriture japonaise, vocabulaire, Kana/Kanji
 et notes Obsidian. Le lanceur PowerShell propose Coding/Japanese lorsque `nvim`
 interactif n’a aucun argument ; `nvim-code` et `nvim-jp` choisissent directement.
-Voir l’[installation des profils](NeovimProfiles/README.md) et le
+Voir l’[installation des profils (anglais)](NeovimProfiles/README.md) et le
 [manuel](MANUAL.fr.md#profil-décriture-japonaise). Réglages personnels, favoris,
-mode de démarrage et archive d’importation sont ignorés par Git.
+et mode de démarrage sont ignorés par Git.
 
 Le tableau de bord propose des raccourcis pour les fichiers, la recherche,
 les plugins et les terminaux. Consultez [Tableau de bord et notifications](MANUAL.fr.md#tableau-de-bord-et-notifications)

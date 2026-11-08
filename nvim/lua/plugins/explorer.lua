@@ -31,7 +31,7 @@ return {
           "t",
         },
 
-        desc = "Toggle file explorer",
+        desc = "Toggle Explorer",
       },
     },
 
@@ -39,6 +39,8 @@ return {
       open_files_do_not_replace_types = {
         "terminal", "snacks_terminal", "trouble", "qf", "snacks_dashboard",
       },
+      -- File explorer remains open while selecting/opening many buffers.
+      -- Ctrl+B is the explicit toggle; opening a file never closes it.
       event_handlers = {
         {
           event = "file_renamed",
@@ -85,6 +87,7 @@ return {
         hijack_netrw_behavior =
           "open_current",
 
+
         -- Better performance on large repositories.
         use_libuv_file_watcher =
           false,
@@ -110,23 +113,23 @@ return {
         width = 34,
 
         mappings = {
-          -- Close the explorer.
+          -- Close explorer immediately.
           ["<C-b>"] =
             "close_window",
 
-          -- Open the selected file or folder.
+          -- Normal open.
           ["<CR>"] =
             "open",
 
-          -- Open in a vertical split.
+          -- Side-by-side.
           ["v"] =
             "open_vsplit",
 
-          -- Open in a horizontal split.
+          -- Above/below.
           ["s"] =
             "open_split",
 
-          -- Alternate shortcuts for opening splits.
+          -- Keep Ctrl variants too.
           ["<C-v>"] =
             "open_vsplit",
 

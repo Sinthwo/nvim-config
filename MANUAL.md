@@ -9,6 +9,7 @@ examples use PowerShell and resolve paths for the current user.
 ## Contents
 
 - [Installation and first launch](#installation-and-first-launch)
+- [Updating and restoring](#updating-and-restoring)
 - [Dashboard and notifications](#dashboard-and-notifications)
 - [Editing and shortcuts](#editing-and-shortcuts)
 - [Finding files and using the explorer](#finding-files-and-using-the-explorer)
@@ -65,6 +66,72 @@ Use these commands to check the setup:
 :ConformInfo
 :messages
 ```
+
+## Updating and restoring
+
+### Update an installed configuration
+
+1. Save your work and close every Neovim process using this configuration. In
+   your repository checkout, commit or stash your own changes, then run
+   `git pull --ff-only` to get the new files. Check any changed requirements.
+2. Repeat the README's Neovim installation block. It moves your installed
+   configuration to a timestamped backup and prints its path. Only run the
+   separate WezTerm block if you also want to replace the terminal configuration.
+3. Before reopening Neovim, use the following block to keep your wallpaper
+   selection, favorites, and startup mode when using the default image folder.
+   Enter the backup path printed in step 2.
+
+```powershell
+$backupDir = Read-Host 'Full path of the Neovim backup printed during installation'
+$nvimDir = (& nvim.exe --headless -u NONE -i NONE -n --cmd 'lua io.write(vim.fn.stdpath("config"))' +qa).Trim()
+if ($LASTEXITCODE -ne 0 -or -not $nvimDir) { throw 'Could not find the Neovim config directory.' }
+if (-not (Test-Path -LiteralPath $backupDir -PathType Container)) { throw 'Backup directory not found.' }
+foreach ($name in @('selected-background.txt', 'favorite-backgrounds.txt', 'background-mode.txt')) {
+    $saved = Join-Path $backupDir "backgrounds\$name"
+    if (Test-Path -LiteralPath $saved -PathType Leaf) {
+        Copy-Item -LiteralPath $saved -Destination (Join-Path $nvimDir "backgrounds\$name") -Force -ErrorAction Stop
+    }
+}
+```
+
+Copy any personal images from the old `backgrounds` folder into the matching
+location in the new one. If you use `NVIM_BACKGROUND_DIR`, that external folder
+and its selections are unaffected. Review and merge your Lua customizations
+and WezTerm font or appearance settings from the backups; copying all the old
+Lua files back would replace the update. See the
+[Japanese profile update instructions](NeovimProfiles/README.md#install-the-japanese-profile)
+for preserving its separate `jp-settings.json`.
+
+Open Neovim, run `:Lazy restore` to align installed plugins with the new
+`lazy-lock.json`, and restart. Check `:checkhealth`, `:Mason`, and `:ConformInfo`.
+Use `:Lazy update` only when intentionally changing plugin versions.
+
+### Restore a configuration backup
+
+Close Neovim. Run this block in PowerShell, selecting the timestamped config
+backup you want to restore. It keeps the current config in another directory
+before moving the backup into place. If installation failed after creating a
+backup, the same steps work even when the active config folder is absent.
+
+```powershell
+$nvimDir = (& nvim.exe --headless -u NONE -i NONE -n --cmd 'lua io.write(vim.fn.stdpath("config"))' +qa).Trim()
+if ($LASTEXITCODE -ne 0 -or -not $nvimDir) { throw 'Could not find the Neovim config directory.' }
+$backupDir = (Resolve-Path -LiteralPath (Read-Host 'Full path of the Neovim backup to restore') -ErrorAction Stop).ProviderPath
+if (-not (Test-Path -LiteralPath (Join-Path $backupDir 'init.lua') -PathType Leaf)) { throw 'Select a config backup containing init.lua.' }
+if (-not $backupDir.StartsWith("$nvimDir.backup-", [StringComparison]::OrdinalIgnoreCase)) { throw 'Select a timestamped backup beside this config directory.' }
+if (Test-Path -LiteralPath $nvimDir) {
+    $beforeRestore = "$nvimDir.before-restore-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+    Move-Item -LiteralPath $nvimDir -Destination $beforeRestore -ErrorAction Stop
+    Write-Host "Replaced configuration saved at: $beforeRestore"
+}
+Move-Item -LiteralPath $backupDir -Destination $nvimDir -ErrorAction Stop
+```
+
+Restart Neovim, run `:Lazy restore`, and restart once more to use that backup's
+plugin revisions. Plugin data, Mason tools, and personal vault files are not
+rolled back by restoring the config folder. To restore WezTerm, close it,
+rename the current `$HOME\.wezterm.lua` to a new backup name, then copy the
+chosen `.wezterm.lua.backup-*` file to `$HOME\.wezterm.lua` and reopen WezTerm.
 
 ## Dashboard and notifications
 
@@ -233,6 +300,16 @@ setup supports Python debugging. Java debugging requires an additional adapter
 and configuration.
 
 ## Git and project terminals
+
+Additional review commands are `:CodeDiff` for side-by-side changes,
+`:CodeDiff history %` for file history, and `:MiniDiffOverlay` for inline changes.
+`:InclineToggle` toggles split filename labels; `:Oil` opens an editable directory
+buffer alongside the existing Neo-tree sidebar. `:AICopyPath` copies the relative
+filename and cursor line. `:AICopyContext` copies the current line with its location
+and a code fence; select lines and run `:'<,'>AICopyContext` to copy a range.
+Web and Markdown formatters try prettierd, then prettier. Astro additionally needs
+prettier-plugin-astro in the project. Formatting remains manual with `Space c f`.
+See the [upgrade notes](nvim/UPGRADE_NOTES.md).
 
 | Keys | Action |
 | --- | --- |
@@ -488,7 +565,7 @@ optional reviewed Anki cards. `:JPHelp` lists the `Space j` shortcuts.
 
 Plugins, parser installations, undo history, and study logs are isolated by
 `NVIM_APPNAME=nvim-jp`. Personal vault/Anki settings live in Git-ignored
-`jp-settings.json`; no settings or plugin cache from the archive are shared.
+`jp-settings.json`. Plugin caches are created locally.
 Restart the profile after configuring the vault. Both profiles use Neovim 0.12+.
 See [Japanese help](nvim-jp/JP-HELP.md).
 
@@ -510,57 +587,13 @@ image is missing. The terminal window stays opaque.
 | `Alt+Enter` | Toggle WezTerm fullscreen |
 | `Ctrl+Shift+L` | Open the WezTerm debug overlay |
 
-`Space u b` opens the Wallpaper Manager. Browse one folder at a time, use
-Favorites to add or remove stars, Shuffle now to choose another image, and
-Settings to choose startup behavior. The categories are `Anime/`, `Games/`,
-`Real World/`, and `Other/`. Anime images live in `Anime/<title>/Images/`, with
-`GIFs/` reserved for animations. PNG, JPG/JPEG, GIF, BMP, and WebP are supported.
-The manager uses the Snacks picker, with `vim.ui.select` as a fallback; SVG is excluded.
-
-### Startup modes
-
-| Mode | Behavior |
-| --- | --- |
-| `random` (default) | Choose an image at each interactive startup, avoiding the current image when possible |
-| `random_favorite` | Choose from favorites; requires at least one favorite |
-| `manual` | Keep the selected image; choosing an image manually also enables this mode |
-
-Use `:BackgroundMode random`, `:BackgroundMode random_favorite`, or
-`:BackgroundMode manual` to set the mode. Random modes apply a new image
-immediately. Headless sessions skip startup rotation.
-
-| Command | Action |
-| --- | --- |
-| `:BackgroundRandom` | Shuffle once |
-| `:BackgroundFavorite` | Add or remove the active image from favorites |
-| `:BackgroundFavorites` | Browse favorites |
-
-These three commands keep the startup mode. Cancelling a menu keeps the current
-image and mode.
-
-### Local selection
-
-`background-mode.txt`, `favorite-backgrounds.txt`, and `selected-background.txt`
-are local, Git-ignored files. Favorites and selections use relative image paths,
-such as `Anime/Magi/Images/01-Magi-Friends-under-Starry-Sky.jpg`.
-Older absolute paths still work and become relative when rewritten.
-
-The default folder is Neovim's config directory plus `backgrounds`, normally
-`$env:LOCALAPPDATA\nvim\backgrounds`. WezTerm checks the selection about once a second.
-
-To use a custom folder, set the same environment variable before launching
-WezTerm and Neovim:
-
-```powershell
-$backgroundDir = Join-Path $HOME 'Pictures\Terminal Backgrounds'
-New-Item -ItemType Directory -Path $backgroundDir -Force | Out-Null
-[Environment]::SetEnvironmentVariable('NVIM_BACKGROUND_DIR', $backgroundDir, 'User')
-```
-
-Place images there, restart WezTerm, and choose one in Neovim. Use an absolute
-directory or a `~/...` home-relative directory. Both applications must receive
-the same value. WezTerm also uses `XDG_CONFIG_HOME` and
-`NVIM_APPNAME` if you use those Neovim settings.
+`Space u b` opens the Wallpaper Manager. Random startup rotation is the default;
+choose Manual in Settings to keep an image. The
+[wallpaper guide](nvim/backgrounds/README.md#choose-a-wallpaper) covers folder
+browsing, favorites, startup modes, supported formats, and custom image folders.
+WezTerm checks the selection about once a second. Both applications must use
+the same `NVIM_BACKGROUND_DIR`; environment overrides `XDG_CONFIG_HOME` and
+`NVIM_APPNAME` also affect the default image folder.
 
 ## Customization and privacy
 
@@ -678,6 +711,7 @@ or change your active Neovim configuration:
 nvim --headless -u NONE -i NONE -n -l tools/verify-config.lua
 nvim --headless -u NONE -i NONE -n -l tools/verify-japanese.lua
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/verify-profiles.ps1
+nvim --headless -u NONE -i NONE -n -l tools/verify-docs.lua
 wezterm --config-file '.\WezTerminal-Config\.wezterm.lua' show-keys
 ```
 
@@ -691,3 +725,10 @@ Neovim session as well. The last command loads the WezTerm configuration and
 prints its keybindings.
 
 The additional commands verify Japanese note creation and preservation in an isolated test vault, plus PowerShell argument forwarding, profile isolation, environment restoration, and CI launches. They do not activate the launcher in your current shell.
+
+For documentation changes, `tools/verify-docs.lua` checks local links, translated
+heading and table coverage, exact shortcut/command labels, shared code examples,
+and screenshot actions. Update English and its translations together. Keep the
+wallpaper walkthrough in `nvim/backgrounds/README*.md`; other guides should link
+to it. English-only profile links must say so in translated pages. These checks
+do not assess translation quality or fetch external URLs.

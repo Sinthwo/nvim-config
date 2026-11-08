@@ -51,6 +51,15 @@ PNG、JPG/JPEG、GIF、BMP、WebP に対応し、SVG は対象外です。Snacks
 
 既定のフォルダーは Neovim の `stdpath("config")` 内の `backgrounds` で、Windows では通常 `$env:LOCALAPPDATA\nvim\backgrounds` です。Neovim と WezTerm の `NVIM_BACKGROUND_DIR` を同じ絶対パス、またはホームからの相対パス `~/...` に設定してください。変数を変更したら両方のアプリケーションを再起動します。
 
+永続的なユーザー設定には次の PowerShell ブロックを実行し、フォルダーに画像を追加してから、
+WezTerm と Neovim を完全に再起動して値を反映させてください。
+
+```powershell
+$backgroundDir = Join-Path $HOME 'Pictures\Terminal Backgrounds'
+New-Item -ItemType Directory -Path $backgroundDir -Force -ErrorAction Stop | Out-Null
+[Environment]::SetEnvironmentVariable('NVIM_BACKGROUND_DIR', $backgroundDir, 'User')
+```
+
 ## WezTerm に壁紙を表示する
 
 付属の [`WezTerminal-Config/.wezterm.lua`](../../WezTerminal-Config/.wezterm.lua) を `$HOME\.wezterm.lua` に配置してください。WezTerm は選択を読み込み、Neovim の使用中に暗くした壁紙を表示します。ターミナルウィンドウは不透明で、文字を読みやすくするため画像を暗くします。

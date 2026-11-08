@@ -32,7 +32,7 @@ function M.show()
     '   q  Close dashboard',
     '',
     '   i = Insert | Esc = Normal | :w = Save | :q = Quit',
-    '   Japanese input: Win+Space, choose IME A/あ mode',
+    '   Japanese input: Win+Space, then IME Hiragana (あ)',
     '   Coding Neovim stays separate.',
     '',
   }

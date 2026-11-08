@@ -8,7 +8,7 @@ Windows 向けの Neovim・PowerShell・WezTerm 設定です。ファイルエ�
 オプションでクラウド開発、AI ターミナルセッション、Markdown・Obsidian 連携、日本語作文、
 画像プレビュー、壁紙を追加できます。詳しくは [Windows マニュアル](MANUAL.ja.md)をご覧ください。
 
-**クイックリンク：** [Windows へのインストール](#windows-へのインストール) · [便利なショートカット](#便利なショートカット) · [オプション機能](#オプション機能) · [ファイルと共有](#ファイルと共有)
+**クイックリンク：** [Windows へのインストール](#windows-へのインストール) · [最初の動作確認](#最初の動作確認) · [更新と復元](MANUAL.ja.md#更新と復元) · [便利なショートカット](#便利なショートカット) · [オプション機能](#オプション機能) · [ファイルと共有](#ファイルと共有)
 
 ## スクリーンショット
 
@@ -38,26 +38,58 @@ Set-Location -LiteralPath '.\nvim-config'
 
 Neovim を閉じ、リポジトリのフォルダーで PowerShell を開いて、次のコマンドを実行してください。既存の設定がある場合、新しいファイルをコピーする前に、日時付きのバックアップへ移動します。インストール済みのプラグインデータは保持されます。
 
+ファイル操作に失敗するとコマンドは停止します。表示されたバックアップ先を控えてください。
+既存の設定を置き換える前に、[更新と復元](MANUAL.ja.md#更新と復元)でローカル設定の引き継ぎ方法を確認してください。
+
 ```powershell
-# Ask Neovim for its actual config directory, including environment overrides.
-$nvimDir = (& nvim --headless -u NONE -i NONE -n --cmd 'lua io.write(vim.fn.stdpath("config"))' +qa).Trim()
+# Ask the executable directly, bypassing any PowerShell profile launcher.
+$nvimDir = (& nvim.exe --headless -u NONE -i NONE -n --cmd 'lua io.write(vim.fn.stdpath("config"))' +qa).Trim()
 if ($LASTEXITCODE -ne 0 -or -not $nvimDir) { throw 'Could not find the Neovim config directory.' }
 $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
+$nvimBackup = "$nvimDir.backup-$stamp"
 if (Test-Path -LiteralPath $nvimDir) {
-    Move-Item -LiteralPath $nvimDir -Destination "$nvimDir.backup-$stamp"
+    Move-Item -LiteralPath $nvimDir -Destination $nvimBackup -ErrorAction Stop
+    Write-Host "Neovim backup: $nvimBackup"
 }
-New-Item -ItemType Directory -Path (Split-Path -Parent $nvimDir) -Force | Out-Null
-Copy-Item -LiteralPath '.\nvim' -Destination $nvimDir -Recurse
+New-Item -ItemType Directory -Path (Split-Path -Parent $nvimDir) -Force -ErrorAction Stop | Out-Null
+Copy-Item -LiteralPath '.\nvim' -Destination $nvimDir -Recurse -ErrorAction Stop
+```
 
-# Optional: install the companion WezTerm configuration.
+### 任意：WezTerm の設定
+
+WezTerm の設定を置き換える場合だけ、この独立したブロックを実行してください。
+既存のファイルは先にバックアップします。
+
+```powershell
+$stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
 $weztermFile = Join-Path $HOME '.wezterm.lua'
 if (Test-Path -LiteralPath $weztermFile) {
-    Move-Item -LiteralPath $weztermFile -Destination "$weztermFile.backup-$stamp"
+    $weztermBackup = "$weztermFile.backup-$stamp"
+    Move-Item -LiteralPath $weztermFile -Destination $weztermBackup -ErrorAction Stop
+    Write-Host "WezTerm backup: $weztermBackup"
 }
-Copy-Item -LiteralPath '.\WezTerminal-Config\.wezterm.lua' -Destination $weztermFile
+Copy-Item -LiteralPath '.\WezTerminal-Config\.wezterm.lua' -Destination $weztermFile -ErrorAction Stop
 ```
 
 通常、Neovim は `$env:LOCALAPPDATA\nvim` を使用し、WezTerm は `$HOME\.wezterm.lua` を読み込みます。WezTerm を再起動して `nvim` を起動し、最初のプラグインとツールのダウンロードが完了するまで待ってください。ソースファイルを開くと、言語サーバーのインストールが始まります。初回インストール後に Neovim を再起動し、`:checkhealth` と `:Mason` を実行してください。
+
+## 最初の動作確認
+
+練習用の Git プロジェクトで WezTerm を開き、`nvim README.md` を実行します。
+初回ダウンロードの完了後に Neovim を再起動し、同じプロジェクトに戻ってください。
+ショートカットはノーマルモード（`Esc`）で、Space の後に各キーを順番に押します。
+
+| 試す操作 | 期待する結果 |
+| --- | --- |
+| `Space f f`、ファイル名の一部、`Enter` を入力 | ファイル選択から指定したファイルが開きます。 |
+| `Space f g` でプロジェクト内にある文字列を検索 | 一致箇所とプレビューが表示され、`Esc` で閉じます。 |
+| `i` で少し編集し、`Esc`、`Ctrl+S` を押す | 保存され、未保存の変更を示す印が消えます。 |
+| Lua ファイルを開いて `Space c f` を押す | Mason でのインストール完了後、StyLua が整形します。 |
+| `Space g g` を押す | Neogit に変更ファイルが表示され、`:close` で戻れます。 |
+
+編集と整形には練習用ファイルを使ってください。動作しない場合は `:messages`、`:Mason`、
+`:ConformInfo` と[トラブルシューティング](MANUAL.ja.md#トラブルシューティング)を確認します。
+ほかの操作は[マニュアル](MANUAL.ja.md)をご覧ください。
 
 ## 便利なショートカット
 
@@ -82,15 +114,21 @@ Copy-Item -LiteralPath '.\WezTerminal-Config\.wezterm.lua' -Destination $wezterm
 
 ## オプション機能
 
+`:CodeDiff` または `:MiniDiffOverlay` で変更を確認し、`:InclineToggle` で分割ウィンドウの
+ファイル名表示を切り替え、`:Oil` で編集可能なディレクトリを開けます。
+`:AICopyPath` または `:AICopyContext` で AI ツール向けのコード参照をコピーできます。
+Web と Markdown の整形には、利用可能な prettierd または prettier を使います。
+詳細は[更新メモ（英語）](nvim/UPGRADE_NOTES.md)を参照してください。
+
 `Space u b` で壁紙管理を開き、フォルダー参照、お気に入り、ランダム選択、起動モードを使えます。
 初期状態では起動時にランダム選択します。Settings の Manual で画像を固定できます。
 `Space m p` は Markdown/Mermaid のブラウザープレビューです。
 
 任意の `nvim-jp/` は日本語作文、単語、仮名・漢字練習、Obsidian ノートを追加します。
 PowerShell ランチャーは対話的な `nvim` の引数がない場合に Coding/Japanese を選択します。
-`nvim-code` と `nvim-jp` は直接起動します。[プロファイルのインストール](NeovimProfiles/README.md)と
+`nvim-code` と `nvim-jp` は直接起動します。[プロファイルのインストール（英語）](NeovimProfiles/README.md)と
 [マニュアル](MANUAL.ja.md#日本語学習プロファイル)を参照してください。
-個人設定、お気に入り、起動モード、インポート用アーカイブは Git が無視します。
+個人設定、お気に入り、起動モードは Git が無視します。
 
 起動時のダッシュボードには、ファイル、検索、プラグイン、ターミナル用のショートカットがあります。
 コマンドは[ダッシュボードと通知](MANUAL.ja.md#ダッシュボードと通知)、起動済みセッションの選択と拡大は

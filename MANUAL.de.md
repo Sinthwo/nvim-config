@@ -7,6 +7,7 @@
 ## Inhalt
 
 - [Installation und erster Start](#installation-und-erster-start)
+- [Aktualisieren und Wiederherstellen](#aktualisieren-und-wiederherstellen)
 - [Dashboard und Benachrichtigungen](#dashboard-und-benachrichtigungen)
 - [Bearbeiten und Tastenkürzel](#bearbeiten-und-tastenkürzel)
 - [Dateisuche und Explorer](#dateisuche-und-explorer)
@@ -51,6 +52,74 @@ Prüfe die Einrichtung mit diesen Befehlen:
 :ConformInfo
 :messages
 ```
+
+## Aktualisieren und Wiederherstellen
+
+### Eine installierte Konfiguration aktualisieren
+
+1. Speichere deine Arbeit und schließe alle Neovim-Prozesse mit dieser
+   Konfiguration. Committe oder stash deine Änderungen im Repository und führe
+   `git pull --ff-only` aus. Prüfe geänderte Voraussetzungen.
+2. Wiederhole den Neovim-Installationsblock aus dem README. Er verschiebt die
+   installierte Konfiguration in eine Sicherung mit Zeitstempel und gibt deren
+   Pfad aus. Nutze den separaten WezTerm-Block nur, wenn du auch die
+   Terminalkonfiguration ersetzen möchtest.
+3. Übernimm vor dem nächsten Start mit diesem Block Hintergrundauswahl,
+   Favoriten und Startmodus aus dem Standardbildordner. Gib den in Schritt 2
+   ausgegebenen Sicherungspfad ein.
+
+```powershell
+$backupDir = Read-Host 'Full path of the Neovim backup printed during installation'
+$nvimDir = (& nvim.exe --headless -u NONE -i NONE -n --cmd 'lua io.write(vim.fn.stdpath("config"))' +qa).Trim()
+if ($LASTEXITCODE -ne 0 -or -not $nvimDir) { throw 'Could not find the Neovim config directory.' }
+if (-not (Test-Path -LiteralPath $backupDir -PathType Container)) { throw 'Backup directory not found.' }
+foreach ($name in @('selected-background.txt', 'favorite-backgrounds.txt', 'background-mode.txt')) {
+    $saved = Join-Path $backupDir "backgrounds\$name"
+    if (Test-Path -LiteralPath $saved -PathType Leaf) {
+        Copy-Item -LiteralPath $saved -Destination (Join-Path $nvimDir "backgrounds\$name") -Force -ErrorAction Stop
+    }
+}
+```
+
+Kopiere eigene Bilder aus dem alten `backgrounds`-Ordner an dieselbe Stelle
+im neuen Ordner. Ein externer `NVIM_BACKGROUND_DIR` samt Auswahl bleibt
+unverändert. Vergleiche deine Lua-Anpassungen sowie WezTerm-Schrift- und
+Darstellungseinstellungen mit den Sicherungen und übernimm sie gezielt.
+Alle alten Lua-Dateien zurückzukopieren würde das Update ersetzen. Die
+[Profilanleitung (Englisch)](NeovimProfiles/README.md#install-the-japanese-profile)
+erklärt die Übernahme der separaten `jp-settings.json`.
+
+Starte Neovim, führe `:Lazy restore` für die Versionen aus der neuen
+`lazy-lock.json` aus und starte erneut. Prüfe `:checkhealth`, `:Mason` und
+`:ConformInfo`. Nutze `:Lazy update` nur für beabsichtigte Pluginupdates.
+
+### Eine Konfigurationssicherung wiederherstellen
+
+Schließe Neovim. Wähle im folgenden PowerShell-Block die gewünschte Sicherung
+mit Zeitstempel. Die aktuelle Konfiguration wird vorher separat aufbewahrt.
+Das funktioniert auch, wenn die Installation nach dem Sichern gescheitert ist
+und der aktive Konfigurationsordner fehlt.
+
+```powershell
+$nvimDir = (& nvim.exe --headless -u NONE -i NONE -n --cmd 'lua io.write(vim.fn.stdpath("config"))' +qa).Trim()
+if ($LASTEXITCODE -ne 0 -or -not $nvimDir) { throw 'Could not find the Neovim config directory.' }
+$backupDir = (Resolve-Path -LiteralPath (Read-Host 'Full path of the Neovim backup to restore') -ErrorAction Stop).ProviderPath
+if (-not (Test-Path -LiteralPath (Join-Path $backupDir 'init.lua') -PathType Leaf)) { throw 'Select a config backup containing init.lua.' }
+if (-not $backupDir.StartsWith("$nvimDir.backup-", [StringComparison]::OrdinalIgnoreCase)) { throw 'Select a timestamped backup beside this config directory.' }
+if (Test-Path -LiteralPath $nvimDir) {
+    $beforeRestore = "$nvimDir.before-restore-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+    Move-Item -LiteralPath $nvimDir -Destination $beforeRestore -ErrorAction Stop
+    Write-Host "Replaced configuration saved at: $beforeRestore"
+}
+Move-Item -LiteralPath $backupDir -Destination $nvimDir -ErrorAction Stop
+```
+
+Starte Neovim, führe `:Lazy restore` aus und starte erneut, um die Pluginversionen
+dieser Sicherung zu verwenden. Plugindaten, Mason-Werkzeuge und persönliche
+Vault-Dateien werden dadurch nicht zurückgesetzt. Für WezTerm: schließen,
+die aktuelle `$HOME\.wezterm.lua` unter einem neuen Sicherungsnamen ablegen,
+die gewünschte `.wezterm.lua.backup-*` nach `$HOME\.wezterm.lua` kopieren und
+WezTerm wieder öffnen.
 
 ## Dashboard und Benachrichtigungen
 
@@ -145,7 +214,7 @@ Starte Neovim nach der Sprachserverinstallation neu. PowerShell Editor Services 
 | --- | --- |
 | `gd` / `gD` | Definition / Deklaration |
 | `gi` / `gr` | Implementierung / Referenzen |
-| `K` | Dokumentation beim Überfahren |
+| `K` | Dokumentation zum Symbol unter dem Cursor |
 | `F2` | Symbol umbenennen |
 | `Space c a` | Codeaktionen im normalen oder visuellen Modus |
 | `Space c d` | Diagnosen für die aktuelle Zeile |
@@ -176,6 +245,16 @@ Für Java organisiert `Space j o` Imports, `Space j v` extrahiert eine Variable 
 Die Debugoberfläche lädt mit dem Debugger, öffnet sich beim Start oder Anhängen und schließt am Sitzungsende. Wähle bei Nachfrage eine Python-Startkonfiguration. Diese Einrichtung unterstützt Python-Debugging. Java-Debugging benötigt einen zusätzlichen Adapter und weitere Einstellungen.
 
 ## Git und Projektterminals
+
+Weitere Review-Befehle sind `:CodeDiff` für Änderungen nebeneinander,
+`:CodeDiff history %` für den Dateiverlauf und `:MiniDiffOverlay` für Inline-Änderungen.
+`:InclineToggle` schaltet Dateinamen in Splits um; `:Oil` öffnet einen bearbeitbaren
+Ordner neben Neo-tree. `:AICopyPath` kopiert den relativen Dateinamen und die Cursorzeile.
+`:AICopyContext` kopiert die aktuelle Zeile mit Position und Codeblock;
+mit `:'<,'>AICopyContext` kopierst du zuvor ausgewählte Zeilen.
+Web- und Markdown-Formatierer versuchen zuerst prettierd, dann prettier. Astro benötigt
+zusätzlich prettier-plugin-astro im Projekt. Formatiere weiterhin manuell mit `Space c f`.
+Siehe die [Upgrade-Notizen (Englisch)](nvim/UPGRADE_NOTES.md).
 
 | Tasten | Aktion |
 | --- | --- |
@@ -342,7 +421,7 @@ und führe den Plugin-Build erneut aus. `Space m r` steuert weiterhin die Markdo
 ## Japanisches Schreibprofil
 
 Das optionale Profil `nvim-jp/` bietet einen eigenen Arbeitsbereich zum
-Japanischschreiben und Lernen. Die [Profilanleitung](NeovimProfiles/README.md)
+Japanischschreiben und Lernen. Die [Profilanleitung (Englisch)](NeovimProfiles/README.md)
 erklärt die Installation und den PowerShell-Starter. Interaktives `nvim` ohne
 Argumente zeigt eine Auswahl; `nvim-code` und `nvim-jp` wählen direkt.
 Dateiargumente, Headless-Aufrufe, umgeleitete Ein-/Ausgabe und CI starten Coding ohne Menü.
@@ -356,9 +435,8 @@ der ersten Schulklasse, Übungen, Fortschritt und optionale bestätigte Anki-Kar
 
 `NVIM_APPNAME=nvim-jp` trennt Plugins, Parser, Rückgängigverlauf und Lernprotokolle.
 Vault und Anki werden lokal in der von Git ignorierten `jp-settings.json`
-gespeichert. Persönliche Einstellungen und Plugin-Caches aus dem Archiv werden
-nicht übernommen. Nach der Vault-Einrichtung das Profil neu starten.
-Beide Profile verwenden Neovim 0.12+. Siehe [Japanisch-Hilfe](nvim-jp/JP-HELP.md).
+gespeichert. Plugin-Caches werden lokal angelegt. Nach der Vault-Einrichtung das Profil neu starten.
+Beide Profile verwenden Neovim 0.12+. Siehe [Japanisch-Hilfe (Englisch)](nvim-jp/JP-HELP.md).
 
 ## WezTerm und Hintergrundbilder
 
@@ -374,53 +452,12 @@ Installiere die ergänzende Konfiguration unter `$HOME\.wezterm.lua`. WezTerm ve
 | `Alt+Enter` | WezTerm-Vollbild umschalten |
 | `Ctrl+Shift+L` | WezTerm-Debuganzeige öffnen |
 
-`Space u b` öffnet den Wallpaper Manager: Browse wallpapers durchsucht Ordner,
-Favorites verwaltet Favoriten, Shuffle now wählt ein anderes Bild, Settings
-bestimmt das Startverhalten. Kategorien: `Anime/`, `Games/`, `Real World/`, `Other/`.
-Animebilder liegen unter `Anime/<Titel>/Images/`, Animationen unter `GIFs/`.
-PNG, JPG/JPEG, GIF, BMP und WebP werden unterstützt, SVG nicht.
-Die Oberfläche nutzt Snacks und ersatzweise `vim.ui.select`.
-
-### Startmodi
-
-| Modus | Verhalten |
-| --- | --- |
-| `random` (Standard) | Bei jedem interaktiven Start ein Bild wählen, möglichst ein anderes als das aktuelle |
-| `random_favorite` | Nur Favoriten verwenden; mindestens ein Favorit ist erforderlich |
-| `manual` | Die Auswahl behalten; eine manuelle Bildauswahl aktiviert diesen Modus ebenfalls |
-
-Mit `:BackgroundMode random`, `:BackgroundMode random_favorite` oder
-`:BackgroundMode manual` setzt du den Modus. Zufallsmodi wählen sofort ein Bild.
-Headless-Starts überspringen den Bildwechsel.
-
-| Befehl | Aktion |
-| --- | --- |
-| `:BackgroundRandom` | Einmal zufällig wählen |
-| `:BackgroundFavorite` | Das aktive Bild als Favoriten markieren oder die Markierung entfernen |
-| `:BackgroundFavorites` | Favoriten durchsuchen |
-
-Diese drei Befehle behalten den Startmodus bei. Abbrechen verändert weder Bild
-noch Modus.
-
-### Lokale Auswahl
-
-`background-mode.txt`, `favorite-backgrounds.txt` und `selected-background.txt`
-bleiben lokal und werden von Git ignoriert. Favoriten und Auswahl verwenden
-relative Bildpfade wie `Anime/Magi/Images/01-Magi-Friends-under-Starry-Sky.jpg`.
-Alte absolute Pfade funktionieren weiterhin und werden beim Schreiben relativ.
-
-Der Standardordner ist Neovims Konfigurationsverzeichnis plus `backgrounds`,
-normalerweise `$env:LOCALAPPDATA\nvim\backgrounds`. WezTerm prüft die Auswahl etwa einmal pro Sekunde.
-
-Für einen eigenen Ordner setze vor dem Start beider Anwendungen dieselbe Umgebungsvariable:
-
-```powershell
-$backgroundDir = Join-Path $HOME 'Pictures\Terminal Backgrounds'
-New-Item -ItemType Directory -Path $backgroundDir -Force | Out-Null
-[Environment]::SetEnvironmentVariable('NVIM_BACKGROUND_DIR', $backgroundDir, 'User')
-```
-
-Lege Bilder dort ab, starte WezTerm neu und wähle eines in Neovim. Verwende einen absoluten Ordner oder einen relativ zum Benutzerordner angegebenen Pfad `~/...`. Beide Anwendungen müssen denselben Wert erhalten. WezTerm berücksichtigt auch `XDG_CONFIG_HOME` und `NVIM_APPNAME`, falls du diese Neovim-Einstellungen verwendest.
+`Space u b` öffnet den Wallpaper Manager. Standardmäßig wird das Bild beim
+Start zufällig gewählt; Manual unter Settings behält es bei. Die
+[Hintergrundbildanleitung](nvim/backgrounds/README.de.md#hintergrundbild-auswählen) erklärt
+Ordner, Favoriten, Startmodi, Formate und eigene Bildordner. WezTerm prüft die
+Auswahl etwa einmal pro Sekunde. Beide Anwendungen brauchen denselben
+`NVIM_BACKGROUND_DIR`; `XDG_CONFIG_HOME` und `NVIM_APPNAME` beeinflussen auch den Standardordner.
 
 ## Anpassungen und Datenschutz
 
@@ -491,6 +528,9 @@ Bei verfügbarem Compiler lassen sich Parser ausdrücklich installieren:
 | `Ctrl+Tab` wechselt Terminaltabs | Neovim innerhalb WezTerms neu starten, `Space b n/p` versuchen und ergänzende Konfiguration prüfen. |
 | Grafikdarstellung scheitert | `config.front_end = "OpenGL"` in der lokalen WezTerm-Konfiguration versuchen. |
 | KI-Sitzungen scheitern | CLI in PATH prüfen, ganze Zahl von 1 bis 8 verwenden und Terminal für viele Teilansichten vergrößern. |
+| Dashboard-Logo fehlt | WezTerm-Begleitkonfiguration, `dashboard-logo.png` und `wezterm_dashboard_logo.lua` in `stdpath("config")` prüfen. Kleine Fenster verwenden eine Textüberschrift. |
+| KI-Sitzung lässt sich nicht fokussieren oder vergrößern | Zuerst einen Arbeitsbereich öffnen und eine vorhandene Sitzungsnummer wählen. `:UC` stellt das Raster wieder her. |
+| LazyGit öffnet sich nicht | `lazygit --version` im Terminal prüfen, aus dem Neovim gestartet wird. |
 | KI-Unterstrichalias scheitert im Skript | `Codex8`, `Claude8`, `CodexEnd` oder `ClaudeEnd` nutzen; Unterstrichformen sind interaktive Abkürzungen. |
 | Bicep LSP fehlt | `bicep-ls` in PATH prüfen und neu starten; Bicep CLI allein genügt nicht. |
 | Terraform-Formatierung scheitert | `terraform version` prüfen; Mason installiert den Sprachserver separat. |
@@ -508,6 +548,7 @@ Führe diese Befehle im Repositoryordner in PowerShell aus. Sie installieren kei
 nvim --headless -u NONE -i NONE -n -l tools/verify-config.lua
 nvim --headless -u NONE -i NONE -n -l tools/verify-japanese.lua
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/verify-profiles.ps1
+nvim --headless -u NONE -i NONE -n -l tools/verify-docs.lua
 wezterm --config-file '.\WezTerminal-Config\.wezterm.lua' show-keys
 ```
 
@@ -516,3 +557,11 @@ Der erste Befehl prüft Lua-Syntax, Dokumentationslinks und Tastenkürzel. Er te
 Die Prüfungen simulieren Pluginverhalten. Teste interaktive Funktionen auch in deiner normalen Neovim-Sitzung. Der letzte Befehl lädt die WezTerm-Konfiguration und gibt ihre Tastenbelegungen aus.
 
 Die zusätzlichen Befehle prüfen japanische Notizen in einem isolierten Test-Vault sowie PowerShell-Argumente, Profiltrennung, Wiederherstellung der Umgebung und CI-Aufrufe. Der Starter wird dabei nicht in deiner aktuellen Shell aktiviert.
+
+Bei Dokumentationsänderungen prüft `tools/verify-docs.lua` lokale Links,
+Gliederungs- und Tabellenumfang der Übersetzungen, genaue Tasten- und Befehlsnamen,
+gemeinsame Codebeispiele und Screenshot-Aktionen. Aktualisiere Englisch und die
+Übersetzungen gemeinsam. Die Hintergrundbildanleitung gehört in
+`nvim/backgrounds/README*.md`; andere Anleitungen verlinken darauf. Markiere Links
+auf englische Profilseiten als solche. Die Prüfung bewertet keine Übersetzungsqualität
+und ruft keine externen URLs ab.

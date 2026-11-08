@@ -9,7 +9,7 @@ Optional tools add cloud development, AI terminal sessions, Markdown and
 Obsidian workflows, Japanese writing, image previews, and wallpapers.
 See the [Windows user manual](MANUAL.md) for the full reference.
 
-**Quick links:** [Install on Windows](#install-on-windows) · [Useful shortcuts](#useful-shortcuts) · [Optional features](#optional-features) · [Files and sharing](#files-and-sharing)
+**Quick links:** [Install on Windows](#install-on-windows) · [First successful session](#first-successful-session) · [Updating and restoring](MANUAL.md#updating-and-restoring) · [Useful shortcuts](#useful-shortcuts) · [Optional features](#optional-features) · [Files and sharing](#files-and-sharing)
 
 ## Screenshots
 
@@ -48,23 +48,38 @@ Close Neovim, then open PowerShell in the repository folder and run the commands
 below. Any existing configuration is moved to a timestamped backup before the
 new files are copied. Installed plugin data is kept.
 
+The commands stop on file-operation errors. Keep the printed backup path.
+For an existing installation, read [Updating and restoring](MANUAL.md#updating-and-restoring)
+before replacing files; it explains how to keep local settings.
+
 ```powershell
-# Ask Neovim for its actual config directory, including environment overrides.
-$nvimDir = (& nvim --headless -u NONE -i NONE -n --cmd 'lua io.write(vim.fn.stdpath("config"))' +qa).Trim()
+# Ask the executable directly, bypassing any PowerShell profile launcher.
+$nvimDir = (& nvim.exe --headless -u NONE -i NONE -n --cmd 'lua io.write(vim.fn.stdpath("config"))' +qa).Trim()
 if ($LASTEXITCODE -ne 0 -or -not $nvimDir) { throw 'Could not find the Neovim config directory.' }
 $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
+$nvimBackup = "$nvimDir.backup-$stamp"
 if (Test-Path -LiteralPath $nvimDir) {
-    Move-Item -LiteralPath $nvimDir -Destination "$nvimDir.backup-$stamp"
+    Move-Item -LiteralPath $nvimDir -Destination $nvimBackup -ErrorAction Stop
+    Write-Host "Neovim backup: $nvimBackup"
 }
-New-Item -ItemType Directory -Path (Split-Path -Parent $nvimDir) -Force | Out-Null
-Copy-Item -LiteralPath '.\nvim' -Destination $nvimDir -Recurse
+New-Item -ItemType Directory -Path (Split-Path -Parent $nvimDir) -Force -ErrorAction Stop | Out-Null
+Copy-Item -LiteralPath '.\nvim' -Destination $nvimDir -Recurse -ErrorAction Stop
+```
 
-# Optional: install the companion WezTerm configuration.
+### Optional: WezTerm configuration
+
+Run this separate block only if you want to replace your WezTerm configuration.
+It saves the existing file first.
+
+```powershell
+$stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
 $weztermFile = Join-Path $HOME '.wezterm.lua'
 if (Test-Path -LiteralPath $weztermFile) {
-    Move-Item -LiteralPath $weztermFile -Destination "$weztermFile.backup-$stamp"
+    $weztermBackup = "$weztermFile.backup-$stamp"
+    Move-Item -LiteralPath $weztermFile -Destination $weztermBackup -ErrorAction Stop
+    Write-Host "WezTerm backup: $weztermBackup"
 }
-Copy-Item -LiteralPath '.\WezTerminal-Config\.wezterm.lua' -Destination $weztermFile
+Copy-Item -LiteralPath '.\WezTerminal-Config\.wezterm.lua' -Destination $weztermFile -ErrorAction Stop
 ```
 
 Neovim normally uses `$env:LOCALAPPDATA\nvim`. WezTerm reads
@@ -72,6 +87,24 @@ Neovim normally uses `$env:LOCALAPPDATA\nvim`. WezTerm reads
 plugin and tool downloads to finish. Open a source file to trigger language
 server installation. Restart Neovim after the first installation, then run
 `:checkhealth` and `:Mason`.
+
+## First successful session
+
+Open WezTerm in a disposable Git project, then run `nvim README.md`. Wait for
+the initial downloads, restart Neovim, and return to that project. Use Normal
+mode (`Esc`) for the shortcuts below; press each Space sequence one key at a time.
+
+| Try | Expected result |
+| --- | --- |
+| Press `Space f f`, type part of a filename, then `Enter` | The file picker opens the selected file. |
+| Press `Space f g` and search for text you know exists | Matches appear with a preview; `Esc` closes the picker. |
+| Press `i`, make a small edit, then `Esc` and `Ctrl+S` | The file is saved; its modified indicator clears. |
+| Open a Lua file and press `Space c f` | StyLua formats it once its Mason installation has finished. |
+| Press `Space g g` | Neogit shows the project's changed files; use `:close` to return. |
+
+Use a practice file for editing and formatting. If an action fails, check
+`:messages`, `:Mason`, and `:ConformInfo`, then see [Troubleshooting](MANUAL.md#troubleshooting).
+The [manual](MANUAL.md) explains the other commands.
 
 ## Useful shortcuts
 
@@ -101,6 +134,12 @@ tab. Install the required external tools before using these features; see the
 
 ## Optional features
 
+Review changes with `:CodeDiff` or `:MiniDiffOverlay`, toggle split filenames
+with `:InclineToggle`, and open an editable directory buffer with `:Oil`.
+Use `:AICopyPath` or `:AICopyContext` to copy code references for AI tools.
+Web and Markdown formatting uses prettierd or prettier when available.
+See the [upgrade notes](nvim/UPGRADE_NOTES.md) for usage and installation details.
+
 `Space u b` opens a wallpaper manager with folder browsing, favorites, shuffle,
 and startup modes. Random startup rotation is the default; choose Manual in
 Settings to keep an image. `Space m p` toggles browser Markdown/Mermaid preview.
@@ -110,7 +149,7 @@ practice, and Obsidian notes. The PowerShell launcher offers Coding/Japanese
 when interactive `nvim` has no arguments; use `nvim-code` or `nvim-jp` directly.
 See the [profile installation guide](NeovimProfiles/README.md) and
 [manual](MANUAL.md#japanese-writing-profile). Personal profile settings, favorites,
-startup mode, and the import archive are ignored by Git.
+and startup mode are ignored by Git.
 
 The startup dashboard provides shortcuts for files, search, plugins, and
 terminals. See [dashboard and notifications](MANUAL.md#dashboard-and-notifications)
